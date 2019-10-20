@@ -10,6 +10,7 @@ I tried to create a deep learning library of **Define and Run** / **NHWC format*
 
 ## Requirement
 .NET Framework 4.7.2
+
 AVX2 and FMA3 suppoted CPU. (Intel:Haswell(2013)-, AMD:Excavator(2015)-)
 
 ## Usage
