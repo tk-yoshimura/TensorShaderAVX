@@ -1,0 +1,66 @@
+using System;
+using System.Diagnostics;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TensorShaderAvxBackend;
+
+namespace TensorShaderAvxBackendTest.ArrayManipulations {
+    [TestClass]
+    public class BroadcastTest {
+        [TestMethod]
+        public void ExecuteTest() {
+            Random rd = new Random(1234);
+
+            for (uint src_length = 1; src_length <= 32; src_length++) {
+                for (uint dst_length = src_length; dst_length <= src_length * 32; dst_length += src_length) {
+                    for (uint slides = 0; slides <= 4; slides++) {
+                        float[] x = (new float[src_length * slides + 2]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
+                        float[] y = (new float[dst_length * slides + 2]).Select((_) => (float)rd.NextDouble() + 1).ToArray();
+
+                        float v0 = y[0], v1 = y[dst_length * slides + 1];
+
+                        ArrayManipulation.Broadcast(1, src_length, x, 1, dst_length, y, slides);
+
+                        for (int j = 0; j < slides; j++) {
+                            for (int i = 0; i < dst_length; i++) {
+                                Assert.AreEqual(x[i % src_length + j * src_length + 1], y[i + j * dst_length + 1]);
+                            }
+                        }
+
+                        Assert.AreEqual(v0, y[0]);
+                        Assert.AreEqual(v1, y[dst_length * slides + 1]);
+
+                        Console.WriteLine($"pass: {src_length} {dst_length} {slides}");
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void SpeedTest() {
+            Random rd = new Random(1234);
+
+            Stopwatch sw = new Stopwatch();
+
+            for (uint src_length = 1; src_length <= 32; src_length++) {
+                uint dst_length = src_length * 1000000;
+
+                float[] x = new float[src_length];
+                float[] y = new float[dst_length];
+
+                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+
+                sw.Restart();
+
+                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+
+                sw.Stop();
+
+                Console.WriteLine($"{dst_length} : {sw.ElapsedMilliseconds / 4} msec");
+            }
+        }
+    }
+}

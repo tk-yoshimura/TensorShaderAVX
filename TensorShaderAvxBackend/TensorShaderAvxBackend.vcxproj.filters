@@ -1,0 +1,977 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\Initialize">
+      <UniqueIdentifier>{37371c09-9e9c-467e-b83a-a16916920932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Util">
+      <UniqueIdentifier>{8e878c45-3df5-4bdf-a195-8359976b854b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise">
+      <UniqueIdentifier>{1923d675-4b17-4f1f-83b4-6308f7a060d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\BinaryArithmetric">
+      <UniqueIdentifier>{5cf7d638-3cd2-44b9-9475-2add665e786d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\UnaryArithmetric">
+      <UniqueIdentifier>{21f46d47-d6c2-4f60-a740-7fdc304141dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\BinaryConstantArithmetric">
+      <UniqueIdentifier>{5f4cd31b-5228-4efa-9415-0c7fb6cb1e36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\LogicalArithmetric">
+      <UniqueIdentifier>{a93aa251-34b8-4483-8a25-9c8a2bc7c8d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\LogicalConstantArithmetric">
+      <UniqueIdentifier>{bec8fc4e-92a4-4088-bb19-a769979c3a58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\Activation">
+      <UniqueIdentifier>{d33a8e34-c465-4a97-a793-ea395453be34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Aggregation">
+      <UniqueIdentifier>{f56ec01f-eab6-4940-8496-c286e61c9178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Elementwise\MultiArithmetric">
+      <UniqueIdentifier>{557ec206-cf0d-440a-90d5-2cb99243e4a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Pool">
+      <UniqueIdentifier>{4ff7118d-73db-45b8-816d-a7da64d5beb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution">
+      <UniqueIdentifier>{73eaa195-dd31-480c-b0d1-5ad10b2c0073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Channelwise">
+      <UniqueIdentifier>{652f4477-9383-4a5f-85bc-b84bc5f9a3a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Batchwise">
+      <UniqueIdentifier>{8ae7313e-b9ad-4375-9f64-18ab4f1ad133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ArrayManipulation">
+      <UniqueIdentifier>{eefa3561-7ece-45a0-847b-d12173eca69e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\Dense">
+      <UniqueIdentifier>{918ac3c2-39c9-4fee-a1d3-f4a15531263c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\Convolution1D">
+      <UniqueIdentifier>{168035a4-59e3-45aa-bd44-7f4ad131bef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\Convolution2D">
+      <UniqueIdentifier>{1cc959b6-9071-43c5-8970-ccf188da1a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\Convolution3D">
+      <UniqueIdentifier>{a4b0624c-27a1-445a-a6d3-0e56c61e2ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\ChannelwiseConvolution1D">
+      <UniqueIdentifier>{e9abbc07-d7d1-407a-a096-fc6aafbb1bcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\ChannelwiseConvolution2D">
+      <UniqueIdentifier>{b8eaf8c3-78d8-4c92-8479-841c6e7322ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\ChannelwiseConvolution3D">
+      <UniqueIdentifier>{423d50dc-9b0a-426d-83ec-3b9f1c78f71a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Convolution\PointwiseConvolution">
+      <UniqueIdentifier>{b6e0cc66-ad48-4f89-bfea-929858d23e42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex">
+      <UniqueIdentifier>{5d866d62-4f86-4c8b-89ea-cabb915f5938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\BinaryArithmetric">
+      <UniqueIdentifier>{395acc09-3fd7-4c1c-8d5a-6b5fc558c827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\UnaryArithmetric">
+      <UniqueIdentifier>{a4781a1c-cda9-4c1b-a625-b80b9fd7c274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Activation">
+      <UniqueIdentifier>{8b0ca4f2-e101-4052-ba56-4285a2d54e81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Randomize">
+      <UniqueIdentifier>{4bb760ac-ed67-47bc-b739-0b690b0eb375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Cast">
+      <UniqueIdentifier>{d6d4d691-2de8-4057-9615-fbea1ac82431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector">
+      <UniqueIdentifier>{5de40116-a4ee-4fa1-94e2-808fa09b3023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Activation">
+      <UniqueIdentifier>{3a135c3c-59b5-46cb-8d95-7aaba7ad63fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\BinaryArithmetric">
+      <UniqueIdentifier>{004f3ad6-ede3-45eb-9064-5afb68dcfcff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Cast">
+      <UniqueIdentifier>{9afdca16-f01f-4c5b-8fc0-2a6db4e594fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\TrivectorQuaternionArithmetric">
+      <UniqueIdentifier>{6e43e14b-dffc-46d4-af1b-3d4312ed3e3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion">
+      <UniqueIdentifier>{d4b11400-2033-4d46-b9fc-26db1572c328}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Activation">
+      <UniqueIdentifier>{5c3758bf-95b9-4a8f-880a-14bd4c189d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\BinaryArithmetric">
+      <UniqueIdentifier>{a13dd4da-490f-44d2-9887-45e6d9bc4209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Cast">
+      <UniqueIdentifier>{fa4e57f6-1934-4d47-ac04-4bf1b2847df4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\UnaryArithmetric">
+      <UniqueIdentifier>{0aad5b08-5b87-41ae-b355-560d579694cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Indexer">
+      <UniqueIdentifier>{45d3fefa-a3e8-46fd-a622-cb876b9971c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Transform">
+      <UniqueIdentifier>{0879df08-a3b0-477a-bd37-fde933fd866b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Padding">
+      <UniqueIdentifier>{cfb8139f-cf6c-4754-824f-327410d49b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trimming">
+      <UniqueIdentifier>{db652099-a3ac-4bfb-9055-76ae33590e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Zoom">
+      <UniqueIdentifier>{7340ce7f-97b8-4876-bed3-6949bd45fb4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Convolution">
+      <UniqueIdentifier>{97f30970-2e81-4425-a360-8b7602c278df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Convolution\Convolution1D">
+      <UniqueIdentifier>{f029454d-b96d-49fd-96f5-8dcea3d9dd88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Convolution\Convolution2D">
+      <UniqueIdentifier>{20e4428a-f449-4060-b727-b9b56414265e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Convolution\Convolution3D">
+      <UniqueIdentifier>{5bb20a83-5e4c-4af6-ac30-a29362cf24fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Complex\Convolution\Dense">
+      <UniqueIdentifier>{670c9a19-21c3-49cb-af90-e792c894c64c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Convolution">
+      <UniqueIdentifier>{aba56c7a-0b51-41a7-835e-86c4d6ca692a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Convolution\Dense">
+      <UniqueIdentifier>{fbdb1504-972c-4406-9f14-902043b5bd92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Convolution\Convolution3D">
+      <UniqueIdentifier>{e181557e-b473-4285-a7a6-fe5520dd9a00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Convolution\Convolution2D">
+      <UniqueIdentifier>{186e8bce-dbf1-4d90-bfa5-42ee8d6efd60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Quaternion\Convolution\Convolution1D">
+      <UniqueIdentifier>{931cf361-232b-4285-8045-1cef6b02b3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Convolution">
+      <UniqueIdentifier>{e03166fc-a1b4-4590-a470-1179a9169b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Convolution\Dense">
+      <UniqueIdentifier>{272be956-e786-4162-b116-c91f4716c204}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Convolution\Convolution1D">
+      <UniqueIdentifier>{77537661-f9e4-4d34-8cb6-cc038f5d8d96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Convolution\Convolution2D">
+      <UniqueIdentifier>{59ce720c-1c3f-4a2d-881c-0fe7850fe3f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Trivector\Convolution\Convolution3D">
+      <UniqueIdentifier>{49104812-fce2-4081-ba23-ccc990bb8559}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TensorShaderAvxBackend.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Util\util.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\add.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\abs.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\add_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\arccos.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\arcsin.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\arctan.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\cbrt.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\ceil.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\cos.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\cosh.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\cube.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\div.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\div_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\equal.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\equal_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\exp.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\exp2.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\floor.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\greaterthan.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\greaterthan_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\greaterthanorequal.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\isnan.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\greaterthanorequal_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\lessthan.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\lessthan_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\lessthanorequal.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\lessthanorequal_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\log.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\log2.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\log10.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\maximum.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\minimum.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\mul.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\Activation\leakyrelu.cpp">
+      <Filter>ソース ファイル\Elementwise\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\Activation\relu.cpp">
+      <Filter>ソース ファイル\Elementwise\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\Activation\elu.cpp">
+      <Filter>ソース ファイル\Elementwise\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\tan.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\tanh.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\step.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\sinh.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\sin.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\signedsqrt.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\sign.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\rsqrt.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\round.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\maximum_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\minimum_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\mul_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\nanaszero.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\neg.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\notequal.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\notequal_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\pow.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\pow_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\rcbrt.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\rcp.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\signedpow.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\signedpow_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\square.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\sqrt.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\sub.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\sub_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryConstantArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\Activation\relugrad.cpp">
+      <Filter>ソース ファイル\Elementwise\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\Activation\elugrad.cpp">
+      <Filter>ソース ファイル\Elementwise\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\Activation\leakyrelugrad.cpp">
+      <Filter>ソース ファイル\Elementwise\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Initialize\static_cctor.cpp">
+      <Filter>ソース ファイル\Initialize</Filter>
+    </ClCompile>
+    <ClCompile Include="Aggregation\average.cpp">
+      <Filter>ソース ファイル\Aggregation</Filter>
+    </ClCompile>
+    <ClCompile Include="Aggregation\sum.cpp">
+      <Filter>ソース ファイル\Aggregation</Filter>
+    </ClCompile>
+    <ClCompile Include="Aggregation\min.cpp">
+      <Filter>ソース ファイル\Aggregation</Filter>
+    </ClCompile>
+    <ClCompile Include="Aggregation\max.cpp">
+      <Filter>ソース ファイル\Aggregation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\MultiArithmetric\multisum.cpp">
+      <Filter>ソース ファイル\Elementwise\MultiArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\maxpool_1d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\maxpool_2d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\maxpool_3d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\averagepool_1d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\averagepool_2d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\averagepool_3d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\maxunpool_3d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\maxunpool_2d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\maxunpool_1d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\averageunpool_3d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\averageunpool_2d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\averageunpool_1d.cpp">
+      <Filter>ソース ファイル\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\softplus.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\logcosh.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\UnaryArithmetric\sigmoid.cpp">
+      <Filter>ソース ファイル\Elementwise\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Channelwise\add_chwise.cpp">
+      <Filter>ソース ファイル\Channelwise</Filter>
+    </ClCompile>
+    <ClCompile Include="Channelwise\mul_chwise.cpp">
+      <Filter>ソース ファイル\Channelwise</Filter>
+    </ClCompile>
+    <ClCompile Include="Channelwise\sublvec_chwise.cpp">
+      <Filter>ソース ファイル\Channelwise</Filter>
+    </ClCompile>
+    <ClCompile Include="Channelwise\subrvec_chwise.cpp">
+      <Filter>ソース ファイル\Channelwise</Filter>
+    </ClCompile>
+    <ClCompile Include="Channelwise\divrvec_chwise.cpp">
+      <Filter>ソース ファイル\Channelwise</Filter>
+    </ClCompile>
+    <ClCompile Include="Channelwise\divlvec_chwise.cpp">
+      <Filter>ソース ファイル\Channelwise</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\MultiArithmetric\clamp_constant.cpp">
+      <Filter>ソース ファイル\Elementwise\MultiArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\MultiArithmetric\clamp.cpp">
+      <Filter>ソース ファイル\Elementwise\MultiArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_not.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_and.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_or.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_xor.cpp">
+      <Filter>ソース ファイル\Elementwise\LogicalArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Batchwise\mul_bnwise.cpp">
+      <Filter>ソース ファイル\Batchwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\zeroset.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\clear.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\pattern_copy.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\broadcast.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\BinaryArithmetric\atan2.cpp">
+      <Filter>ソース ファイル\Elementwise\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Dense\dense.cpp">
+      <Filter>ソース ファイル\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Dense\kernelproduct_dense.cpp">
+      <Filter>ソース ファイル\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Dense\transposedense.cpp">
+      <Filter>ソース ファイル\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution1D\deconvolution_1d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution1D\kernelproduct_1d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution1D\convolution_1d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution2D\convolution_2d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution2D\deconvolution_2d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution2D\kernelproduct_2d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution3D\deconvolution_3d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution3D\kernelproduct_3d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\Convolution3D\convolution_3d.cpp">
+      <Filter>ソース ファイル\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution1D\deconvolution_cw1d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution1D\kernelproduct_cw1d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution1D\convolution_cw1d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution2D\deconvolution_cw2d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution2D\kernelproduct_cw2d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution2D\convolution_cw2d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution3D\kernelproduct_cw3d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution3D\convolution_cw3d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\ChannelwiseConvolution3D\deconvolution_cw3d.cpp">
+      <Filter>ソース ファイル\Convolution\ChannelwiseConvolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\PointwiseConvolution\convolution_pw.cpp">
+      <Filter>ソース ファイル\Convolution\PointwiseConvolution</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\PointwiseConvolution\deconvolution_pw.cpp">
+      <Filter>ソース ファイル\Convolution\PointwiseConvolution</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolution\PointwiseConvolution\kernelproduct_pw.cpp">
+      <Filter>ソース ファイル\Convolution\PointwiseConvolution</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\masktable.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\BinaryArithmetric\complex_mul.cpp">
+      <Filter>ソース ファイル\Complex\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\BinaryArithmetric\complex_mulgrad.cpp">
+      <Filter>ソース ファイル\Complex\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_rrelu.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_rrelugrad.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_zrelu.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_zrelugrad.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\UnaryArithmetric\complex_square.cpp">
+      <Filter>ソース ファイル\Complex\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Randomize\random_uniform.cpp">
+      <Filter>ソース ファイル\Randomize</Filter>
+    </ClCompile>
+    <ClCompile Include="Randomize\random_normal.cpp">
+      <Filter>ソース ファイル\Randomize</Filter>
+    </ClCompile>
+    <ClCompile Include="Randomize\random_bernoulli.cpp">
+      <Filter>ソース ファイル\Randomize</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\UnaryArithmetric\complex_conjugate.cpp">
+      <Filter>ソース ファイル\Complex\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_decay.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_squash.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_normalize.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\BinaryArithmetric\complex_squaregrad.cpp">
+      <Filter>ソース ファイル\Complex\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_decaygrad.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_squashgrad.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Activation\complex_normalizegrad.cpp">
+      <Filter>ソース ファイル\Complex\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Cast\complex_cast.cpp">
+      <Filter>ソース ファイル\Complex\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Cast\complex_real.cpp">
+      <Filter>ソース ファイル\Complex\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Cast\complex_imag.cpp">
+      <Filter>ソース ファイル\Complex\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Cast\complex_purereal.cpp">
+      <Filter>ソース ファイル\Complex\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Cast\complex_pureimag.cpp">
+      <Filter>ソース ファイル\Complex\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Activation\trivector_decaygrad.cpp">
+      <Filter>ソース ファイル\Trivector\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Activation\trivector_normalize.cpp">
+      <Filter>ソース ファイル\Trivector\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Activation\trivector_normalizegrad.cpp">
+      <Filter>ソース ファイル\Trivector\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Activation\trivector_squash.cpp">
+      <Filter>ソース ファイル\Trivector\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Activation\trivector_squashgrad.cpp">
+      <Filter>ソース ファイル\Trivector\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Activation\trivector_decay.cpp">
+      <Filter>ソース ファイル\Trivector\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\BinaryArithmetric\trivector_cross.cpp">
+      <Filter>ソース ファイル\Trivector\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_cast.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_purex.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_purey.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_purez.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_x.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_y.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Cast\trivector_z.cpp">
+      <Filter>ソース ファイル\Trivector\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\TrivectorQuaternionArithmetric\trivector_quaternion_mul_qgrad.cpp">
+      <Filter>ソース ファイル\Trivector\TrivectorQuaternionArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\TrivectorQuaternionArithmetric\trivector_quaternion_mul_vgrad.cpp">
+      <Filter>ソース ファイル\Trivector\TrivectorQuaternionArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\TrivectorQuaternionArithmetric\trivector_quaternion_mul.cpp">
+      <Filter>ソース ファイル\Trivector\TrivectorQuaternionArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_decay.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_decaygrad.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_normalize.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_normalizegrad.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_rrelu.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_rrelugrad.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_squash.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Activation\quaternion_squashgrad.cpp">
+      <Filter>ソース ファイル\Quaternion\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\BinaryArithmetric\quaternion_mulgrad.cpp">
+      <Filter>ソース ファイル\Quaternion\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\BinaryArithmetric\quaternion_multransposegrad.cpp">
+      <Filter>ソース ファイル\Quaternion\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\BinaryArithmetric\quaternion_mul.cpp">
+      <Filter>ソース ファイル\Quaternion\BinaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_cast.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\UnaryArithmetric\quaternion_square.cpp">
+      <Filter>ソース ファイル\Quaternion\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\UnaryArithmetric\quaternion_conjugate.cpp">
+      <Filter>ソース ファイル\Quaternion\UnaryArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_r.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_purer.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_k.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_purei.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_purej.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_purek.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_i.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Cast\quaternion_j.cpp">
+      <Filter>ソース ファイル\Quaternion\Cast</Filter>
+    </ClCompile>
+    <ClCompile Include="Indexer\onehotvector.cpp">
+      <Filter>ソース ファイル\Indexer</Filter>
+    </ClCompile>
+    <ClCompile Include="Indexer\argmin.cpp">
+      <Filter>ソース ファイル\Indexer</Filter>
+    </ClCompile>
+    <ClCompile Include="Indexer\argmax.cpp">
+      <Filter>ソース ファイル\Indexer</Filter>
+    </ClCompile>
+    <ClCompile Include="Indexer\index.cpp">
+      <Filter>ソース ファイル\Indexer</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\flip.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\sort.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayManipulation\sortwithkey.cpp">
+      <Filter>ソース ファイル\ArrayManipulation</Filter>
+    </ClCompile>
+    <ClCompile Include="Elementwise\MultiArithmetric\lerp.cpp">
+      <Filter>ソース ファイル\Elementwise\MultiArithmetric</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform\channel_to_space_2d.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform\channel_to_space_3d.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform\space_to_channel_2d.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform\space_to_channel_3d.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Padding\zero_padding_1d.cpp">
+      <Filter>ソース ファイル\Padding</Filter>
+    </ClCompile>
+    <ClCompile Include="Padding\edge_padding_1d.cpp">
+      <Filter>ソース ファイル\Padding</Filter>
+    </ClCompile>
+    <ClCompile Include="Padding\zero_padding_2d.cpp">
+      <Filter>ソース ファイル\Padding</Filter>
+    </ClCompile>
+    <ClCompile Include="Padding\edge_padding_2d.cpp">
+      <Filter>ソース ファイル\Padding</Filter>
+    </ClCompile>
+    <ClCompile Include="Padding\zero_padding_3d.cpp">
+      <Filter>ソース ファイル\Padding</Filter>
+    </ClCompile>
+    <ClCompile Include="Padding\edge_padding_3d.cpp">
+      <Filter>ソース ファイル\Padding</Filter>
+    </ClCompile>
+    <ClCompile Include="Trimming\trimming_2d.cpp">
+      <Filter>ソース ファイル\Trimming</Filter>
+    </ClCompile>
+    <ClCompile Include="Trimming\trimming_3d.cpp">
+      <Filter>ソース ファイル\Trimming</Filter>
+    </ClCompile>
+    <ClCompile Include="Trimming\trimming_1d.cpp">
+      <Filter>ソース ファイル\Trimming</Filter>
+    </ClCompile>
+    <ClCompile Include="Zoom\neighbor_zoom_1d.cpp">
+      <Filter>ソース ファイル\Zoom</Filter>
+    </ClCompile>
+    <ClCompile Include="Zoom\neighbor_zoom_2d.cpp">
+      <Filter>ソース ファイル\Zoom</Filter>
+    </ClCompile>
+    <ClCompile Include="Zoom\neighbor_zoom_3d.cpp">
+      <Filter>ソース ファイル\Zoom</Filter>
+    </ClCompile>
+    <ClCompile Include="Zoom\linear_zoom_1d.cpp">
+      <Filter>ソース ファイル\Zoom</Filter>
+    </ClCompile>
+    <ClCompile Include="Zoom\linear_zoom_2d.cpp">
+      <Filter>ソース ファイル\Zoom</Filter>
+    </ClCompile>
+    <ClCompile Include="Zoom\linear_zoom_3d.cpp">
+      <Filter>ソース ファイル\Zoom</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Dense\complex_dense.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Dense\complex_kernelproduct_dense.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Dense\complex_transposedense.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Dense\quaternion_transposedense.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Dense\quaternion_dense.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Dense\quaternion_kernelproduct_dense.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Dense\trivector_kernelproduct_dense.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Dense\trivector_transposedense.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Dense\trivector_dense.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Dense</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution1D\trivector_convolution_1d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution1D\trivector_deconvolution_1d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution1D\trivector_kernelproduct_1d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution2D\trivector_kernelproduct_2d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution2D\trivector_convolution_2d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution2D\trivector_deconvolution_2d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution3D\trivector_deconvolution_3d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution3D\trivector_kernelproduct_3d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Trivector\Convolution\Convolution3D\trivector_convolution_3d.cpp">
+      <Filter>ソース ファイル\Trivector\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution1D\quaternion_kernelproduct_1d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution1D\quaternion_convolution_1d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution1D\quaternion_deconvolution_1d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution2D\quaternion_convolution_2d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution2D\quaternion_deconvolution_2d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution2D\quaternion_kernelproduct_2d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution3D\quaternion_deconvolution_3d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution3D\quaternion_kernelproduct_3d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion\Convolution\Convolution3D\quaternion_convolution_3d.cpp">
+      <Filter>ソース ファイル\Quaternion\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution1D\complex_convolution_1d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution1D\complex_deconvolution_1d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution1D\complex_kernelproduct_1d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution1D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution2D\complex_kernelproduct_2d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution2D\complex_convolution_2d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution2D\complex_deconvolution_2d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution3D\complex_convolution_3d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution3D\complex_deconvolution_3d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex\Convolution\Convolution3D\complex_kernelproduct_3d.cpp">
+      <Filter>ソース ファイル\Complex\Convolution\Convolution3D</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

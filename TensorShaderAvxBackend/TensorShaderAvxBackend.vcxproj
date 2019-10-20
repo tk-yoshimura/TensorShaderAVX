@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{E7AC4994-37D9-48F7-8DA1-9D4A37E629E4}</ProjectGuid>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <Keyword>ManagedCProj</Keyword>
+    <RootNamespace>TensorShaderAvxBackend</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>TensorShaderAvxBackend</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerOutput>All</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies />
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerOutput>All</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies />
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TensorShaderAvxBackend.h" />
+    <ClInclude Include="Resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Aggregation\max.cpp" />
+    <ClCompile Include="Aggregation\min.cpp" />
+    <ClCompile Include="Aggregation\sum.cpp" />
+    <ClCompile Include="Aggregation\average.cpp" />
+    <ClCompile Include="ArrayManipulation\broadcast.cpp" />
+    <ClCompile Include="ArrayManipulation\clear.cpp" />
+    <ClCompile Include="ArrayManipulation\flip.cpp" />
+    <ClCompile Include="ArrayManipulation\pattern_copy.cpp" />
+    <ClCompile Include="ArrayManipulation\sort.cpp" />
+    <ClCompile Include="ArrayManipulation\sortwithkey.cpp" />
+    <ClCompile Include="ArrayManipulation\zeroset.cpp" />
+    <ClCompile Include="Batchwise\mul_bnwise.cpp" />
+    <ClCompile Include="Channelwise\add_chwise.cpp" />
+    <ClCompile Include="Channelwise\divlvec_chwise.cpp" />
+    <ClCompile Include="Channelwise\divrvec_chwise.cpp" />
+    <ClCompile Include="Channelwise\mul_chwise.cpp" />
+    <ClCompile Include="Channelwise\sublvec_chwise.cpp" />
+    <ClCompile Include="Channelwise\subrvec_chwise.cpp" />
+    <ClCompile Include="Complex\Activation\complex_decay.cpp" />
+    <ClCompile Include="Complex\Activation\complex_decaygrad.cpp" />
+    <ClCompile Include="Complex\Activation\complex_normalize.cpp" />
+    <ClCompile Include="Complex\Activation\complex_normalizegrad.cpp" />
+    <ClCompile Include="Complex\Activation\complex_rrelu.cpp" />
+    <ClCompile Include="Complex\Activation\complex_rrelugrad.cpp" />
+    <ClCompile Include="Complex\Activation\complex_squash.cpp" />
+    <ClCompile Include="Complex\Activation\complex_squashgrad.cpp" />
+    <ClCompile Include="Complex\Activation\complex_zrelu.cpp" />
+    <ClCompile Include="Complex\Activation\complex_zrelugrad.cpp" />
+    <ClCompile Include="Complex\BinaryArithmetric\complex_mul.cpp" />
+    <ClCompile Include="Complex\BinaryArithmetric\complex_mulgrad.cpp" />
+    <ClCompile Include="Complex\BinaryArithmetric\complex_squaregrad.cpp" />
+    <ClCompile Include="Complex\Cast\complex_cast.cpp" />
+    <ClCompile Include="Complex\Cast\complex_imag.cpp" />
+    <ClCompile Include="Complex\Cast\complex_pureimag.cpp" />
+    <ClCompile Include="Complex\Cast\complex_purereal.cpp" />
+    <ClCompile Include="Complex\Cast\complex_real.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution1D\complex_convolution_1d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution1D\complex_deconvolution_1d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution1D\complex_kernelproduct_1d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution2D\complex_convolution_2d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution2D\complex_deconvolution_2d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution2D\complex_kernelproduct_2d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution3D\complex_convolution_3d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution3D\complex_deconvolution_3d.cpp" />
+    <ClCompile Include="Complex\Convolution\Convolution3D\complex_kernelproduct_3d.cpp" />
+    <ClCompile Include="Complex\Convolution\Dense\complex_dense.cpp" />
+    <ClCompile Include="Complex\Convolution\Dense\complex_kernelproduct_dense.cpp" />
+    <ClCompile Include="Complex\Convolution\Dense\complex_transposedense.cpp" />
+    <ClCompile Include="Complex\UnaryArithmetric\complex_conjugate.cpp" />
+    <ClCompile Include="Complex\UnaryArithmetric\complex_square.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution1D\convolution_cw1d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution1D\deconvolution_cw1d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution1D\kernelproduct_cw1d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution2D\convolution_cw2d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution2D\deconvolution_cw2d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution2D\kernelproduct_cw2d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution3D\convolution_cw3d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution3D\deconvolution_cw3d.cpp" />
+    <ClCompile Include="Convolution\ChannelwiseConvolution3D\kernelproduct_cw3d.cpp" />
+    <ClCompile Include="Convolution\Convolution1D\convolution_1d.cpp" />
+    <ClCompile Include="Convolution\Convolution1D\deconvolution_1d.cpp" />
+    <ClCompile Include="Convolution\Convolution1D\kernelproduct_1d.cpp" />
+    <ClCompile Include="Convolution\Convolution2D\convolution_2d.cpp" />
+    <ClCompile Include="Convolution\Convolution2D\deconvolution_2d.cpp" />
+    <ClCompile Include="Convolution\Convolution2D\kernelproduct_2d.cpp" />
+    <ClCompile Include="Convolution\Convolution3D\convolution_3d.cpp" />
+    <ClCompile Include="Convolution\Convolution3D\deconvolution_3d.cpp" />
+    <ClCompile Include="Convolution\Convolution3D\kernelproduct_3d.cpp" />
+    <ClCompile Include="Convolution\Dense\dense.cpp" />
+    <ClCompile Include="Convolution\Dense\kernelproduct_dense.cpp" />
+    <ClCompile Include="Convolution\Dense\transposedense.cpp" />
+    <ClCompile Include="Convolution\PointwiseConvolution\convolution_pw.cpp" />
+    <ClCompile Include="Convolution\PointwiseConvolution\deconvolution_pw.cpp" />
+    <ClCompile Include="Convolution\PointwiseConvolution\kernelproduct_pw.cpp" />
+    <ClCompile Include="Elementwise\Activation\elu.cpp" />
+    <ClCompile Include="Elementwise\Activation\elugrad.cpp" />
+    <ClCompile Include="Elementwise\Activation\leakyrelu.cpp" />
+    <ClCompile Include="Elementwise\Activation\leakyrelugrad.cpp" />
+    <ClCompile Include="Elementwise\Activation\relu.cpp" />
+    <ClCompile Include="Elementwise\Activation\relugrad.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\add.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\atan2.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\div.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\maximum.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\minimum.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\mul.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\pow.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\signedpow.cpp" />
+    <ClCompile Include="Elementwise\BinaryArithmetric\sub.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\add_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\div_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\maximum_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\minimum_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\mul_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\pow_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\signedpow_constant.cpp" />
+    <ClCompile Include="Elementwise\BinaryConstantArithmetric\sub_constant.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\equal.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\greaterthan.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\greaterthanorequal.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\isnan.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\lessthan.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\lessthanorequal.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_and.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_not.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_or.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\logical_xor.cpp" />
+    <ClCompile Include="Elementwise\LogicalArithmetric\notequal.cpp" />
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\equal_constant.cpp" />
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\greaterthanorequal_constant.cpp" />
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\greaterthan_constant.cpp" />
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\lessthanorequal_constant.cpp" />
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\lessthan_constant.cpp" />
+    <ClCompile Include="Elementwise\LogicalConstantArithmetric\notequal_constant.cpp" />
+    <ClCompile Include="Elementwise\MultiArithmetric\clamp.cpp" />
+    <ClCompile Include="Elementwise\MultiArithmetric\clamp_constant.cpp" />
+    <ClCompile Include="Elementwise\MultiArithmetric\multisum.cpp" />
+    <ClCompile Include="Elementwise\MultiArithmetric\lerp.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\abs.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\arccos.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\arcsin.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\arctan.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\cbrt.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\ceil.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\cos.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\cosh.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\cube.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\exp.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\exp2.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\floor.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\log.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\log10.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\log2.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\logcosh.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\nanaszero.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\neg.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\rcbrt.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\rcp.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\round.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\rsqrt.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\sigmoid.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\sign.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\signedsqrt.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\sin.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\sinh.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\softplus.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\sqrt.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\square.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\step.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\tan.cpp" />
+    <ClCompile Include="Elementwise\UnaryArithmetric\tanh.cpp" />
+    <ClCompile Include="Indexer\argmax.cpp" />
+    <ClCompile Include="Indexer\argmin.cpp" />
+    <ClCompile Include="Indexer\index.cpp" />
+    <ClCompile Include="Indexer\onehotvector.cpp" />
+    <ClCompile Include="Initialize\static_cctor.cpp" />
+    <ClCompile Include="Padding\edge_padding_1d.cpp" />
+    <ClCompile Include="Padding\edge_padding_2d.cpp" />
+    <ClCompile Include="Padding\edge_padding_3d.cpp" />
+    <ClCompile Include="Padding\zero_padding_2d.cpp" />
+    <ClCompile Include="Padding\zero_padding_1d.cpp" />
+    <ClCompile Include="Padding\zero_padding_3d.cpp" />
+    <ClCompile Include="Pool\averagepool_1d.cpp" />
+    <ClCompile Include="Pool\averagepool_2d.cpp" />
+    <ClCompile Include="Pool\averagepool_3d.cpp" />
+    <ClCompile Include="Pool\averageunpool_1d.cpp" />
+    <ClCompile Include="Pool\averageunpool_2d.cpp" />
+    <ClCompile Include="Pool\averageunpool_3d.cpp" />
+    <ClCompile Include="Pool\maxpool_1d.cpp" />
+    <ClCompile Include="Pool\maxpool_2d.cpp" />
+    <ClCompile Include="Pool\maxpool_3d.cpp" />
+    <ClCompile Include="Pool\maxunpool_1d.cpp" />
+    <ClCompile Include="Pool\maxunpool_2d.cpp" />
+    <ClCompile Include="Pool\maxunpool_3d.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_decay.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_decaygrad.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_normalize.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_normalizegrad.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_rrelu.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_rrelugrad.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_squash.cpp" />
+    <ClCompile Include="Quaternion\Activation\quaternion_squashgrad.cpp" />
+    <ClCompile Include="Quaternion\BinaryArithmetric\quaternion_mul.cpp" />
+    <ClCompile Include="Quaternion\BinaryArithmetric\quaternion_mulgrad.cpp" />
+    <ClCompile Include="Quaternion\BinaryArithmetric\quaternion_multransposegrad.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_cast.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_i.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_j.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_k.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_purei.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_purej.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_purek.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_purer.cpp" />
+    <ClCompile Include="Quaternion\Cast\quaternion_r.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution1D\quaternion_convolution_1d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution1D\quaternion_deconvolution_1d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution1D\quaternion_kernelproduct_1d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution2D\quaternion_convolution_2d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution2D\quaternion_deconvolution_2d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution2D\quaternion_kernelproduct_2d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution3D\quaternion_convolution_3d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution3D\quaternion_deconvolution_3d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Convolution3D\quaternion_kernelproduct_3d.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Dense\quaternion_dense.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Dense\quaternion_kernelproduct_dense.cpp" />
+    <ClCompile Include="Quaternion\Convolution\Dense\quaternion_transposedense.cpp" />
+    <ClCompile Include="Quaternion\UnaryArithmetric\quaternion_conjugate.cpp" />
+    <ClCompile Include="Quaternion\UnaryArithmetric\quaternion_square.cpp" />
+    <ClCompile Include="Randomize\random_bernoulli.cpp" />
+    <ClCompile Include="Randomize\random_normal.cpp" />
+    <ClCompile Include="Randomize\random_uniform.cpp" />
+    <ClCompile Include="Transform\channel_to_space_2d.cpp" />
+    <ClCompile Include="Transform\channel_to_space_3d.cpp" />
+    <ClCompile Include="Transform\space_to_channel_2d.cpp" />
+    <ClCompile Include="Transform\space_to_channel_3d.cpp" />
+    <ClCompile Include="Trimming\trimming_1d.cpp" />
+    <ClCompile Include="Trimming\trimming_2d.cpp" />
+    <ClCompile Include="Trimming\trimming_3d.cpp" />
+    <ClCompile Include="Trivector\Activation\trivector_decay.cpp" />
+    <ClCompile Include="Trivector\Activation\trivector_decaygrad.cpp" />
+    <ClCompile Include="Trivector\Activation\trivector_normalize.cpp" />
+    <ClCompile Include="Trivector\Activation\trivector_normalizegrad.cpp" />
+    <ClCompile Include="Trivector\Activation\trivector_squash.cpp" />
+    <ClCompile Include="Trivector\Activation\trivector_squashgrad.cpp" />
+    <ClCompile Include="Trivector\BinaryArithmetric\trivector_cross.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_cast.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_purex.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_purey.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_purez.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_x.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_y.cpp" />
+    <ClCompile Include="Trivector\Cast\trivector_z.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution1D\trivector_convolution_1d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution1D\trivector_deconvolution_1d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution1D\trivector_kernelproduct_1d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution2D\trivector_convolution_2d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution2D\trivector_deconvolution_2d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution2D\trivector_kernelproduct_2d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution3D\trivector_convolution_3d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution3D\trivector_deconvolution_3d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Convolution3D\trivector_kernelproduct_3d.cpp" />
+    <ClCompile Include="Trivector\Convolution\Dense\trivector_dense.cpp" />
+    <ClCompile Include="Trivector\Convolution\Dense\trivector_kernelproduct_dense.cpp" />
+    <ClCompile Include="Trivector\Convolution\Dense\trivector_transposedense.cpp" />
+    <ClCompile Include="Trivector\TrivectorQuaternionArithmetric\trivector_quaternion_mul.cpp" />
+    <ClCompile Include="Trivector\TrivectorQuaternionArithmetric\trivector_quaternion_mul_qgrad.cpp" />
+    <ClCompile Include="Trivector\TrivectorQuaternionArithmetric\trivector_quaternion_mul_vgrad.cpp" />
+    <ClCompile Include="Util\masktable.cpp" />
+    <ClCompile Include="Util\util.cpp" />
+    <ClCompile Include="Zoom\linear_zoom_1d.cpp" />
+    <ClCompile Include="Zoom\linear_zoom_2d.cpp" />
+    <ClCompile Include="Zoom\linear_zoom_3d.cpp" />
+    <ClCompile Include="Zoom\neighbor_zoom_1d.cpp" />
+    <ClCompile Include="Zoom\neighbor_zoom_2d.cpp" />
+    <ClCompile Include="Zoom\neighbor_zoom_3d.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

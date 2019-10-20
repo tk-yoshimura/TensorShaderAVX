@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5EDC4080-E650-46E1-86C1-043446E3E636}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TensorShaderAvxBackendTest</RootNamespace>
+    <AssemblyName>TensorShaderAvxBackendTest</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderAvxBackend, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TensorShaderAvxBackend\bin\x64\Debug\TensorShaderAvxBackend.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregation\AverageTest.cs" />
+    <Compile Include="Aggregation\MaxTest.cs" />
+    <Compile Include="Aggregation\MinTest.cs" />
+    <Compile Include="ArrayManipulation\BroadcastTest.cs" />
+    <Compile Include="Aggregation\SumTest.cs" />
+    <Compile Include="Batchwise\MulTest.cs" />
+    <Compile Include="ArrayManipulation\CopyTest.cs" />
+    <Compile Include="Channelwise\DivRVectorTest.cs" />
+    <Compile Include="Channelwise\DivLVectorTest.cs" />
+    <Compile Include="Channelwise\SubRVectorTest.cs" />
+    <Compile Include="Channelwise\SubLVectorTest.cs" />
+    <Compile Include="Channelwise\MulTest.cs" />
+    <Compile Include="Channelwise\AddTest.cs" />
+    <Compile Include="Elementwise\Activation\EluGradTest.cs" />
+    <Compile Include="Elementwise\Activation\LeakyReluGradTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\SignedPowTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\PowTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\DivTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\LogicalXorTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\LogicalNotTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\LogicalAndTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\LogicalOrTest.cs" />
+    <Compile Include="Elementwise\MultiArithmetric\ClampTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\MinimumTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\MulTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\MaximumTest.cs" />
+    <Compile Include="Elementwise\Activation\ReluGradTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\SubTest.cs" />
+    <Compile Include="Elementwise\BinaryArithmetric\AddTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\SignedPowConstantTest .cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\PowConstantTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\SubConstantTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\AddConstantTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\DivConstantTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\MaximumConstantTest.cs" />
+    <Compile Include="Elementwise\MultiArithmetric\ClampConstantTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\MinimumConstantTest.cs" />
+    <Compile Include="Elementwise\BinaryConstantArithmetric\MulConstantTest.cs" />
+    <Compile Include="ArrayManipulation\ClearTest.cs" />
+    <Compile Include="ArrayManipulation\ZerosetTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\IsNanTest.cs" />
+    <Compile Include="Elementwise\LogicalConstantArithmetric\EqualConstantTest.cs" />
+    <Compile Include="Elementwise\LogicalConstantArithmetric\GreaterThanOrEqualConstantTest.cs" />
+    <Compile Include="Elementwise\LogicalConstantArithmetric\GreaterThanConstantTest.cs" />
+    <Compile Include="Elementwise\LogicalConstantArithmetric\LessThanOrEqualConstantTest.cs" />
+    <Compile Include="Elementwise\LogicalConstantArithmetric\LessThanConstantTest.cs" />
+    <Compile Include="Elementwise\LogicalConstantArithmetric\NotEqualConstantTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\NotEqualTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\EqualTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\LessThanOrEqualTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\GreaterThanOrEqualTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\LessThanTest.cs" />
+    <Compile Include="Elementwise\LogicalArithmetric\GreaterThanTest.cs" />
+    <Compile Include="Elementwise\MultiArithmetric\SumTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\ArcCosTest.cs" />
+    <Compile Include="Elementwise\Activation\EluTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SigmoidTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SoftPlusTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\LogCoshTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\NanAsZeroTest.cs" />
+    <Compile Include="Elementwise\Activation\LeakyReluTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\RoundTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\FloorTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\CoshTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\ArcSinTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\CeilTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SinhTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\ArcTanTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\CubeTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SquareTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\TanhTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\TanTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SinTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\Log10Test.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\Log2Test.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\Exp2Test.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\CosTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\LogTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\ExpTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\NegTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\RcbrtTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\RsqrtTest.cs" />
+    <Compile Include="Elementwise\Activation\ReluTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\AbsTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\CbrtTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SignedSqrtTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\StepTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SqrtTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\SignTest.cs" />
+    <Compile Include="Elementwise\UnaryArithmetric\RcpTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\UnitTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pool\" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets'))" />
+  </Target>
+  <Import Project="..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets')" />
+</Project>
