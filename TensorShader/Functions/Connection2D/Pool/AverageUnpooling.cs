@@ -66,7 +66,7 @@ namespace TensorShader.Functions.Connection2D {
             }
 
             this.Stride = stride;
-            this.InShape = Shape.Map2D(outshape.Channels, outshape.Width / stride, outshape.Height / stride, outshape.Channels);
+            this.InShape = Shape.Map2D(outshape.Channels, outshape.Width / stride, outshape.Height / stride, outshape.Batch);
             this.OutShape = outshape;
         }
 

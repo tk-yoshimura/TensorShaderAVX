@@ -68,7 +68,7 @@ namespace TensorShader.Functions.Connection3D {
             }
 
             this.Stride = stride;
-            this.InShape = Shape.Map3D(outshape.Channels, outshape.Width / stride, outshape.Height / stride, outshape.Depth / stride, outshape.Channels);
+            this.InShape = Shape.Map3D(outshape.Channels, outshape.Width / stride, outshape.Height / stride, outshape.Depth / stride, outshape.Batch);
             this.OutShape = outshape;
         }
 
