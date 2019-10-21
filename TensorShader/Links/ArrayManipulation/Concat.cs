@@ -41,7 +41,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null || !XS.Select((field)=>field.EnableBackprop).Any()) {
+            if (Y.Grad == null || !XS.Select((field)=>field.EnableBackprop).Any((b)=>b)) {
                 return;
             }
 

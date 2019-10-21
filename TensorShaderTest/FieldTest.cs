@@ -521,9 +521,9 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                Assert.AreEqual(25, flow.NodeCount);
-                Assert.AreEqual(14, flow.VariableNodeCount);
-                Assert.AreEqual(11, flow.FunctionNodeCount);
+                Assert.AreEqual(23, flow.NodeCount);
+                Assert.AreEqual(13, flow.VariableNodeCount);
+                Assert.AreEqual(10, flow.FunctionNodeCount);
                 Assert.AreEqual(2, flow.InTensorCount);
                 Assert.AreEqual(1, flow.OutTensorCount);
 
@@ -546,9 +546,9 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                Assert.AreEqual(25, flow.NodeCount);
-                Assert.AreEqual(14, flow.VariableNodeCount);
-                Assert.AreEqual(11, flow.FunctionNodeCount);
+                Assert.AreEqual(23, flow.NodeCount);
+                Assert.AreEqual(13, flow.VariableNodeCount);
+                Assert.AreEqual(10, flow.FunctionNodeCount);
                 Assert.AreEqual(2, flow.InTensorCount);
                 Assert.AreEqual(1, flow.OutTensorCount);
 
@@ -619,9 +619,9 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                Assert.AreEqual(25, optimize_flow.NodeCount);
-                Assert.AreEqual(14, optimize_flow.VariableNodeCount);
-                Assert.AreEqual(11, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(23, optimize_flow.NodeCount);
+                Assert.AreEqual(13, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(10, optimize_flow.FunctionNodeCount);
                 Assert.AreEqual(2, optimize_flow.InTensorCount);
                 Assert.AreEqual(1, optimize_flow.OutTensorCount);
 

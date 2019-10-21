@@ -28,7 +28,7 @@ namespace TensorShader {
                 infield.InLinks.Add(this);
             }
 
-            bool enable_backprob = infields.Select((field)=>field.EnableBackprop).Any();
+            bool enable_backprob = infields.Select((field)=>field.EnableBackprop).Any((b)=>b);
             foreach(Field outfield in outfields) {
                 if (outfield.OutLink != null) {
                     throw new ArgumentNullException(nameof(OutFields));
