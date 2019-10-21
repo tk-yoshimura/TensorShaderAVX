@@ -51,13 +51,13 @@ namespace TensorShader {
             if (value != null && value.Length < shape.Length) {
                 throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
             }
-            if (value == null && clone_value) {
+            if (value == null && !clone_value) {
                 throw new ArgumentException(nameof(clone_value));
             }
 
             this.Buffer = (value == null)
                             ? new float[shape.Length]
-                            : (clone_value ? value : (float[])value.Clone());
+                            : (clone_value ? (float[])value.Clone() : value);
             this.Shape = shape;
         }
 
@@ -65,7 +65,7 @@ namespace TensorShader {
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
         public Tensor(Shape shape, float[] value = null)
-            : this(shape, value, clone_value: false) { }
+            : this(shape, value, clone_value: true) { }
 
         /// <summary>状態</summary>
         public virtual float[] State{
@@ -205,7 +205,7 @@ namespace TensorShader {
     /// <summary>バッファ共有テンソル</summary>
     internal class TemporaryTensor : Tensor {
         public TemporaryTensor(Shape shape, float[] value = null) : 
-            base(shape, value, clone_value:true){ }
+            base(shape, value, clone_value:false){ }
     }
 
     /// <summary>領域外アクセスチェック有効テンソル</summary>
