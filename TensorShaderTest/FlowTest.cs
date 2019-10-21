@@ -525,5 +525,60 @@ namespace TensorShaderTest {
             Assert.AreEqual(6, flow.TensorCount);
             Assert.AreEqual(6, flow.BufferCount);
         }
+
+        [TestMethod]
+        public void ReshapeTest() {
+            float[] u = new float[12] { 7, 10, 2, 5, 11, 3, 8, 9, 4, 12, 1, 6, };
+            Tensor t = new Tensor(Shape.Map0D(3, 4), u );
+
+            { 
+                var v1 = new InputNode(Shape.Map0D(3, 4), t);
+                var v2 = v1 + 1;
+                var v3 = Reshape(v2, Shape.Vector(12)).Save();
+
+                Flow flow = Flow.FromInputs(v1);
+                flow.Execute();
+
+                Assert.AreEqual(4, flow.TensorCount);
+                Assert.AreEqual(2, flow.BufferCount);
+            }
+
+            { 
+                var v1 = new InputNode(Shape.Map0D(3, 4), t);
+                var v2 = Reshape(v1, Shape.Vector(12)).Save();
+                var v3 = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
+
+                Flow flow = Flow.FromInputs(v1);
+                flow.Execute();
+
+                Assert.AreEqual(5, flow.TensorCount);
+                Assert.AreEqual(3, flow.BufferCount);
+            }
+
+            { 
+                var v1 = new InputNode(Shape.Map0D(3, 4), t);
+                var v2 = Reshape(Reshape(v1, Shape.Vector(12)), Shape.Map0D(2, 6)).Save();
+                var v3 = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
+
+                Flow flow = Flow.FromInputs(v1);
+                flow.Execute();
+
+                Assert.AreEqual(6, flow.TensorCount);
+                Assert.AreEqual(3, flow.BufferCount);
+            }
+
+            { 
+                var v1 = new InputNode(Shape.Map0D(3, 4), t);
+                var v2 = v1 + 1;
+                var v3 = Reshape(v2, Shape.Vector(12)).Save();
+                var v4 = Reshape(v2, Shape.Map1D(2, 3, 2)).Save();
+
+                Flow flow = Flow.FromInputs(v1);
+                flow.Execute();
+
+                Assert.AreEqual(6, flow.TensorCount);
+                Assert.AreEqual(3, flow.BufferCount);
+            }
+        }
     }
 }

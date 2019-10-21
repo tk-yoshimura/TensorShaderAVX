@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using static TensorShader.Field;
@@ -1166,6 +1167,166 @@ namespace TensorShaderTest {
                 CollectionAssert.AreEqual(new float[] { -2f, 0f, 2f, 4f, 6f }, y1);
                 CollectionAssert.AreEqual(new float[] { 10f }, y2);
                 CollectionAssert.AreEqual(new float[] { 2f }, loss.Tensor.State);
+            }
+        }
+
+        [TestMethod]
+        public void ReshapeTest() {
+            float[] u = new float[12] { 7, 10, 2, 5, 11, 3, 8, 9, 4, 12, 1, 6, };
+            float[] v = new float[12] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+            float[] err = (new float[12]).Select((_, idx) => u[idx] - v[idx]).ToArray();
+            float[] err_p1 = (new float[12]).Select((_, idx) => (u[idx] + 1) - v[idx]).ToArray();
+
+            Tensor intensor = new Tensor(Shape.Map0D(3, 4), u);
+            Tensor outtensor1 = new Tensor(Shape.Vector(12), v);
+            Tensor outtensor2 = new Tensor(Shape.Map0D(4, 3), v);
+            Tensor outtensor3 = new Tensor(Shape.Map1D(2, 3, 2), v);
+
+            {
+                ParameterField fin = intensor;
+                ParameterField g1 = outtensor1;
+                VariableField g2 = outtensor2;
+                VariableField g3 = outtensor3;
+
+                Field ferr1 = Reshape(fin, g1.Shape) - g1;
+                Field ferr2 = Reshape(fin, g2.Shape) - g2;
+                Field ferr3 = Reshape(fin, g3.Shape) - g3;
+
+                (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr1, ferr2, ferr3);
+
+                flow.Execute();
+
+                Assert.AreEqual(28, flow.NodeCount);
+                Assert.AreEqual(17, flow.VariableNodeCount);
+                Assert.AreEqual(11, flow.FunctionNodeCount);
+                Assert.AreEqual(4, flow.InTensorCount);
+                Assert.AreEqual(2, flow.OutTensorCount);
+                
+                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradTensor.State);
+                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradTensor.State);
+            }
+
+            {
+                ParameterField fin = intensor;
+                ParameterField g1 = outtensor1;
+                VariableField g2 = outtensor2;
+                VariableField g3 = outtensor3;
+
+                Field fp1 = fin + 1;
+                Field ferr1 = Reshape(fp1, g1.Shape) - g1;
+                Field ferr2 = Reshape(fp1, g2.Shape) - g2;
+                Field ferr3 = Reshape(fp1, g3.Shape) - g3;
+
+                (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr1, ferr2, ferr3);
+
+                flow.Execute();
+
+                Assert.AreEqual(30, flow.NodeCount);
+                Assert.AreEqual(18, flow.VariableNodeCount);
+                Assert.AreEqual(12, flow.FunctionNodeCount);
+                Assert.AreEqual(4, flow.InTensorCount);
+                Assert.AreEqual(2, flow.OutTensorCount);
+                
+                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradTensor.State);
+                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradTensor.State);
+            }
+
+            {
+                ParameterField fin = intensor;
+                ParameterField g1 = outtensor1;
+                VariableField g2 = outtensor2;
+                VariableField g3 = outtensor3;
+
+                Field ferr2 = Reshape(fin, g2.Shape) - g2;
+                Field ferr1 = Reshape(fin, g1.Shape) - g1;
+                Field ferr3 = Reshape(fin, g3.Shape) - g3;
+
+                (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr2, ferr1, ferr3);
+
+                flow.Execute();
+
+                Assert.AreEqual(28, flow.NodeCount);
+                Assert.AreEqual(17, flow.VariableNodeCount);
+                Assert.AreEqual(11, flow.FunctionNodeCount);
+                Assert.AreEqual(4, flow.InTensorCount);
+                Assert.AreEqual(2, flow.OutTensorCount);
+                
+                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradTensor.State);
+                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradTensor.State);
+            }
+
+            {
+                ParameterField fin = intensor;
+                ParameterField g1 = outtensor1;
+                VariableField g2 = outtensor2;
+                VariableField g3 = outtensor3;
+
+                Field fp1 = fin + 1;
+                Field ferr2 = Reshape(fp1, g2.Shape) - g2;
+                Field ferr1 = Reshape(fp1, g1.Shape) - g1;
+                Field ferr3 = Reshape(fp1, g3.Shape) - g3;
+
+                (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr2, ferr1, ferr3);
+
+                flow.Execute();
+
+                Assert.AreEqual(30, flow.NodeCount);
+                Assert.AreEqual(18, flow.VariableNodeCount);
+                Assert.AreEqual(12, flow.FunctionNodeCount);
+                Assert.AreEqual(4, flow.InTensorCount);
+                Assert.AreEqual(2, flow.OutTensorCount);
+                
+                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradTensor.State);
+                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradTensor.State);
+            }
+
+            {
+                ParameterField fin = intensor;
+                ParameterField g1 = outtensor1;
+                VariableField g2 = outtensor2;
+                VariableField g3 = outtensor3;
+
+                Field ferr2 = Reshape(fin, g2.Shape) - g2;
+                Field ferr3 = Reshape(fin, g3.Shape) - g3;
+                Field ferr1 = Reshape(fin, g1.Shape) - g1;
+
+                (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr2, ferr3, ferr1);
+
+                flow.Execute();
+
+                Assert.AreEqual(28, flow.NodeCount);
+                Assert.AreEqual(17, flow.VariableNodeCount);
+                Assert.AreEqual(11, flow.FunctionNodeCount);
+                Assert.AreEqual(4, flow.InTensorCount);
+                Assert.AreEqual(2, flow.OutTensorCount);
+                
+                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradTensor.State);
+                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradTensor.State);
+            }
+
+            {
+                ParameterField fin = intensor;
+                ParameterField g1 = outtensor1;
+                VariableField g2 = outtensor2;
+                VariableField g3 = outtensor3;
+
+                Field fp1 = fin + 1;
+                Field ferr2 = Reshape(fp1, g2.Shape) - g2;
+                Field ferr3 = Reshape(fp1, g3.Shape) - g3;
+                Field ferr1 = Reshape(fp1, g1.Shape) - g1;
+
+                (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr2, ferr3, ferr1);
+
+                flow.Execute();
+
+                Assert.AreEqual(30, flow.NodeCount);
+                Assert.AreEqual(18, flow.VariableNodeCount);
+                Assert.AreEqual(12, flow.FunctionNodeCount);
+                Assert.AreEqual(4, flow.InTensorCount);
+                Assert.AreEqual(2, flow.OutTensorCount);
+                
+                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradTensor.State);
+                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradTensor.State);
             }
         }
 
