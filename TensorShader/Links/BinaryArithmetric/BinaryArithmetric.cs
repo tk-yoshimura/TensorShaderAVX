@@ -12,11 +12,11 @@ namespace TensorShader.Links.BinaryArithmetric {
         protected Field X2 => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public BinaryArithmetric(Field infield1, Field infield2, Field outfield)
-            : base(new Field[] { infield1, infield2 }, new Field[]{ outfield }) { }
+            : base(new Field[] { infield1, infield2 }, outfield) { }
 
         /// <summary>形状を調整する</summary>
         public static VariableNode AdjectShape(VariableNode node, Shape shape) {

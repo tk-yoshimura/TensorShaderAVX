@@ -21,7 +21,7 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>入力形状</summary>
         protected Shape InShape{ private set; get; }
@@ -31,7 +31,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Reshape(Field infield, Field outfield, Shape shape)
-            : base(new Field[]{ infield }, new Field[]{ outfield }){
+            : base(new Field[]{ infield }, outfield){
             this.InShape = infield.Shape;
             this.OutShape = shape;
         }

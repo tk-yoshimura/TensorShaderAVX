@@ -24,11 +24,11 @@ namespace TensorShader.Links.Loss {
         protected Field T => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public SquareError(Field xfield, Field tfield, Field outfield)
-            : base(new Field[]{ xfield, tfield }, new Field[]{ outfield }) { }
+            : base(new Field[]{ xfield, tfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

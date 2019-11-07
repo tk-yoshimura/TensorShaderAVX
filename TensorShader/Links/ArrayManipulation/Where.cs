@@ -27,14 +27,14 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field X2 => InFields[2];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>形状</summary>
         protected Shape Shape{ private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public Where(Field condition, Field x1, Field x2, Field y)
-            : base(new Field[]{ condition, x1, x2 }, new Field[]{ y }){
+            : base(new Field[]{ condition, x1, x2 }, y ){
             this.Shape = condition.Shape;
         }
 

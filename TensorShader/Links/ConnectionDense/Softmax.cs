@@ -22,11 +22,11 @@ namespace TensorShader.Links.ConnectionDense {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public Softmax(Field infield, Field outfield)
-            : base(new Field[]{ infield }, new Field[]{ outfield }) {
+            : base(new Field[]{ infield }, outfield) {
             if (infield.Shape.Type != ShapeType.Map || infield.Shape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(infield.Shape, ("Ndim", 2), ("Type", ShapeType.Map)));
             }

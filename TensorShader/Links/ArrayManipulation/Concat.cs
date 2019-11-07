@@ -23,14 +23,14 @@ namespace TensorShader.Links.ArrayManipulation {
         protected IReadOnlyList<Field> XS => InFields;
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>軸</summary>
         public int Axis { private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public Concat(int axis, Field[] infields, Field outfield)
-            : base(infields, new Field[]{ outfield }) {
+            : base(infields, outfield) {
             this.Axis = axis;
         }
 

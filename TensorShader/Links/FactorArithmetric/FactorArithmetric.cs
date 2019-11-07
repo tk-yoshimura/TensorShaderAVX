@@ -8,10 +8,10 @@ namespace TensorShader.Links.FactorArithmetric {
         protected Field Factor => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public FactorArithmetric(Field infield, Field factorfield, Field outfield)
-            : base(new Field[] { infield, factorfield }, new Field[]{ outfield }) { }
+            : base(new Field[] { infield, factorfield }, outfield) { }
     }
 }

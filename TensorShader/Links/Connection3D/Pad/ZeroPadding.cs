@@ -49,7 +49,7 @@ namespace TensorShader.Links.Connection3D {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public ZeroPadding(Field infield, Field outfield, int pad)
@@ -57,7 +57,7 @@ namespace TensorShader.Links.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public ZeroPadding(Field infield, Field outfield, int pad_left, int pad_right, int pad_top, int pad_bottom, int pad_front, int pad_rear)
-            : base(new Field[]{ infield }, new Field[]{ outfield }) {
+            : base(new Field[]{ infield }, outfield) {
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
             this.PadTop = pad_top;

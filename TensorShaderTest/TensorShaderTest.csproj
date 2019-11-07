@@ -183,7 +183,6 @@
     <Compile Include="Links\ArrayManipulation\BatchwiseMulTest.cs" />
     <Compile Include="Links\ArrayManipulation\ConcatTest.cs" />
     <Compile Include="Links\ArrayManipulation\FlipTest.cs" />
-    <Compile Include="Links\ArrayManipulation\SeparateTest.cs" />
     <Compile Include="Links\ArrayManipulation\ExtractChannelTest.cs" />
     <Compile Include="Links\ArrayManipulation\WhereTest.cs" />
     <Compile Include="Links\ArrayManipulation\ReshapeTest.cs" />

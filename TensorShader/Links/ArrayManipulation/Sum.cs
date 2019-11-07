@@ -30,11 +30,11 @@ namespace TensorShader.Links.ArrayManipulation {
         protected IReadOnlyList<Field> XS => InFields;
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public Sum(Field[] infields, Field outfield)
-            : base(infields, new Field[]{ outfield }) { }
+            : base(infields, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

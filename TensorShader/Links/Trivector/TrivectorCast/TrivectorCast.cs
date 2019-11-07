@@ -27,11 +27,11 @@ namespace TensorShader.Links.Trivector {
         protected Field Z => InFields[2];
 
         /// <summary>出力項</summary>
-        protected Field V => OutFields[0];
+        protected Field V => OutField;
 
         /// <summary>コンストラクタ</summary>
         public TrivectorCast(Field xfield, Field yfield, Field zfield, Field outfield)
-            : base(new Field[] { xfield, yfield, zfield }, new Field[] { outfield }) { }
+            : base(new Field[] { xfield, yfield, zfield }, outfield ) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

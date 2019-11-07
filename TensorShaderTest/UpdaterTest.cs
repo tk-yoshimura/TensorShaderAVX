@@ -106,7 +106,7 @@ namespace TensorShaderTest {
                 ParameterField f1 = new ParameterField(intensor);
                 VariableField fo = new VariableField(outtensor);
 
-                (Field f2, Field f3) = PosNeg(f1);
+                (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
                 Field ferr = f4 - fo;
 

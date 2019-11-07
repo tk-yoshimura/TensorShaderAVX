@@ -24,11 +24,11 @@ namespace TensorShader.Links.Connection2D {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public MaxPooling(Field infield, Field outfield, int stride)
-            : base(new Field[]{ infield }, new Field[]{ outfield }) {
+            : base(new Field[]{ infield }, outfield) {
             this.Stride = stride;
         }
 

@@ -27,11 +27,11 @@ namespace TensorShader.Links.Connection1D {
         protected Field W => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public ChannelwiseConvolution(Field infield, Field kernelfield, Field outfield, int stride)
-            : base(new Field[]{ infield, kernelfield }, new Field[]{ outfield }) {
+            : base(new Field[]{ infield, kernelfield }, outfield) {
             this.Stride = stride;
         }
 

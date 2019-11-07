@@ -24,11 +24,11 @@ namespace TensorShader.Links.ConnectionDense {
         protected Field W => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public Dense(Field infield, Field kernelfield, Field outfield)
-            : base(new Field[]{ infield, kernelfield }, new Field[]{ outfield }) { }
+            : base(new Field[]{ infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

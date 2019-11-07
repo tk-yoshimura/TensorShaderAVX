@@ -25,11 +25,11 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field V => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public BatchwiseMul(Field infield, Field vecfield, Field outfield)
-            : base(new Field[]{ infield, vecfield }, new Field[]{ outfield }){ }
+            : base(new Field[]{ infield, vecfield }, outfield ){ }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

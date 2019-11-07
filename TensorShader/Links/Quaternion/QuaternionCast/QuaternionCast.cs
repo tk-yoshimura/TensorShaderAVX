@@ -30,11 +30,11 @@ namespace TensorShader.Links.Quaternion {
         protected Field XImagK => InFields[3];
 
         /// <summary>複素数項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public QuaternionCast(Field realfield, Field imagifield, Field imagjfield, Field imagkfield, Field outfield)
-            : base(new Field[] { realfield, imagifield, imagjfield, imagkfield }, new Field[] { outfield }) { }
+            : base(new Field[] { realfield, imagifield, imagjfield, imagkfield }, outfield ) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

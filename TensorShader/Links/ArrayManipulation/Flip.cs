@@ -22,14 +22,14 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>軸</summary>
         protected readonly int Axis;
 
         /// <summary>コンストラクタ</summary>
         public Flip(Field x, Field y, int axis)
-            : base(new Field[]{ x }, new Field[]{ y }){
+            : base(new Field[]{ x }, y ){
             this.Axis = axis;
         }
 

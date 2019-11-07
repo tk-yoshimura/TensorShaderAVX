@@ -10,11 +10,11 @@ namespace TensorShader.Links.Evaluation.Classify {
         protected Field T => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public ClassifyEvaluation(Field xfield, Field tfield, Field yfield)
-            : base(new Field[] { xfield, tfield }, new Field[] { yfield }) {
+            : base(new Field[] { xfield, tfield }, yfield ) {
             if (X.Shape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElementsWithIndex(0, X.Shape, ("Ndim", 2)));
             }

@@ -5,7 +5,8 @@ using System.Linq;
 namespace TensorShader {
     /// <summary>リンク</summary>
     public abstract class Link {
-        private readonly List<Field> infields, outfields;
+        private readonly List<Field> infields;
+        private readonly Field outfield;
 
         /// <summary>入力フィールド</summary>
         public IReadOnlyList<Field> InFields => infields.AsReadOnly();
@@ -14,32 +15,28 @@ namespace TensorShader {
         public int InFieldCount => infields.Count;
 
         /// <summary>出力フィールド</summary>
-        public IReadOnlyList<Field> OutFields => outfields.AsReadOnly();
-
-        /// <summary>出力フィールド数</summary>
-        public int OutFieldCount => outfields.Count;
+        public Field OutField => outfield;
 
         /// <summary>リンク名</summary>
         public virtual string Name => GetType().Name.Split('.').Last();
 
         /// <summary>コンストラクタ</summary>
-        public Link(Field[] infields, Field[] outfields) {
+        public Link(Field[] infields, Field outfield) {
             foreach(Field infield in infields) {
                 infield.InLinks.Add(this);
             }
 
             bool enable_backprob = infields.Select((field)=>field.EnableBackprop).Any((b)=>b);
-            foreach(Field outfield in outfields) {
-                if (outfield.OutLink != null) {
-                    throw new ArgumentNullException(nameof(OutFields));
-                }
-
-                outfield.OutLink = this;
-                outfield.EnableBackprop = enable_backprob;
+            
+            if (outfield.OutLink != null) {
+                throw new ArgumentNullException(nameof(outfield));
             }
 
+            outfield.OutLink = this;
+            outfield.EnableBackprop = enable_backprob;
+            
             this.infields = new List<Field>(infields);
-            this.outfields = new List<Field>(outfields);
+            this.outfield = outfield;
         }
 
         /// <summary>順伝搬</summary>

@@ -21,14 +21,14 @@ namespace TensorShader.Links.Indexer {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>チャネル数</summary>
         protected int Channels { private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public OneHotVector(Field infield, Field outfield, int channels)
-            : base(new Field[]{ infield }, new Field[]{ outfield }){
+            : base(new Field[]{ infield }, outfield){
             this.Channels = channels;
         }
 

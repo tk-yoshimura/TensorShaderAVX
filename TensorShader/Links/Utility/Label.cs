@@ -21,14 +21,14 @@ namespace TensorShader.Links.Utility {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>ラベル名</summary>
         public override string Name => name;
 
         /// <summary>コンストラクタ</summary>
         public Label(Field infield, Field outfield, string name)
-            : base(new Field[] { infield }, new Field[]{ outfield }) {
+            : base(new Field[] { infield }, outfield) {
             this.name = name;
         }
 

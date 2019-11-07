@@ -434,7 +434,6 @@ namespace TensorShader {
 
             Stack<Field> backward_stack = new Stack<Field>(error_fields);
             Dictionary<Field, List<Link>> outlinks_table = new Dictionary<Field, List<Link>>();
-            Dictionary<Link, List<Field>> outfield_table = new Dictionary<Link, List<Field>>();
 
             // 逆伝搬実行
             while (backward_stack.Count > 0) {
@@ -457,22 +456,6 @@ namespace TensorShader {
 
                         if (outlinks_table[push_field].Count > 0) {
                             continue;
-                        }
-
-                        // 入力フィールドのリンクの出力フィールドがすべて誤差確定済みかチェック
-                        if (push_field.OutLink != null) {
-                            if (!outfield_table.ContainsKey(push_field.OutLink)) {
-                                outfield_table.Add(
-                                    push_field.OutLink,
-                                    push_field.OutLink.OutFields.WhiteList(reachable_fields).ToList()
-                                );
-                            }
-
-                            outfield_table[push_field.OutLink].Remove(push_field);
-
-                            if (outfield_table[push_field.OutLink].Count > 0) {
-                                continue;
-                            }
                         }
 
                         // 逆伝搬に必要な誤差変数がすべて準備できたら勾配を確定しスタックに追加

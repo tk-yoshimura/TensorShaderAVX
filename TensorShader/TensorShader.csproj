@@ -407,7 +407,6 @@
     <Compile Include="Links\ArrayManipulation\ExtractChannel.cs" />
     <Compile Include="Links\ArrayManipulation\Concat.cs" />
     <Compile Include="Links\ArrayManipulation\Flip.cs" />
-    <Compile Include="Links\ArrayManipulation\Separate.cs" />
     <Compile Include="Links\ArrayManipulation\Sort.cs" />
     <Compile Include="Links\ArrayManipulation\Where.cs" />
     <Compile Include="Links\ArrayManipulation\Reshape.cs" />
@@ -603,7 +602,6 @@
     <Compile Include="Links\UnaryArithmetric\Relu.cs" />
     <Compile Include="Links\Utility\Unchain.cs" />
     <Compile Include="Links\Utility\Label.cs" />
-    <Compile Include="Links\Utility\PosNeg.cs" />
     <Compile Include="Links\UnaryArithmetric\Abs.cs" />
     <Compile Include="Links\UnaryArithmetric\UnaryArithmetric.cs" />
     <Compile Include="Node.cs" />

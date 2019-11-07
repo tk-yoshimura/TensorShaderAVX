@@ -14,13 +14,13 @@ namespace TensorShader.Links.Aggregation {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         private readonly Shape keepdims_shape;
 
         /// <summary>コンストラクタ</summary>
         public Aggregation(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
-            : base(new Field[] { infield }, new Field[]{ outfield }) {
+            : base(new Field[] { infield }, outfield ) {
             if (axes == null) {
                 axes = (new int[infield.Shape.Ndim]).Select((_, idx) => idx).ToArray();
             }

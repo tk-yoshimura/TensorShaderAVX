@@ -37,7 +37,7 @@ namespace TensorShader.Links.Connection1D {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public EdgePadding(Field infield, Field outfield, int pad)
@@ -45,7 +45,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public EdgePadding(Field infield, Field outfield, int pad_left, int pad_right)
-            : base(new Field[]{ infield }, new Field[]{ outfield }) {
+            : base(new Field[]{ infield }, outfield) {
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
         }

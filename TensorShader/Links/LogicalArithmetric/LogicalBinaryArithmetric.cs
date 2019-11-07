@@ -8,11 +8,11 @@ namespace TensorShader.Links.LogicalArithmetric {
         protected Field X2 => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public LogicalBinaryArithmetric(Field infield1, Field infield2, Field outfield)
-            : base(new Field[]{ infield1, infield2 }, new Field[]{ outfield }) { }
+            : base(new Field[]{ infield1, infield2 }, outfield) { }
 
         /// <summary>逆伝搬</summary>
         public override sealed void Backward() {

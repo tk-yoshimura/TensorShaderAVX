@@ -43,7 +43,7 @@ namespace TensorShader.Links.Connection2D {
         protected Field X => InFields[0];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public Trimming(Field infield, Field outfield, int trim)
@@ -51,7 +51,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public Trimming(Field infield, Field outfield, int trim_left, int trim_right, int trim_top, int trim_bottom)
-            : base(new Field[]{ infield }, new Field[]{ outfield }) {
+            : base(new Field[]{ infield }, outfield) {
             this.TrimLeft = trim_left;
             this.TrimRight = trim_right;
             this.TrimTop = trim_top;

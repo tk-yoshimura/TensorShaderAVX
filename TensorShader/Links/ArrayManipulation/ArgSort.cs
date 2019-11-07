@@ -27,14 +27,14 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field Index => InFields[1];
 
         /// <summary>出力項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>軸</summary>
         protected readonly int Axis;
 
         /// <summary>コンストラクタ</summary>
         public ArgSort(Field x, Field index, Field y, int axis)
-            : base(new Field[]{ x, index }, new Field[]{ y }){
+            : base(new Field[]{ x, index }, y){
             this.Axis = axis;
         }
 

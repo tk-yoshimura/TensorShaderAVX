@@ -24,11 +24,11 @@ namespace TensorShader.Links.Complex {
         protected Field XImag => InFields[1];
 
         /// <summary>複素数項</summary>
-        protected Field Y => OutFields[0];
+        protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
         public ComplexCast(Field realfield, Field imagfield, Field outfield)
-            : base(new Field[] { realfield, imagfield }, new Field[] { outfield }) { }
+            : base(new Field[] { realfield, imagfield }, outfield ) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
