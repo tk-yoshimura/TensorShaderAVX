@@ -46,7 +46,7 @@ namespace TensorShader.Operators.ArrayManipulation {
                 slides *= (uint)outmap.Shape[i];
             }
 
-            TensorShaderAvxBackend.ArrayManipulation.Broadcast(0, src_length, inmap.Buffer, 0, dst_length, outmap.Buffer, slides);
+            TensorShaderAvxBackend.ArrayManipulation.Broadcast(src_length, inmap.Buffer, dst_length, outmap.Buffer, slides);
         }
 
         /// <summary>操作を実行</summary>

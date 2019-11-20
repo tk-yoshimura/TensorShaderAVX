@@ -43,34 +43,25 @@ void deconvolution_cw1d(unsigned int channels,
 
 void TensorShaderAvxBackend::Convolution::ChannelwiseDeconvolution1D(unsigned int channels, unsigned int outwidth,
                                                                      unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride,
-                                                                     cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap) {
+                                                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
-
-    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
-
-    if (channels * inwidth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * kwidth > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
+    
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    ArrayManipulation::Zeroset(channels * outwidth * th, channels * outwidth, outmap);
+    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    Util::CheckLength(channels * inwidth * batch, inmap);
+    Util::CheckLength(channels * outwidth * batch, outmap);
+    Util::CheckLength(channels * kwidth, kernel);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    outmap->Zeroset(channels * outwidth * th, channels * outwidth);
+    
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     deconvolution_cw1d(channels,
                        inwidth, outwidth, kwidth,

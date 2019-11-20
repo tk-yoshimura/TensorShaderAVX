@@ -8,7 +8,7 @@ void trivector_y(unsigned int length, float* src_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Trivector::Y(unsigned int length, cli::array<float>^ src, cli::array<float>^ dst_y) {
+void TensorShaderAvxBackend::Trivector::Y(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst_y) {
 
     Util::CheckDuplicateArray(src, dst_y);
 
@@ -16,14 +16,11 @@ void TensorShaderAvxBackend::Trivector::Y(unsigned int length, cli::array<float>
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length, src);
-    Util::CheckOutOfRange(0, length / 3, dst_y);
+    Util::CheckLength(length, src);
+    Util::CheckLength(length / 3, dst_y);
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst_y[0];
-
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst_y->Ptr.ToPointer());
 
     trivector_y(length, src_ptr, dst_ptr);
 }

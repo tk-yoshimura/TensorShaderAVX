@@ -8,7 +8,7 @@ void trivector_z(unsigned int length, float* src_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Trivector::Z(unsigned int length, cli::array<float>^ src, cli::array<float>^ dst_z) {
+void TensorShaderAvxBackend::Trivector::Z(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst_z) {
 
     Util::CheckDuplicateArray(src, dst_z);
 
@@ -16,14 +16,11 @@ void TensorShaderAvxBackend::Trivector::Z(unsigned int length, cli::array<float>
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length, src);
-    Util::CheckOutOfRange(0, length / 3, dst_z);
+    Util::CheckLength(length, src);
+    Util::CheckLength(length / 3, dst_z);
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst_z[0];
-
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst_z->Ptr.ToPointer());
 
     trivector_z(length, src_ptr, dst_ptr);
 }

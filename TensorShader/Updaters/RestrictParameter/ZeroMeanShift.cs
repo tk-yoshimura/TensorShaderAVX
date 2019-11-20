@@ -16,7 +16,7 @@ namespace TensorShader.Updaters.RestrictParameter {
 
         /// <summary>更新フロー</summary>
         public override Flow UpdateFlow() {
-            VariableNode mean = Broadcast(Mean(Value, axes, keepdims: true), Value.Shape);
+            VariableNode mean = Broadcast(Average(Value, axes, keepdims: true), Value.Shape);
             VariableNode new_value = Value - mean;
             new_value.Update(Value);
 

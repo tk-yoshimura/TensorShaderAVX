@@ -171,29 +171,23 @@ void linear_zoom_3d(unsigned int channels,
     }
 }
 
-void TensorShaderAvxBackend::Zoom::LinearZoom3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Zoom::LinearZoom3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
+
+    if (th >= batch) {
+        throw gcnew System::ArgumentException();
+    }
 
     unsigned int outwidth = inwidth * 2;
     unsigned int outheight = inheight * 2;
     unsigned int outdepth = indepth * 2;
 
-    if (channels * inwidth * inheight * indepth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (th >= batch) {
-        throw gcnew System::ArgumentException();
-    }
+    Util::CheckLength(channels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(channels * outwidth * outheight * outdepth * batch, outmap);
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     linear_zoom_3d(channels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, inmap_ptr, outmap_ptr);
 }

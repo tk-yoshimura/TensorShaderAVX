@@ -33,15 +33,13 @@ void random_uniform(unsigned int length, unsigned __int64 seed, float* dst_ptr) 
     }
 }
 
-void TensorShaderAvxBackend::Randomize::Uniform(unsigned int index, unsigned int length, cli::array<float>^ dst, Random^ random) {
+void TensorShaderAvxBackend::Randomize::Uniform(unsigned int length, AvxArray<float>^ dst, Random^ random) {
 
-    Util::CheckOutOfRange(index, length, dst);
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* dst_ptr = pinptr_dst;
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     unsigned __int64 seed = ((unsigned __int64)random->Next() + 1) * 0x100000000ull + ((unsigned __int64)random->Next() + 1);
 
-    random_uniform(length, seed, dst_ptr + index);
+    random_uniform(length, seed, dst_ptr);
 }

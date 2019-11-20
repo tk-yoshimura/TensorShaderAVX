@@ -48,12 +48,12 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="TensorShaderAvxBackend, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TensorShaderAvxBackend\bin\x64\Debug\TensorShaderAvxBackend.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="TensorShaderAvxBackend, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregation\AverageTest.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="Aggregation\MinTest.cs" />
     <Compile Include="ArrayManipulation\BroadcastTest.cs" />
     <Compile Include="Aggregation\SumTest.cs" />
+    <Compile Include="AvxArrayTest.cs" />
     <Compile Include="Batchwise\MulTest.cs" />
     <Compile Include="ArrayManipulation\CopyTest.cs" />
     <Compile Include="Channelwise\DivRVectorTest.cs" />
@@ -95,7 +96,6 @@
     <Compile Include="Elementwise\BinaryConstantArithmetric\MinimumConstantTest.cs" />
     <Compile Include="Elementwise\BinaryConstantArithmetric\MulConstantTest.cs" />
     <Compile Include="ArrayManipulation\ClearTest.cs" />
-    <Compile Include="ArrayManipulation\ZerosetTest.cs" />
     <Compile Include="Elementwise\LogicalArithmetric\IsNanTest.cs" />
     <Compile Include="Elementwise\LogicalConstantArithmetric\EqualConstantTest.cs" />
     <Compile Include="Elementwise\LogicalConstantArithmetric\GreaterThanOrEqualConstantTest.cs" />
@@ -152,9 +152,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pool\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

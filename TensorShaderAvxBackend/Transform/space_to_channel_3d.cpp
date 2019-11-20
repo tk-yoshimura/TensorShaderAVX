@@ -46,28 +46,24 @@ void space_to_channel_3d(unsigned int inchannels, unsigned int outchannels,
     }
 }
 
-void TensorShaderAvxBackend::Transform::SpaceToChannel3D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int scale, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Transform::SpaceToChannel3D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    unsigned int outchannels = inchannels * scale * scale * scale;
-    unsigned int inwidth = outwidth * scale, inheight = outheight * scale, indepth = outdepth * scale;
-
-    if (inchannels * inwidth * inheight * indepth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    unsigned int outchannels = inchannels * scale * scale * scale;
+    unsigned int inwidth = outwidth * scale;
+    unsigned int inheight = outheight * scale;
+    unsigned int indepth = outdepth * scale;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    Util::CheckLength(inchannels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     space_to_channel_3d(inchannels, outchannels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, scale, inmap_ptr, outmap_ptr);
 }

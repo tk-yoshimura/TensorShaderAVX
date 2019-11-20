@@ -508,9 +508,6 @@
     <ClCompile Include="Batchwise\mul_bnwise.cpp">
       <Filter>ソース ファイル\Batchwise</Filter>
     </ClCompile>
-    <ClCompile Include="ArrayManipulation\zeroset.cpp">
-      <Filter>ソース ファイル\ArrayManipulation</Filter>
-    </ClCompile>
     <ClCompile Include="ArrayManipulation\clear.cpp">
       <Filter>ソース ファイル\ArrayManipulation</Filter>
     </ClCompile>
@@ -972,6 +969,9 @@
     </ClCompile>
     <ClCompile Include="Complex\Convolution\Convolution3D\complex_kernelproduct_3d.cpp">
       <Filter>ソース ファイル\Complex\Convolution\Convolution3D</Filter>
+    </ClCompile>
+    <ClCompile Include="avxarray.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

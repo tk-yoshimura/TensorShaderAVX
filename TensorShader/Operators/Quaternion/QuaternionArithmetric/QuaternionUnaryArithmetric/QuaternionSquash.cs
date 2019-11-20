@@ -11,7 +11,7 @@ namespace TensorShader.Operators.QuaternionUnaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Quaternion.Squash(0, (uint)Shape.Length, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Quaternion.Squash((uint)Shape.Length, inmap.Buffer, outmap.Buffer);
         }
     }
 }

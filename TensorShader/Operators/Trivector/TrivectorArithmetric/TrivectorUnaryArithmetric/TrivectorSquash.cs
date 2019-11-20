@@ -11,7 +11,7 @@ namespace TensorShader.Operators.TrivectorUnaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Trivector.Squash(0, (uint)Shape.Length, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Trivector.Squash((uint)Shape.Length, inmap.Buffer, outmap.Buffer);
         }
     }
 }

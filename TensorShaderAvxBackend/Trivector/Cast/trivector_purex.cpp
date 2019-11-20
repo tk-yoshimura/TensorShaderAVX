@@ -10,7 +10,7 @@ void trivector_purex(unsigned int length, float* srcx_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Trivector::PureX(unsigned int length, cli::array<float>^ src_x, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Trivector::PureX(unsigned int length, AvxArray<float>^ src_x, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src_x, dst);
 
@@ -18,14 +18,11 @@ void TensorShaderAvxBackend::Trivector::PureX(unsigned int length, cli::array<fl
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length / 3, src_x);
-    Util::CheckOutOfRange(0, length, dst);
-
-    pin_ptr<float> pinptr_srcx = &src_x[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* srcx_ptr = pinptr_srcx;
-    float* dst_ptr = pinptr_dst;
+    Util::CheckLength(length / 3, src_x);
+    Util::CheckLength(length, dst);
+    
+    float* srcx_ptr = (float*)(src_x->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     trivector_purex(length, srcx_ptr, dst_ptr);
 }

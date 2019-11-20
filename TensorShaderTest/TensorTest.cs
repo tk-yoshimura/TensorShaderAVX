@@ -399,7 +399,7 @@ namespace TensorShaderTest {
 
                 Tensor outmap = tensors[0];
 
-                outmap.Buffer[outmap.Length] = 1;
+                outmap.Buffer[(ulong)outmap.Length] = 1;
             }
 
             /// <summary>操作を実行</summary>

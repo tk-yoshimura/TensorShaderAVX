@@ -17,12 +17,12 @@ void complex_squaregrad(unsigned int length, float* src1_ptr, float* src2_ptr, f
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
-        __m256 x1 = _mm256_loadu_ps(src1_ptr + i);
-        __m256 x2 = _mm256_loadu_ps(src2_ptr + i);
+        __m256 x1 = _mm256_load_ps(src1_ptr + i);
+        __m256 x2 = _mm256_load_ps(src2_ptr + i);
 
         __m256 y = _mm256_squaremulgrad_ps(x2, x1);
 
-        _mm256_storeu_ps(dst_ptr + i, y);
+        _mm256_store_ps(dst_ptr + i, y);
     }
 
     if (k > 0) {
@@ -37,21 +37,17 @@ void complex_squaregrad(unsigned int length, float* src1_ptr, float* src2_ptr, f
     }
 }
 
-void TensorShaderAvxBackend::Complex::SquareGrad(unsigned int index, unsigned int length, cli::array<float>^ src1, cli::array<float>^ src2, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Complex::SquareGrad(unsigned int length, AvxArray<float>^ src1, AvxArray<float>^ src2, AvxArray<float>^ dst) {
 
-    Util::CheckOutOfRange(index, length, src1, src2, dst);
+    Util::CheckLength(length, src1, src2, dst);
 
     if (length % 2 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src1 = &src1[0];
-    pin_ptr<float> pinptr_src2 = &src2[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* src1_ptr = (float*)(src1->Ptr.ToPointer());
+    float* src2_ptr = (float*)(src2->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* src1_ptr = pinptr_src1;
-    float* src2_ptr = pinptr_src2;
-    float* dst_ptr = pinptr_dst;
-
-    complex_squaregrad(length, src1_ptr + index, src2_ptr + index, dst_ptr + index);
+    complex_squaregrad(length, src1_ptr, src2_ptr, dst_ptr);
 }

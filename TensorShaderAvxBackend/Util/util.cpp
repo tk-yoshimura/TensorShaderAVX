@@ -6,23 +6,36 @@
 
 using namespace System;
 
-void TensorShaderAvxBackend::Util::CheckOutOfRange(unsigned int index, unsigned int length, ...cli::array<cli::array<float>^>^ arrays){
+void TensorShaderAvxBackend::Util::CheckLength(unsigned int length, ...cli::array<AvxArray<float>^>^ arrays){
     if (length <= 0) {
         return;
     }
     
+    for each (AvxArray<float>^ array in arrays){
+        if (length > (unsigned int)array->Length) {
+            throw gcnew System::IndexOutOfRangeException();
+        }
+    }
+}
+
+void TensorShaderAvxBackend::Util::CheckOutOfRange(unsigned int index, unsigned int length, ...cli::array<AvxArray<float>^>^ arrays) {
+    if (length <= 0) {
+        return;
+    }
+
     if (index + length < index) {
         throw gcnew System::OverflowException();
     }
-    
-    for each (cli::array<float>^ array in arrays){
+
+    for each (AvxArray<float>^ array in arrays) {
         if (index >= (unsigned int)array->Length || index + length > (unsigned int)array->Length) {
             throw gcnew System::IndexOutOfRangeException();
         }
     }
 }
 
-void TensorShaderAvxBackend::Util::CheckDuplicateArray(... cli::array<cli::array<float>^>^ arrays) {
+
+void TensorShaderAvxBackend::Util::CheckDuplicateArray(... cli::array<AvxArray<float>^>^ arrays) {
     for (int i = 0; i < arrays->Length; i++) {
         for (int j = 0; j < i; j++) {
             if (ReferenceEquals(arrays[i], arrays[j])) {

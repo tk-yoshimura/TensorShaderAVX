@@ -149,36 +149,27 @@ void complex_kernelproduct_1d_transpose(unsigned int inchannels, unsigned int ou
 
 void TensorShaderAvxBackend::Complex::KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, 
 	                                                  unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride, bool transpose,
-                                                      cli::array<float>^ inmap, cli::array<float>^ outmap, cli::array<float>^ kernel) {
+                                                      AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
-
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
 
     if (inchannels % 2 != 0 || outchannels % 2 != 0 || outch % 2 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * inwidth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth / 2 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (outch >= outchannels) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    Util::CheckLength(inchannels * inwidth * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth / 2, kernel);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (transpose) {
         complex_kernelproduct_1d_transpose(inchannels, outchannels, 

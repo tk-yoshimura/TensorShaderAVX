@@ -63,20 +63,18 @@ void sort_stride1(unsigned int axislength, unsigned int slides, float* ref_ptr) 
     }
 }
 
-void TensorShaderAvxBackend::ArrayManipulation::Sort(unsigned int stride, unsigned int axislength, unsigned int slides, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::ArrayManipulation::Sort(unsigned int stride, unsigned int axislength, unsigned int slides, AvxArray<float>^ src, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src, dst);
-    Util::CheckOutOfRange(0, stride * axislength * slides, src, dst);
+    Util::CheckLength(stride * axislength * slides, src, dst);
 
-    Array::Copy(src, dst, (long long)(stride * axislength * slides));
+    AvxArray<float>::Copy(src, dst, (long long)(stride * axislength * slides));
 
     if (axislength <= 1) {
         return;
     }
 
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* dst_ptr = pinptr_dst;
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (stride > 1) {
         sort(stride, axislength, slides, dst_ptr);

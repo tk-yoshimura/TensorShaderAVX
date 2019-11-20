@@ -45,37 +45,25 @@ void maxunpool_1d(unsigned int channels, unsigned int outwidth, unsigned int th,
     }
 }
 
-void TensorShaderAvxBackend::Pool::MaxUnpool1D(unsigned int channels, unsigned int outwidth, unsigned int batch, unsigned int th, unsigned int stride, cli::array<float>^ ingrad, cli::array<float>^ inpool, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Pool::MaxUnpool1D(unsigned int channels, unsigned int outwidth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, ingrad, inpool, outmap);
 
-    if (channels * (outwidth / stride) * batch > (unsigned int)ingrad->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * (outwidth / stride) * batch > (unsigned int)inpool->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    ArrayManipulation::Zeroset(channels * outwidth * th, channels * outwidth, outmap);
+    unsigned int inwidth = outwidth / stride;
 
-    pin_ptr<float> pinptr_ingrad = &ingrad[0];
-    pin_ptr<float> pinptr_inpool = &inpool[0];
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    Util::CheckLength(channels * inwidth * batch, ingrad, inpool);
+    Util::CheckLength(channels * outwidth * batch, inmap, outmap);
 
-    float* ingrad_ptr = pinptr_ingrad;
-    float* inpool_ptr = pinptr_inpool;
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    outmap->Zeroset(channels * outwidth * th, channels * outwidth);
+
+    float* ingrad_ptr = (float*)(ingrad->Ptr.ToPointer());
+    float* inpool_ptr = (float*)(inpool->Ptr.ToPointer());
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     maxunpool_1d(channels, outwidth, th, stride, ingrad_ptr, inpool_ptr, inmap_ptr, outmap_ptr);
 }

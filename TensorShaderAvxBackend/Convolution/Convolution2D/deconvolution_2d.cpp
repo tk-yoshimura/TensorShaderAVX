@@ -75,35 +75,26 @@ void deconvolution_2d(unsigned int inchannels, unsigned int outchannels,
 
 void TensorShaderAvxBackend::Convolution::Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
                                                           unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride,
-                                                          cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap) {
+                                                          AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
-    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
-    unsigned int inheight = (outheight - kheight) / stride + 1;
-
-    if (inchannels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    ArrayManipulation::Zeroset(outchannels * outwidth * outheight * th, outchannels * outwidth * outheight, outmap);
+    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
+    unsigned int inheight = (outheight - kheight) / stride + 1;
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth * kheight, kernel);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    outmap->Zeroset(outchannels * outwidth * outheight * th, outchannels * outwidth * outheight);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     deconvolution_2d(inchannels, outchannels,
                      inwidth, outwidth, kwidth,

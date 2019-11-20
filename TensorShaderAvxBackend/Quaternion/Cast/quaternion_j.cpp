@@ -8,7 +8,7 @@ void quaternion_j(unsigned int length, float* src_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Quaternion::J(unsigned int length, cli::array<float>^ src, cli::array<float>^ dst_j) {
+void TensorShaderAvxBackend::Quaternion::J(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst_j) {
 
     Util::CheckDuplicateArray(src, dst_j);
 
@@ -16,14 +16,11 @@ void TensorShaderAvxBackend::Quaternion::J(unsigned int length, cli::array<float
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length, src);
-    Util::CheckOutOfRange(0, length / 4, dst_j);
+    Util::CheckLength(length, src);
+    Util::CheckLength(length / 4, dst_j);
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst_j[0];
-
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst_j->Ptr.ToPointer());
 
     quaternion_j(length, src_ptr, dst_ptr);
 }

@@ -11,7 +11,7 @@ namespace TensorShader.Operators.FactorArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outmap = tensors[2];
 
-            TensorShaderAvxBackend.Elementwise.PowConstant(0, (uint)Shape.Length, inmap2.Buffer[0], inmap1.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.PowConstant((uint)Shape.Length, inmap2.Buffer[0], inmap1.Buffer, outmap.Buffer);
         }
     }
 }

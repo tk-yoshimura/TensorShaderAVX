@@ -54,36 +54,31 @@ void divrvec_chwise(unsigned int veclength, unsigned int maplength, float* srcve
     }
 }
 
-void TensorShaderAvxBackend::Channelwise::DivRVector(unsigned int vector_length, unsigned int map_length, cli::array<float>^ srcvector, cli::array<float>^ srcmap, cli::array<float>^ dstmap) {
+void TensorShaderAvxBackend::Channelwise::DivRVector(unsigned int vector_length, unsigned int map_length, AvxArray<float>^ srcvector, AvxArray<float>^ srcmap, AvxArray<float>^ dstmap) {
 
     Util::CheckDuplicateArray(srcvector, srcmap, dstmap);
 
-    Util::CheckOutOfRange(0, vector_length, srcvector);
-    Util::CheckOutOfRange(0, map_length, srcmap);
-    Util::CheckOutOfRange(0, map_length, dstmap);
-
-    if (vector_length == 1) {
-        Elementwise::MulConstant(0, map_length, (float)(1.0 / srcvector[0]), srcmap, dstmap);
-        return;
-    }
+    Util::CheckLength(vector_length, srcvector);
+    Util::CheckLength(map_length, srcmap, dstmap);
 
     while (vector_length < 64 && vector_length % 8 != 0) {
-        cli::array<float>^ v = gcnew cli::array<float>(vector_length * 2);
+        AvxArray<float>^ v = gcnew AvxArray<float>(vector_length * 2);
 
-        Array::Copy(srcvector, v, (int)vector_length);
-        Array::Copy(srcvector, 0, v, vector_length, vector_length);
+        AvxArray<float>::Copy(srcvector, v, (int)vector_length);
+        AvxArray<float>::Copy(srcvector, 0, v, vector_length, vector_length);
 
         srcvector = v;
         vector_length *= 2;
     }
 
-    pin_ptr<float> pinptr_srcvec = &srcvector[0];
-    pin_ptr<float> pinptr_srcmap = &srcmap[0];
-    pin_ptr<float> pinptr_dstmap = &dstmap[0];
-
-    float* srcvec_ptr = pinptr_srcvec;
-    float* srcmap_ptr = pinptr_srcmap;
-    float* dstmap_ptr = pinptr_dstmap;
+    float* srcvec_ptr = (float*)(srcvector->Ptr.ToPointer());
+    float* srcmap_ptr = (float*)(srcmap->Ptr.ToPointer());
+    float* dstmap_ptr = (float*)(dstmap->Ptr.ToPointer());
+    
+    if (vector_length == 1) {
+        Elementwise::MulConstant(map_length, (float)(1.0 / srcvec_ptr[0]), srcmap, dstmap);
+        return;
+    }
 
     divrvec_chwise(vector_length, map_length, srcvec_ptr, srcmap_ptr, dstmap_ptr);
 }

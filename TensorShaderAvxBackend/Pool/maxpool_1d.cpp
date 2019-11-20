@@ -38,25 +38,21 @@ void maxpool_1d(unsigned int channels, unsigned int inwidth, unsigned int th, un
     }
 }
 
-void TensorShaderAvxBackend::Pool::MaxPool1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int th, unsigned int stride, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Pool::MaxPool1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    if (channels * inwidth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * (inwidth / stride) * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    unsigned int outwidth = inwidth / stride;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    Util::CheckLength(channels * inwidth * batch, inmap);
+    Util::CheckLength(channels * outwidth * batch, outmap);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     maxpool_1d(channels, inwidth, th, stride, inmap_ptr, outmap_ptr);
 }

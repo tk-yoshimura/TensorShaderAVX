@@ -9,7 +9,7 @@ void quaternion_purek(unsigned int length, float* srck_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Quaternion::PureK(unsigned int length, cli::array<float>^ src_k, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Quaternion::PureK(unsigned int length, AvxArray<float>^ src_k, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src_k, dst);
 
@@ -17,14 +17,11 @@ void TensorShaderAvxBackend::Quaternion::PureK(unsigned int length, cli::array<f
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length / 4, src_k);
-    Util::CheckOutOfRange(0, length, dst);
+    Util::CheckLength(length / 4, src_k);
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_srck = &src_k[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* srck_ptr = pinptr_srck;
-    float* dst_ptr = pinptr_dst;
+    float* srck_ptr = (float*)(src_k->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     quaternion_purek(length, srck_ptr, dst_ptr);
 }

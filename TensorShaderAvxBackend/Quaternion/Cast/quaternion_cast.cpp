@@ -11,7 +11,7 @@ void quaternion_cast(unsigned int length, float* srcr_ptr, float* srci_ptr, floa
     }
 }
 
-void TensorShaderAvxBackend::Quaternion::Cast(unsigned int length, cli::array<float>^ src_r, cli::array<float>^ src_i, cli::array<float>^ src_j, cli::array<float>^ src_k, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Quaternion::Cast(unsigned int length, AvxArray<float>^ src_r, AvxArray<float>^ src_i, AvxArray<float>^ src_j, AvxArray<float>^ src_k, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src_r, src_i, src_j, src_k, dst);
 
@@ -19,20 +19,14 @@ void TensorShaderAvxBackend::Quaternion::Cast(unsigned int length, cli::array<fl
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length / 4, src_r, src_i, src_j, src_k);
-    Util::CheckOutOfRange(0, length, dst);
-
-    pin_ptr<float> pinptr_srcr = &src_r[0];
-    pin_ptr<float> pinptr_srci = &src_i[0];
-    pin_ptr<float> pinptr_srcj = &src_j[0];
-    pin_ptr<float> pinptr_srck = &src_k[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* srcr_ptr = pinptr_srcr;
-    float* srci_ptr = pinptr_srci;
-    float* srcj_ptr = pinptr_srcj;
-    float* srck_ptr = pinptr_srck;
-    float* dst_ptr = pinptr_dst;
+    Util::CheckLength(length / 4, src_r, src_i, src_j, src_k);
+    Util::CheckLength(length, dst);
+    
+    float* srcr_ptr = (float*)(src_r->Ptr.ToPointer());
+    float* srci_ptr = (float*)(src_i->Ptr.ToPointer());
+    float* srcj_ptr = (float*)(src_j->Ptr.ToPointer());
+    float* srck_ptr = (float*)(src_k->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     quaternion_cast(length, srcr_ptr, srci_ptr, srcj_ptr, srck_ptr, dst_ptr);
 }

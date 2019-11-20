@@ -39,28 +39,23 @@ void space_to_channel_2d(unsigned int inchannels, unsigned int outchannels,
     }
 }
 
-void TensorShaderAvxBackend::Transform::SpaceToChannel2D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int th, unsigned int scale, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Transform::SpaceToChannel2D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    unsigned int outchannels = inchannels * scale * scale;
-    unsigned int inwidth = outwidth * scale, inheight = outheight * scale;
-
-    if (inchannels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    unsigned int outchannels = inchannels * scale * scale;
+    unsigned int inwidth = outwidth * scale;
+    unsigned int inheight = outheight * scale;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     space_to_channel_2d(inchannels, outchannels, inwidth, inheight, outwidth, outheight, th, scale, inmap_ptr, outmap_ptr);
 }

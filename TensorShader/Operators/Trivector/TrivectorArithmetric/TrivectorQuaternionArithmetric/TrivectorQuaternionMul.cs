@@ -39,7 +39,7 @@ namespace TensorShader.Operators.TrivectorQuaternionArithmetric {
         public override void Execute(params Tensor[] tensors) {
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outmap = tensors[2];
 
-            TensorShaderAvxBackend.Trivector.Mul(0, 0, (uint)inmap1.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Trivector.Mul((uint)inmap1.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

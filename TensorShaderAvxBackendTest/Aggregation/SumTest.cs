@@ -14,27 +14,30 @@ namespace TensorShaderAvxBackendTest.Aggregations {
             for (uint dst_length = 1; dst_length <= 32; dst_length++) {
                 for (uint src_length = dst_length; src_length <= dst_length * 32; src_length += dst_length) {
                     for (uint slides = 0; slides <= 4; slides++) {
-                        float[] x = (new float[src_length * slides + 2]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
-                        float[] y = (new float[dst_length * slides + 2]).Select((_) => (float)rd.NextDouble() + 1).ToArray();
+                        float[] x = (new float[src_length * slides + 1]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
+                        float[] y = (new float[dst_length * slides + 1]).Select((_) => (float)rd.NextDouble() + 1).ToArray();
 
-                        float v0 = y[0], v1 = y[dst_length * slides + 1];
+                        float v1 = y[dst_length * slides];
 
-                        Aggregation.Sum(1, src_length, x, 1, dst_length, y, slides);
+                        AvxArray<float> vx = x, vy = y;
+
+                        Aggregation.Sum(src_length, vx, dst_length, vy, slides);
+
+                        y = vy;
 
                         for (int j = 0; j < slides; j++) {
                             double[] sum = new double[dst_length];
 
                             for (int i = 0; i < src_length; i++) {
-                                sum[i % dst_length] += x[i + j * src_length + 1];
+                                sum[i % dst_length] += x[i + j * src_length];
                             }
 
                             for (int i = 0; i < dst_length; i++) {
-                                Assert.AreEqual(sum[i], y[i + j * dst_length + 1], 1e-5f);
+                                Assert.AreEqual(sum[i], y[i + j * dst_length], 1e-5f);
                             }
                         }
 
-                        Assert.AreEqual(v0, y[0]);
-                        Assert.AreEqual(v1, y[dst_length * slides + 1]);
+                        Assert.AreEqual(v1, y[dst_length * slides]);
 
                         Console.WriteLine($"pass: {src_length} {dst_length} {slides}");
                     }
@@ -51,17 +54,17 @@ namespace TensorShaderAvxBackendTest.Aggregations {
             for (uint dst_length = 1; dst_length <= 32; dst_length++) {
                 uint src_length = dst_length * 1000000;
 
-                float[] x = new float[src_length];
-                float[] y = new float[dst_length];
+                AvxArray<float> vx = new float[src_length];
+                AvxArray<float> vy = new float[dst_length];
 
-                Aggregation.Sum(0, src_length, x, 0, dst_length, y, 1);
+                Aggregation.Sum(src_length, vx, dst_length, vy, 1);
 
                 sw.Restart();
 
-                Aggregation.Sum(0, src_length, x, 0, dst_length, y, 1);
-                Aggregation.Sum(0, src_length, x, 0, dst_length, y, 1);
-                Aggregation.Sum(0, src_length, x, 0, dst_length, y, 1);
-                Aggregation.Sum(0, src_length, x, 0, dst_length, y, 1);
+                Aggregation.Sum(src_length, vx, dst_length, vy, 1);
+                Aggregation.Sum(src_length, vx, dst_length, vy, 1);
+                Aggregation.Sum(src_length, vx, dst_length, vy, 1);
+                Aggregation.Sum(src_length, vx, dst_length, vy, 1);
 
                 sw.Stop();
 

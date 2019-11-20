@@ -79,14 +79,14 @@ void pattern_copy_9_(unsigned int src_stride, unsigned int dst_stride, unsigned 
     }
 }
 
-void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_stride, unsigned int src_index, unsigned int dst_stride, unsigned int dst_index, unsigned int copy_length, unsigned int slides, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_stride, unsigned int src_index, unsigned int dst_stride, unsigned int dst_index, unsigned int copy_length, unsigned int slides, AvxArray<float>^ src, AvxArray<float>^ dst) {
 
     if (copy_length <= 0) {
         return;
     }
 
-    Util::CheckOutOfRange(0, src_stride * slides, src);
-    Util::CheckOutOfRange(0, dst_stride * slides, dst);
+    Util::CheckLength(src_stride * slides, src);
+    Util::CheckLength(dst_stride * slides, dst);
     
     if (src_index + copy_length > src_stride) {
         throw gcnew System::ArgumentException();
@@ -95,11 +95,8 @@ void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_str
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (copy_length <= 3) {
         pattern_copy_1_3(src_stride, dst_stride, copy_length, slides, src_ptr + src_index, dst_ptr + dst_index);
@@ -119,7 +116,7 @@ void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_str
 }
 
 
-void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_offset, unsigned int src_stride, unsigned int src_index, unsigned int dst_offset, unsigned int dst_stride, unsigned int dst_index, unsigned int copy_length, unsigned int slides, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_offset, unsigned int src_stride, unsigned int src_index, unsigned int dst_offset, unsigned int dst_stride, unsigned int dst_index, unsigned int copy_length, unsigned int slides, AvxArray<float>^ src, AvxArray<float>^ dst) {
 
     if (copy_length <= 0) {
         return;
@@ -135,11 +132,8 @@ void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_off
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* src_ptr = pinptr_src + src_offset;
-    float* dst_ptr = pinptr_dst + dst_offset;
+    float* src_ptr = (float*)(src->Ptr.ToPointer()) + src_offset;
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer()) + dst_offset;
 
     if (copy_length <= 3) {
         pattern_copy_1_3(src_stride, dst_stride, copy_length, slides, src_ptr + src_index, dst_ptr + dst_index);

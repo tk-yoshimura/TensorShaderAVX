@@ -81,7 +81,7 @@ void trivector_convolution_2d(unsigned int inchannels, unsigned int outchannels,
                     for (unsigned int kx = 0, ix = ox * stride; kx < kwidth; kx++, ix++) {
                         for (unsigned int inch = 0, kinch = 0; inch < inchannels; inch += 3, kinch += 4) {
                             __m256d v = _mm256_cvtps_pd(_mm_maskload_ps(inmap_ptr + inch + inchannels * (ix + inwidth * iy), mask3));
-                            __m256d q = _mm256_cvtps_pd(_mm_loadu_ps(kernel_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * ky))));
+                            __m256d q = _mm256_cvtps_pd(_mm_load_ps(kernel_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * ky))));
 
                             vq = _mm256_add_pd(_mm256_trivectormul_pd(v, q), vq);
                         }
@@ -115,7 +115,7 @@ void trivector_convolution_2d_grad(unsigned int inchannels, unsigned int outchan
                     for (unsigned int kx = 0, ix = ox * stride; kx < kwidth; kx++, ix++) {
                         for (unsigned int inch = 0, kinch = 0; inch < inchannels; inch += 3, kinch += 4) {
                             __m256d v = _mm256_cvtps_pd(_mm_maskload_ps(inmap_ptr + inch + inchannels * (ix + inwidth * iy), mask3));
-                            __m256d q = _mm256_cvtps_pd(_mm_loadu_ps(kernel_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * ky))));
+                            __m256d q = _mm256_cvtps_pd(_mm_load_ps(kernel_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * ky))));
 
                             vq = _mm256_add_pd(_mm256_trivectormulgrad_pd(v, q), vq);
                         }
@@ -130,37 +130,28 @@ void trivector_convolution_2d_grad(unsigned int inchannels, unsigned int outchan
 
 void TensorShaderAvxBackend::Trivector::Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
                                                       unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
-                                                      cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap) {
+                                                      AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
-
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
-    unsigned int outheight = (inheight - kheight) / stride + 1;
 
     if (inchannels % 3 != 0 || outchannels % 3 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight * 4 / 9 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outheight = (inheight - kheight) / stride + 1;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth * kheight * 4 / 9, kernel);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (gradmode) {
         trivector_convolution_2d_grad(inchannels, outchannels, 

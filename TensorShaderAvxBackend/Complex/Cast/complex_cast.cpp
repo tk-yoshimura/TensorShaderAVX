@@ -9,7 +9,7 @@ void complex_cast(unsigned int length, float* srcreal_ptr, float* srcimag_ptr, f
     }
 }
 
-void TensorShaderAvxBackend::Complex::Cast(unsigned int length, cli::array<float>^ src_real, cli::array<float>^ src_imag, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Complex::Cast(unsigned int length, AvxArray<float>^ src_real, AvxArray<float>^ src_imag, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src_real, src_imag, dst);
 
@@ -17,16 +17,12 @@ void TensorShaderAvxBackend::Complex::Cast(unsigned int length, cli::array<float
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length / 2, src_real, src_imag);
-    Util::CheckOutOfRange(0, length, dst);
+    Util::CheckLength(length / 2, src_real, src_imag);
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_srcreal = &src_real[0];
-    pin_ptr<float> pinptr_srcimag = &src_imag[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* srcreal_ptr = pinptr_srcreal;
-    float* srcimag_ptr = pinptr_srcimag;
-    float* dst_ptr = pinptr_dst;
+    float* srcreal_ptr = (float*)(src_real->Ptr.ToPointer());
+    float* srcimag_ptr = (float*)(src_imag->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_cast(length, srcreal_ptr, srcimag_ptr, dst_ptr);
 }

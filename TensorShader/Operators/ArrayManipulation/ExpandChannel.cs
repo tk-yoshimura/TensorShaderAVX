@@ -43,7 +43,7 @@ namespace TensorShader.Operators.ArrayManipulation {
                 inmap.CopyTo(outmap);
             }
             else {
-                TensorShaderAvxBackend.ArrayManipulation.Broadcast(0, 1, inmap.Buffer, 0, (uint)Expands, outmap.Buffer, (uint)inmap.Length);
+                TensorShaderAvxBackend.ArrayManipulation.Broadcast(1, inmap.Buffer, (uint)Expands, outmap.Buffer, (uint)inmap.Length);
             }
         }
 

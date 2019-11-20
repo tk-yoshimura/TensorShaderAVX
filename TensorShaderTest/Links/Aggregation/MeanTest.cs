@@ -6,7 +6,7 @@ using static TensorShader.Field;
 
 namespace TensorShaderTest.Links.Aggregation {
     [TestClass]
-    public class MeanTest {
+    public class AverageTest {
         [TestMethod]
         public void ExecuteTest() {
             int channels = 7, width = 3, height = 5, batch = 2;
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { }, keepdims: true);
+                Field y_expect = Average(x, new int[] { }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -43,7 +43,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { }, keepdims: false);
+                Field y_expect = Average(x, new int[] { }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -65,7 +65,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -85,7 +85,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -107,7 +107,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Width }, keepdims:true  );
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Width }, keepdims:true  );
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -127,7 +127,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Width }, keepdims:false  );
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Width }, keepdims:false  );
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -149,7 +149,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Height }, keepdims:true  );
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Height }, keepdims:true  );
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -169,7 +169,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Height }, keepdims:false  );
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Height }, keepdims:false  );
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -191,7 +191,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Batch }, keepdims:true  );
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Batch }, keepdims:true  );
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -211,7 +211,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Batch }, keepdims:false  );
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Batch }, keepdims:false  );
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -233,7 +233,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -253,7 +253,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -275,7 +275,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -295,7 +295,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -317,7 +317,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Batch }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Batch }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -337,7 +337,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Batch }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Batch }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -359,7 +359,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -379,7 +379,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -401,7 +401,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -421,7 +421,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -443,7 +443,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -463,7 +463,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Height }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -485,7 +485,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Batch }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Batch }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -505,7 +505,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Batch }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Width, Axis.Map2D.Batch }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -527,7 +527,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -547,7 +547,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -569,7 +569,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: true);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -589,7 +589,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: false);
+                Field y_expect = Average(x, new int[] { Axis.Map2D.Width, Axis.Map2D.Height, Axis.Map2D.Batch }, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -611,7 +611,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, axes:null, keepdims: true);
+                Field y_expect = Average(x, axes:null, keepdims: true);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -631,7 +631,7 @@ namespace TensorShaderTest.Links.Aggregation {
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
 
-                Field y_expect = Mean(x, axes:null, keepdims: false);
+                Field y_expect = Average(x, axes:null, keepdims: false);
                 Field err = Abs(y_expect - y_actual);
 
                 (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -660,7 +660,7 @@ namespace TensorShaderTest.Links.Aggregation {
             ParameterField x = xtensor;
             VariableField y_actual = ytensor;
 
-            Field y_expect = Mean(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: false);
+            Field y_expect = Average(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: false);
             Field err = Abs(y_expect - y_actual);
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);

@@ -141,38 +141,29 @@ void complex_deconvolution_1d_grad(unsigned int inchannels, unsigned int outchan
 
 void TensorShaderAvxBackend::Complex::Deconvolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, 
 	                                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
-                                                      cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap) {
+                                                      AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
-
-    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
-
+    
     if (inchannels % 2 != 0 || outchannels % 2 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * inwidth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth / 2 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
+    
+    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
 
-    ArrayManipulation::Zeroset(outchannels * outwidth * th, outchannels * outwidth, outmap);
+    Util::CheckLength(inchannels * inwidth * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth / 2, kernel);
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    outmap->Zeroset(outchannels * outwidth * th, outchannels * outwidth);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (gradmode) {
         complex_deconvolution_1d_grad(inchannels, outchannels, 

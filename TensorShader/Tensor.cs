@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TensorShaderAvxBackend;
 
 namespace TensorShader {
     /// <summary>テンソルクラス</summary>
@@ -8,7 +9,7 @@ namespace TensorShader {
         public Shape Shape{ protected set; get; }
 
         /// <summary>保有バッファ</summary>
-        internal float[] Buffer { private protected set; get; }
+        internal AvxArray<float> Buffer { private protected set; get; }
 
         /// <summary>形状タイプ</summary>
         public ShapeType Type => Shape.Type;
@@ -43,35 +44,41 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
-        /// <param name="clone_value">初期値配列をディープコピーするか</param>
-        protected Tensor(Shape shape, float[] value, bool clone_value){
+        public Tensor(Shape shape, float[] value = null){
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));
             }
             if (value != null && value.Length < shape.Length) {
                 throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
             }
-            if (value == null && !clone_value) {
-                throw new ArgumentException(nameof(clone_value));
-            }
 
-            this.Buffer = (value == null)
-                            ? new float[shape.Length]
-                            : (clone_value ? (float[])value.Clone() : value);
+            this.Buffer = value ?? (new float[shape.Length]);
             this.Shape = shape;
         }
 
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
-        /// <param name="value">初期値(任意指定)</param>
-        public Tensor(Shape shape, float[] value = null)
-            : this(shape, value, clone_value: true) { }
+        /// <param name="array">バッファ</param>
+        protected Tensor(Shape shape, AvxArray<float> array){
+            if (shape == null) {
+                throw new ArgumentException(nameof(shape));
+            }
+            if (array == null) { 
+                throw new ArgumentNullException(nameof(array));
+            }
+            if (checked((int)array.Length) < shape.Length) {
+                throw new ArgumentException(ExceptionMessage.Argument("value.Length", (int)array.Length, shape.Length));
+            }
+
+            this.Buffer = array;
+            this.Shape = shape;
+        }
 
         /// <summary>状態</summary>
         public virtual float[] State{
             get {
                 float[] state = new float[Length];
-                Array.Copy(Buffer, state, Length);
+                Buffer.Read(state, (ulong)Length);
 
                 return state;
             }
@@ -80,18 +87,18 @@ namespace TensorShader {
                     throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, Length));
                 }
 
-                Array.Copy(value, Buffer, Length);
+                Buffer.Write(value, (ulong)Length);
             }
         }
 
         /// <summary>初期化</summary>
         public virtual void Clear(float val) {
-            TensorShaderAvxBackend.ArrayManipulation.Clear(0, (uint)Length, val, Buffer);
+            ArrayManipulation.Clear((uint)Length, val, Buffer);
         }
 
         /// <summary>初期化</summary>
         public void Zeroset() {
-            TensorShaderAvxBackend.ArrayManipulation.Zeroset(0, (uint)Length, Buffer);
+            Buffer.Zeroset((ulong)Length);
         }
 
         /// <summary>コピー</summary>
@@ -104,7 +111,7 @@ namespace TensorShader {
                 return;
             }
 
-            Array.Copy(Buffer, tensor.Buffer, Length);
+            Buffer.CopyTo(tensor.Buffer, (ulong)Length);
         }
 
         /// <summary>部分コピー</summary>
@@ -120,7 +127,7 @@ namespace TensorShader {
                 throw new ArgumentOutOfRangeException();
             }
 
-            Array.Copy(Buffer, src_index, tensor.Buffer, dst_index, count);
+            Buffer.CopyTo((ulong)src_index, tensor.Buffer, (ulong)dst_index, (ulong)count);
         }
 
         /// <summary>形状変更</summary>
@@ -204,8 +211,8 @@ namespace TensorShader {
 
     /// <summary>バッファ共有テンソル</summary>
     internal class TemporaryTensor : Tensor {
-        public TemporaryTensor(Shape shape, float[] value = null) : 
-            base(shape, value, clone_value:false){ }
+        public TemporaryTensor(Shape shape, AvxArray<float> array) : 
+            base(shape, array){ }
     }
 
     /// <summary>領域外アクセスチェック有効テンソル</summary>
@@ -228,15 +235,20 @@ namespace TensorShader {
                 if(value.Length != shape.Length) {
                     throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
                 }
-                Array.Copy(value, Buffer, shape.Length);
+
+                Buffer.Write(value, (ulong)shape.Length);
             }
             else {
-                Buffer[0] = (float)random.NextDouble();
+                float[] r = new float[1] { (float)random.NextDouble() };
+
+                Buffer.Write(r, 1);
             }
 
             this.canary = (new float[canary_length]).Select((_) => (float)random.NextDouble()).ToArray();
 
-            Array.Copy(canary, 0, Buffer, shape.Length, canary_length);
+            AvxArray<float> canary = this.canary;
+
+            canary.CopyTo(0, Buffer, (ulong)shape.Length, canary_length);
 
             this.Shape = shape;
         }
@@ -247,10 +259,10 @@ namespace TensorShader {
             get {
                 CheckOverflow();
 
-                float[] value = new float[Length];
-                Array.Copy(Buffer, value, Length);
+                float[] state = new float[Length];
+                Buffer.Read(state, (ulong)Length);
 
-                return value;
+                return state;
             }
 
             set {
@@ -258,19 +270,21 @@ namespace TensorShader {
                     throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, Length));
                 }
 
-                Array.Copy(value, Buffer, Length);
+                Buffer.Write(value, (ulong)Length);
             }
         }
 
         /// <summary>コピー</summary>
         public override void CopyTo(Tensor tensor) {
-            Array.Copy(Buffer, tensor.Buffer, (uint)Length);
+            Buffer.CopyTo(tensor.Buffer, (uint)Length);
         }
 
         /// <summary>領域外アクセスチェック</summary>
         public void CheckOverflow() {
+            float[] canary_read = Buffer.Value.Skip(Shape.Length).ToArray();
+            
             for(int i = 0; i < canary_length; i++) {
-                if (Buffer[Length + i] != canary[i]) {
+                if (canary_read[i] != canary[i]) {
                     throw new IndexOutOfRangeException("Detected out of buffer access.");
                 }
             }

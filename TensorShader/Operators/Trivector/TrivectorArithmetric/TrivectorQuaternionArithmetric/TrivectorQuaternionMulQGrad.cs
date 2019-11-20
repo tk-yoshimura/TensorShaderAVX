@@ -40,7 +40,7 @@ namespace TensorShader.Operators.TrivectorQuaternionArithmetric {
         public override void Execute(params Tensor[] tensors) {
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], inmap3 = tensors[2], outmap = tensors[3];
 
-            TensorShaderAvxBackend.Trivector.MulQGrad(0, 0, (uint)inmap1.Length, inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Trivector.MulQGrad((uint)inmap1.Length, inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

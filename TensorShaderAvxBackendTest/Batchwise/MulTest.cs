@@ -17,7 +17,11 @@ namespace TensorShaderAvxBackendTest.BatchwiseBinaryArithmetric {
                     float[] y = new float[map_length + 1];
                     float v = y[map_length] = (float)rd.NextDouble();
 
-                    Batchwise.Mul(vector_length, map_length, x1, x2, y);
+                    AvxArray<float> vx1 = x1, vx2 = x2, vy = y;
+
+                    Batchwise.Mul(vector_length, map_length, vx1, vx2, vy);
+
+                    x1 = vx1;  x2 = vx2;  y = vy;
 
                     for(uint i = 0; i < map_length; i++) {
                         Assert.AreEqual(x1[i * vector_length / map_length] * x2[i], y[i], 1e-5f, $"vector:{vector_length}, map:{map_length}, index:{i}");

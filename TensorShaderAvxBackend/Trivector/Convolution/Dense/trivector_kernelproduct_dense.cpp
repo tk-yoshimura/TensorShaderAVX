@@ -73,7 +73,7 @@ void trivector_kernelproduct_dense_transpose(unsigned int inchannels, unsigned i
 
 
 void TensorShaderAvxBackend::Trivector::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, bool transpose,
-                                                           cli::array<float>^ inmap, cli::array<float>^ outmap, cli::array<float>^ kernel_value, cli::array<float>^ kernel_grad) {
+                                                           AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad) {
 
     Util::CheckDuplicateArray(inmap, outmap, kernel_value, kernel_grad);
 
@@ -81,31 +81,18 @@ void TensorShaderAvxBackend::Trivector::KernelProductDense(unsigned int inchanne
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * 4 / 9 > (unsigned int)kernel_value->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * 4 / 9 > (unsigned int)kernel_grad->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (outch >= outchannels) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernelvalue = &kernel_value[0];
-    pin_ptr<float> pinptr_kernelgrad = &kernel_grad[0];
+    Util::CheckLength(inchannels * batch, inmap);
+    Util::CheckLength(outchannels * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * 4 / 9, kernel_value, kernel_grad);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernelvalue_ptr = pinptr_kernelvalue;
-    float* kernelgrad_ptr = pinptr_kernelgrad;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernelvalue_ptr = (float*)(kernel_value->Ptr.ToPointer());
+    float* kernelgrad_ptr = (float*)(kernel_grad->Ptr.ToPointer());
 
     if (transpose) {
         trivector_kernelproduct_dense_transpose(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);

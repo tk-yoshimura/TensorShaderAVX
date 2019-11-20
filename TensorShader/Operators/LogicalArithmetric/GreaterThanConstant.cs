@@ -11,7 +11,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Elementwise.GreaterThanConstant(0, (uint)Shape.Length, Constant, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.GreaterThanConstant((uint)Shape.Length, Constant, inmap.Buffer, outmap.Buffer);
         }
     }
 }

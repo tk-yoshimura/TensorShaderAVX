@@ -48,7 +48,7 @@ void trivector_kernelproduct_3d(unsigned int inchannels, unsigned int outchannel
             for (unsigned int ky = 0; ky < kheight; ky++) {
                 for (unsigned int kx = 0; kx < kwidth; kx++) {
                     __m256d uvq = _mm256_setzero_pd();
-                    __m256d q = _mm256_cvtps_pd(_mm_loadu_ps(kernelvalue_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz)))));
+                    __m256d q = _mm256_cvtps_pd(_mm_load_ps(kernelvalue_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz)))));
 
                     for (unsigned int th = 0; th < batch; th++) {
                         for (unsigned int oz = 0, iz = kz; oz < outdepth; oz++, iz += stride) {
@@ -63,7 +63,7 @@ void trivector_kernelproduct_3d(unsigned int inchannels, unsigned int outchannel
                         }
                     }
 
-                    _mm_storeu_ps(kernelgrad_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz))), _mm256_cvtpd_ps(uvq));
+                    _mm_store_ps(kernelgrad_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz))), _mm256_cvtpd_ps(uvq));
                 }
             }
         }
@@ -85,7 +85,7 @@ void trivector_kernelproduct_3d_transpose(unsigned int inchannels, unsigned int 
             for (unsigned int ky = 0; ky < kheight; ky++) {
                 for (unsigned int kx = 0; kx < kwidth; kx++) {
                     __m256d vuq = _mm256_setzero_pd();
-                    __m256d q = _mm256_cvtps_pd(_mm_loadu_ps(kernelvalue_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz)))));
+                    __m256d q = _mm256_cvtps_pd(_mm_load_ps(kernelvalue_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz)))));
 
                     for (unsigned int th = 0; th < batch; th++) {
                         for (unsigned int oz = 0, iz = kz; oz < outdepth; oz++, iz += stride) {
@@ -100,7 +100,7 @@ void trivector_kernelproduct_3d_transpose(unsigned int inchannels, unsigned int 
                         }
                     }
 
-                    _mm_storeu_ps(kernelgrad_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz))), _mm256_cvtpd_ps(vuq));
+                    _mm_store_ps(kernelgrad_ptr + kinch + kernelinchannels * (koutch + kerneloutchannels * (kx + kwidth * (ky + kheight * kz))), _mm256_cvtpd_ps(vuq));
                 }
             }
         }
@@ -110,7 +110,7 @@ void trivector_kernelproduct_3d_transpose(unsigned int inchannels, unsigned int 
 
 void TensorShaderAvxBackend::Trivector::KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
                                                         unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool transpose,
-                                                        cli::array<float>^ inmap, cli::array<float>^ outmap, cli::array<float>^ kernel_value, cli::array<float>^ kernel_grad) {
+                                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad) {
 
     Util::CheckDuplicateArray(inmap, outmap, kernel_value, kernel_grad);
 
@@ -122,31 +122,18 @@ void TensorShaderAvxBackend::Trivector::KernelProduct3D(unsigned int inchannels,
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight * kdepth * 4 / 9 > (unsigned int)kernel_value->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight * kdepth * 4 / 9 > (unsigned int)kernel_grad->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (outch >= outchannels) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernelvalue = &kernel_value[0];
-    pin_ptr<float> pinptr_kernelgrad = &kernel_grad[0];
+    Util::CheckLength(inchannels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth * kheight * kdepth * 4 / 9, kernel_value, kernel_grad);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernelvalue_ptr = pinptr_kernelvalue;
-    float* kernelgrad_ptr = pinptr_kernelgrad;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernelvalue_ptr = (float*)(kernel_value->Ptr.ToPointer());
+    float* kernelgrad_ptr = (float*)(kernel_grad->Ptr.ToPointer());
 
     if (transpose) {
         trivector_kernelproduct_3d_transpose(inchannels, outchannels, 

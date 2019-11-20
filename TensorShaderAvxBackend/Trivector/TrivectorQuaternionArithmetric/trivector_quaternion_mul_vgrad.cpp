@@ -36,7 +36,7 @@ void trivector_mulvgrad(unsigned int length, float* v_ptr, float* q_ptr, float* 
 
     for (unsigned int i = 0, j = 0; i < length; i += 3, j += 4) {
         __m256d v = _mm256_cvtps_pd(_mm_maskload_ps(v_ptr + i, mask3));
-        __m256d q = _mm256_cvtps_pd(_mm_loadu_ps(q_ptr + j));
+        __m256d q = _mm256_cvtps_pd(_mm_load_ps(q_ptr + j));
 
         __m128 u = _mm256_cvtpd_ps(_mm256_trivectormulvgrad_pd(v, q));
 
@@ -44,7 +44,7 @@ void trivector_mulvgrad(unsigned int length, float* v_ptr, float* q_ptr, float* 
     }
 }
 
-void TensorShaderAvxBackend::Trivector::MulVGrad(unsigned int vectorindex, unsigned int quaternionindex, unsigned int vectorlength, cli::array<float>^ src_vector, cli::array<float>^ src_quaternion, cli::array<float>^ dst_vector) {
+void TensorShaderAvxBackend::Trivector::MulVGrad(unsigned int vectorlength, AvxArray<float>^ src_vector, AvxArray<float>^ src_quaternion, AvxArray<float>^ dst_vector) {
 
     Util::CheckDuplicateArray(src_vector, src_quaternion, dst_vector);
 
@@ -54,16 +54,12 @@ void TensorShaderAvxBackend::Trivector::MulVGrad(unsigned int vectorindex, unsig
 
     unsigned int quaternionlength = vectorlength / 3 * 4;
 
-    Util::CheckOutOfRange(vectorindex, vectorlength, src_vector, dst_vector);
-    Util::CheckOutOfRange(quaternionindex, quaternionlength, src_quaternion);
+    Util::CheckLength(vectorlength, src_vector, dst_vector);
+    Util::CheckLength(quaternionlength, src_quaternion);
 
-    pin_ptr<float> pinptr_v = &src_vector[0];
-    pin_ptr<float> pinptr_q = &src_quaternion[0];
-    pin_ptr<float> pinptr_u = &dst_vector[0];
+    float* v_ptr = (float*)(src_vector->Ptr.ToPointer());
+    float* q_ptr = (float*)(src_quaternion->Ptr.ToPointer());
+    float* u_ptr = (float*)(dst_vector->Ptr.ToPointer());
 
-    float* v_ptr = pinptr_v;
-    float* q_ptr = pinptr_q;
-    float* u_ptr = pinptr_u;
-
-    trivector_mulvgrad(vectorlength, v_ptr + vectorindex, q_ptr + quaternionindex, u_ptr + vectorindex);
+    trivector_mulvgrad(vectorlength, v_ptr, q_ptr, u_ptr);
 }

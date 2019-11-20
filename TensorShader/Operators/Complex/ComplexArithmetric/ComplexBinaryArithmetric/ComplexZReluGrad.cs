@@ -11,7 +11,7 @@ namespace TensorShader.Operators.ComplexBinaryArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outmap = tensors[2];
 
-            TensorShaderAvxBackend.Complex.ZReluGrad(0, (uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Complex.ZReluGrad((uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
         }
     }
 }

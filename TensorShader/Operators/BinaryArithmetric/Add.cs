@@ -11,7 +11,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outmap = tensors[2];
 
-            TensorShaderAvxBackend.Elementwise.Add(0, (uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.Add((uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
         }
     }
 
@@ -59,7 +59,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Elementwise.AddConstant(0, (uint)Shape.Length, Constant, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.AddConstant((uint)Shape.Length, Constant, inmap.Buffer, outmap.Buffer);
         }
     }
 
@@ -75,7 +75,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Elementwise.AddConstant(0, (uint)Shape.Length, Constant, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.AddConstant((uint)Shape.Length, Constant, inmap.Buffer, outmap.Buffer);
         }
     }
 }

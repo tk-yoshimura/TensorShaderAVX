@@ -11,7 +11,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Elementwise.IsNan(0, (uint)Shape.Length, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.IsNan((uint)Shape.Length, inmap.Buffer, outmap.Buffer);
         }
     }
 }

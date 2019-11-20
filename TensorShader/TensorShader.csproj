@@ -61,7 +61,7 @@
     <Compile Include="Functions\Aggregation\Max.cs" />
     <Compile Include="Functions\Aggregation\SquareSum.cs" />
     <Compile Include="Functions\Aggregation\Sum.cs" />
-    <Compile Include="Functions\Aggregation\Mean.cs" />
+    <Compile Include="Functions\Aggregation\Average.cs" />
     <Compile Include="Functions\Aggregation\Aggregation.cs" />
     <Compile Include="Functions\ArrayManipulation\ArgSort.cs" />
     <Compile Include="Functions\ArrayManipulation\BatchwiseMul.cs" />
@@ -399,7 +399,7 @@
     <Compile Include="Links\Aggregation\Variance.cs" />
     <Compile Include="Links\Aggregation\SquareSum.cs" />
     <Compile Include="Links\Aggregation\Sum.cs" />
-    <Compile Include="Links\Aggregation\Mean.cs" />
+    <Compile Include="Links\Aggregation\Average.cs" />
     <Compile Include="Links\ArrayManipulation\BatchwiseMul.cs" />
     <Compile Include="Links\ArrayManipulation\Broadcast.cs" />
     <Compile Include="Links\ArrayManipulation\ArgSort.cs" />
@@ -736,7 +736,7 @@
     <Compile Include="Operators\ArrayManipulation\None.cs" />
     <Compile Include="Operators\ArrayManipulation\Fill.cs" />
     <Compile Include="Operators\Aggregation\Aggregation.cs" />
-    <Compile Include="Operators\Aggregation\Mean.cs" />
+    <Compile Include="Operators\Aggregation\Average.cs" />
     <Compile Include="Operators\Connection2D\Convolution\Convolution.cs" />
     <Compile Include="Operators\Connection2D\Convolution\Deconvolution.cs" />
     <Compile Include="Operators\Connection2D\Pad\EdgePadding.cs" />

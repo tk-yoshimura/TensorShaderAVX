@@ -190,29 +190,23 @@ void edge_padding_3d(unsigned int channels,
     }
 }
 
-void TensorShaderAvxBackend::Padding::EdgePadding3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int pad_left, unsigned int pad_right, unsigned int pad_top, unsigned int pad_bottom, unsigned int pad_front, unsigned int pad_rear, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Padding::EdgePadding3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int pad_left, unsigned int pad_right, unsigned int pad_top, unsigned int pad_bottom, unsigned int pad_front, unsigned int pad_rear, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
+
+    if (th >= batch) {
+        throw gcnew System::ArgumentException();
+    }
 
     unsigned int outwidth = inwidth + pad_left + pad_right;
     unsigned int outheight = inheight + pad_top + pad_bottom;
     unsigned int outdepth = indepth + pad_front + pad_rear;
 
-    if (channels * inwidth * inheight * indepth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (th >= batch) {
-        throw gcnew System::ArgumentException();
-    }
+    Util::CheckLength(channels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(channels * outwidth * outheight * outdepth * batch, outmap);
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     edge_padding_3d(channels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, pad_left, pad_right, pad_top, pad_bottom, pad_front, pad_rear, inmap_ptr, outmap_ptr);
 }

@@ -9,7 +9,7 @@ void complex_pureimag(unsigned int length, float* srcimag_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Complex::PureImag(unsigned int length, cli::array<float>^ src_imag, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Complex::PureImag(unsigned int length, AvxArray<float>^ src_imag, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src_imag, dst);
 
@@ -17,14 +17,11 @@ void TensorShaderAvxBackend::Complex::PureImag(unsigned int length, cli::array<f
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length / 2, src_imag);
-    Util::CheckOutOfRange(0, length, dst);
+    Util::CheckLength(length / 2, src_imag);
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_srcimag = &src_imag[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* srcimag_ptr = pinptr_srcimag;
-    float* dst_ptr = pinptr_dst;
+    float* srcimag_ptr = (float*)(src_imag->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_pureimag(length, srcimag_ptr, dst_ptr);
 }

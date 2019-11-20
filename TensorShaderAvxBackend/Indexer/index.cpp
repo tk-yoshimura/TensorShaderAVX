@@ -12,13 +12,11 @@ void index(unsigned int stride, unsigned int axislength, unsigned int clones, fl
     }
 }
 
-void TensorShaderAvxBackend::Indexer::Index(unsigned int stride, unsigned int axislength, unsigned int clones, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Indexer::Index(unsigned int stride, unsigned int axislength, unsigned int clones, AvxArray<float>^ dst) {
 
-    Util::CheckOutOfRange(0, stride * axislength * clones, dst);
+    Util::CheckLength(stride * axislength * clones, dst);
 
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* dst_ptr = pinptr_dst;
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     index(stride, axislength, clones, dst_ptr);
 }

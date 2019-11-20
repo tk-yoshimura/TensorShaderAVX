@@ -116,7 +116,7 @@ void complex_dense_grad(unsigned int inchannels, unsigned int outchannels, unsig
 }
 
 void TensorShaderAvxBackend::Complex::Dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int th, bool gradmode,
-                                            cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap){
+                                            AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap){
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
@@ -124,26 +124,17 @@ void TensorShaderAvxBackend::Complex::Dense(unsigned int inchannels, unsigned in
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels / 2 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    Util::CheckLength(inchannels * batch, inmap);
+    Util::CheckLength(outchannels * batch, outmap);
+    Util::CheckLength(inchannels * outchannels / 2, kernel);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (gradmode) {
         complex_dense_grad(inchannels, outchannels, th, inmap_ptr, outmap_ptr, kernel_ptr);

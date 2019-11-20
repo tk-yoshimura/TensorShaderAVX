@@ -7,7 +7,7 @@ using TensorShader.Operators.Aggregation;
 
 namespace TensorShaderTest.Operators.Aggregation {
     [TestClass]
-    public class MeanTest {
+    public class AverageTest {
         [TestMethod]
         public void ExecuteTest() {
             Random rd = new Random(1234);
@@ -26,7 +26,7 @@ namespace TensorShaderTest.Operators.Aggregation {
                         /*axis = 0*/{
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(1, width, height, length, batch));
 
-                            Mean ope = new Mean(shape, axis:0);
+                            Average ope = new Average(shape, axis:0);
 
                             ope.Execute(v1, v2);
 
@@ -57,7 +57,7 @@ namespace TensorShaderTest.Operators.Aggregation {
                         {
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, 1, height, length, batch));
 
-                            Mean ope = new Mean(shape, axis: 1);
+                            Average ope = new Average(shape, axis: 1);
 
                             ope.Execute(v1, v2);
 
@@ -88,7 +88,7 @@ namespace TensorShaderTest.Operators.Aggregation {
                         {
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, 1, length, batch));
 
-                            Mean ope = new Mean(shape, axis: 2);
+                            Average ope = new Average(shape, axis: 2);
 
                             ope.Execute(v1, v2);
 
@@ -119,7 +119,7 @@ namespace TensorShaderTest.Operators.Aggregation {
                         {
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, height, 1, batch));
 
-                            Mean ope = new Mean(shape, axis: 3);
+                            Average ope = new Average(shape, axis: 3);
 
                             ope.Execute(v1, v2);
 
@@ -150,7 +150,7 @@ namespace TensorShaderTest.Operators.Aggregation {
                         {
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, height, length, 1));
 
-                            Mean ope = new Mean(shape, axis:4);
+                            Average ope = new Average(shape, axis:4);
 
                             ope.Execute(v1, v2);
 
@@ -191,7 +191,7 @@ namespace TensorShaderTest.Operators.Aggregation {
             OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape);
             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map1D(ch, 1));
 
-            Mean ope = new Mean(shape, axis:1);
+            Average ope = new Average(shape, axis:1);
 
             Stopwatch sw = new Stopwatch();
 

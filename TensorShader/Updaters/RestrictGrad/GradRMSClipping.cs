@@ -25,7 +25,7 @@ namespace TensorShader.Updaters.RestrictGrad {
 
         /// <summary>更新フロー</summary>
         public override Flow UpdateFlow() {
-            VariableNode norm = Mean(Square(Grad));
+            VariableNode norm = Average(Square(Grad));
             VariableNode rate = Sqrt(limit / Maximum(limit, norm));
 
             VariableNode new_grad = Grad * rate;

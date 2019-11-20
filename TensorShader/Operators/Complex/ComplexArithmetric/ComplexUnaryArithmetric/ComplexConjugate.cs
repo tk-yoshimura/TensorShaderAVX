@@ -11,7 +11,7 @@ namespace TensorShader.Operators.ComplexUnaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Complex.Conjugate(0, (uint)Shape.Length, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Complex.Conjugate((uint)Shape.Length, inmap.Buffer, outmap.Buffer);
         }
     }
 }

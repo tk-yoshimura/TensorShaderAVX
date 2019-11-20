@@ -53,7 +53,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TensorShader\bin\x64\Debug\TensorShader.dll</HintPath>
     </Reference>
-    <Reference Include="TensorShaderAvxBackend">
+    <Reference Include="TensorShaderAvxBackend, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
     </Reference>
   </ItemGroup>

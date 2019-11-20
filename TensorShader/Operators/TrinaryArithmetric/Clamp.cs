@@ -11,7 +11,7 @@ namespace TensorShader.Operators.TrinaryArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], inmap3 = tensors[2], outmap = tensors[3];
 
-            TensorShaderAvxBackend.Elementwise.Clamp(0, (uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.Clamp((uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outmap.Buffer);
         }
     }
 
@@ -27,7 +27,7 @@ namespace TensorShader.Operators.TrinaryArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], inmap3 = tensors[2], outmap = tensors[3];
 
-            TensorShaderAvxBackend.Elementwise.ClampConstant(0, (uint)Shape.Length, inmap2.Buffer[0], inmap3.Buffer[0], inmap1.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.ClampConstant((uint)Shape.Length, inmap2.Buffer[0], inmap3.Buffer[0], inmap1.Buffer, outmap.Buffer);
         }
     }
 }

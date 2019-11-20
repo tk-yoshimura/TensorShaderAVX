@@ -8,7 +8,7 @@ void clear(unsigned int length, float c, float* dst_ptr) {
     __m256 fillc = _mm256_set1_ps(c);
 
     for (unsigned int i = 0; i < j; i += 8) {
-        _mm256_storeu_ps(dst_ptr + i, fillc);
+        _mm256_store_ps(dst_ptr + i, fillc);
     }
 
     if (k > 0) {
@@ -18,18 +18,11 @@ void clear(unsigned int length, float c, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::ArrayManipulation::Clear(unsigned int index, unsigned int length, float c, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::ArrayManipulation::Clear(unsigned int length, float c, AvxArray<float>^ dst) {
     
-    Util::CheckOutOfRange(index, length, dst);
-    
-    if (length == 1) {
-        dst[index] = c;
-        return;
-    }
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* dst_ptr = pinptr_dst;
-
-    clear(length, c, dst_ptr + index);
+    clear(length, c, dst_ptr);
 }

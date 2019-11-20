@@ -12,18 +12,21 @@ namespace TensorShaderAvxBackendTest.ElementwiseActivation {
             Random rd = new Random(1234);
 
             for(int length = 0; length < 1000; length++) {
-                float[] x1 = (new float[length + 2]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
-                float[] x2 = (new float[length + 2]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
-                float[] y = new float[length + 2];
+                float[] x1 = (new float[length + 1]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
+                float[] x2 = (new float[length + 1]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
+                float[] y = new float[length + 1];
 
-                Elementwise.ReluGrad(1, (uint)length, x1, x2, y);
+                AvxArray<float> vx1 = x1, vx2 = x2, vy = y;
 
-                for(int i = 1; i <= length; i++) {
+                Elementwise.ReluGrad((uint)length, vx1, vx2, vy);
+
+                y = vy;
+
+                for(int i = 0; i < length; i++) {
                     Assert.AreEqual(x2[i] > 0 ? x1[i] : 0f, y[i], $"index:{i}");
                 }
 
-                Assert.AreEqual(0f, y[0], $"index:0");
-                Assert.AreEqual(0f, y[length + 1], $"index:{length + 1}");
+                Assert.AreEqual(0f, y[length], $"index:{length}");
 
                 Console.WriteLine($"pass:{length}");
             }
@@ -31,12 +34,15 @@ namespace TensorShaderAvxBackendTest.ElementwiseActivation {
 
         [TestMethod]
         public void DenormalizedTest() {
-            float[] x1 = new float[] { 0, 1, -1, float.PositiveInfinity, float.NegativeInfinity, float.NaN };
-            float[] x2 = new float[] { 1, 1, 1, 1, 1, 1 };
-            float[] x3 = new float[] { -1, -1, -1, -1, -1, -1 };
-            float[] y = new float[x1.Length];
+            AvxArray<float> vx1 = new float[] { 0, 1, -1, float.PositiveInfinity, float.NegativeInfinity, float.NaN };
+            AvxArray<float> vx2 = new float[] { 1, 1, 1, 1, 1, 1 };
+            AvxArray<float> vx3 = new float[] { -1, -1, -1, -1, -1, -1 };
+            float[] y;
+            AvxArray<float> vy = new AvxArray<float>(vx1.Length);
 
-            Elementwise.ReluGrad(0, (uint)x1.Length, x1, x2, y);
+            Elementwise.ReluGrad((uint)vx1.Length, vx1, vx2, vy);
+
+            y = vy;
 
             Assert.AreEqual(0, y[0]);
             Assert.AreEqual(1, y[1]);
@@ -45,7 +51,9 @@ namespace TensorShaderAvxBackendTest.ElementwiseActivation {
             Assert.AreEqual(float.NegativeInfinity, y[4]);
             Assert.IsTrue(float.IsNaN(y[5]));
 
-            Elementwise.ReluGrad(0, (uint)x1.Length, x1, x3, y);
+            Elementwise.ReluGrad((uint)vx1.Length, vx1, vx3, vy);
+
+            y = vy;
 
             Assert.AreEqual(0, y[0]);
             Assert.AreEqual(0, y[1]);
@@ -54,7 +62,9 @@ namespace TensorShaderAvxBackendTest.ElementwiseActivation {
             Assert.AreEqual(0, y[4]);
             Assert.AreEqual(0, y[5]);
 
-            Elementwise.ReluGrad(0, (uint)x1.Length, x2, x1, y);
+            Elementwise.ReluGrad((uint)vx1.Length, vx2, vx1, vy);
+
+            y = vy;
 
             Assert.AreEqual(0, y[0]);
             Assert.AreEqual(1, y[1]);
@@ -63,7 +73,9 @@ namespace TensorShaderAvxBackendTest.ElementwiseActivation {
             Assert.AreEqual(0, y[4]);
             Assert.AreEqual(0, y[5]);
 
-            Elementwise.ReluGrad(0, (uint)x1.Length, x3, x1, y);
+            Elementwise.ReluGrad((uint)vx1.Length, vx3, vx1, vy);
+
+            y = vy;
 
             Assert.AreEqual(0, y[0]);
             Assert.AreEqual(-1, y[1]);
@@ -77,15 +89,15 @@ namespace TensorShaderAvxBackendTest.ElementwiseActivation {
         public void SpeedTest() {
             int length = 10000000;
 
-            float[] x1 = new float[length];
-            float[] x2 = new float[length];
-            float[] y = new float[length];
+            AvxArray<float> vx1 = new float[length];
+            AvxArray<float> vx2 = new float[length];
+            AvxArray<float> vy = new float[length];
 
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            Elementwise.ReluGrad(0, (uint)length, x1, x2, y);
+            Elementwise.ReluGrad((uint)length, vx1, vx2, vy);
 
             sw.Stop();
 

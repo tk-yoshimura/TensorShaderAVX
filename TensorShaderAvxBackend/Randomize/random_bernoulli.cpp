@@ -20,19 +20,17 @@ void random_bernoulli(unsigned int length, unsigned __int64 seed, double prob, f
     }
 }
 
-void TensorShaderAvxBackend::Randomize::Bernoulli(unsigned int index, unsigned int length, double prob, cli::array<float>^ dst, Random^ random) {
+void TensorShaderAvxBackend::Randomize::Bernoulli(unsigned int length, double prob, AvxArray<float>^ dst, Random^ random) {
 
-    Util::CheckOutOfRange(index, length, dst);
+    Util::CheckLength(length, dst);
 
     if (prob < 0 || !(prob <= 1)) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* dst_ptr = pinptr_dst;
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     unsigned __int64 seed = ((unsigned __int64)random->Next() + 1) * 0x100000000ull + ((unsigned __int64)random->Next() + 1);
 
-    random_bernoulli(length, seed, prob, dst_ptr + index);
+    random_bernoulli(length, seed, prob, dst_ptr);
 }

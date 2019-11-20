@@ -40,29 +40,23 @@ void trimming_3d(unsigned int channels,
     }
 }
 
-void TensorShaderAvxBackend::Trimming::Trimming3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int trim_left, unsigned int trim_right, unsigned int trim_top, unsigned int trim_bottom, unsigned int trim_front, unsigned int trim_rear, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Trimming::Trimming3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int trim_left, unsigned int trim_right, unsigned int trim_top, unsigned int trim_bottom, unsigned int trim_front, unsigned int trim_rear, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
+
+    if (th >= batch) {
+        throw gcnew System::ArgumentException();
+    }
 
     unsigned int inwidth = outwidth + trim_left + trim_right;
     unsigned int inheight = outheight + trim_top + trim_bottom;
     unsigned int indepth = outdepth + trim_front + trim_rear;
 
-    if (channels * inwidth * inheight * indepth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (th >= batch) {
-        throw gcnew System::ArgumentException();
-    }
+    Util::CheckLength(channels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(channels * outwidth * outheight * outdepth * batch, outmap);
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     trimming_3d(channels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, trim_left, trim_right, trim_top, trim_bottom, trim_front, trim_rear, inmap_ptr, outmap_ptr);
 }

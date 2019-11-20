@@ -37,7 +37,7 @@ namespace MNIST {
             Field y = CNN.Forward(x, classes);
             Field acc = Accuracy(y, t);
             Field err = Sum(SoftmaxCrossEntropy(y, OneHotVector(t, classes)), axes:new int[] { Axis.Map0D.Channels });
-            StoreField accnode = acc.Save(), lossnode = Mean(err).Save();
+            StoreField accnode = acc.Save(), lossnode = Average(err).Save();
 
             Console.WriteLine("Build optimize flow...");
             (Flow trainflow, Parameters parameters) = Flow.Optimize(err);

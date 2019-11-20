@@ -4,7 +4,7 @@ using System.Linq;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>平均</summary>
-        public static VariableNode Mean(VariableNode x, int[] axes = null, bool keepdims = false) {
+        public static VariableNode Average(VariableNode x, int[] axes = null, bool keepdims = false) {
             if (axes == null) {
                 axes = (new int[x.Shape.Ndim]).Select((_, dim) => dim).ToArray();
             }
@@ -12,7 +12,7 @@ namespace TensorShader {
             foreach(int axis in axes.OrderBy((val) => val)) {
                 if(x.Shape[axis] == 1)  continue;
 
-                Function function = new Functions.Aggregation.Mean(axis);
+                Function function = new Functions.Aggregation.Average(axis);
 
                 x = Apply(function, x)[0];
             }
@@ -33,7 +33,7 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>平均</summary>
-        public static Tensor Mean(Tensor x, int[] axes = null, bool keepdims = false) {
+        public static Tensor Average(Tensor x, int[] axes = null, bool keepdims = false) {
             if (axes == null) {
                 axes = (new int[x.Shape.Ndim]).Select((_, dim) => dim).ToArray();
             }
@@ -41,7 +41,7 @@ namespace TensorShader {
             foreach(int axis in axes.OrderBy((val) => val)) {
                 if(x.Shape[axis] == 1)  continue;
 
-                Function function = new Functions.Aggregation.Mean(axis);
+                Function function = new Functions.Aggregation.Average(axis);
 
                 Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
 
@@ -67,9 +67,9 @@ namespace TensorShader {
 
 namespace TensorShader.Functions.Aggregation {
     /// <summary>平均</summary>
-    internal class Mean : Aggregation {
+    internal class Average : Aggregation {
         /// <summary>コンストラクタ</summary>
-        public Mean(int axis)
+        public Average(int axis)
             : base(axis) { }
 
         /// <summary>操作クラスを生成する</summary>
@@ -78,7 +78,7 @@ namespace TensorShader.Functions.Aggregation {
 
             Tensor intensor = intensors[0], outtensor = outtensors[0];
 
-            return (new Tensor[]{ intensor, outtensor }, new Operators.Aggregation.Mean(intensor.Shape, Axis));
+            return (new Tensor[]{ intensor, outtensor }, new Operators.Aggregation.Average(intensor.Shape, Axis));
         }
     }
 }

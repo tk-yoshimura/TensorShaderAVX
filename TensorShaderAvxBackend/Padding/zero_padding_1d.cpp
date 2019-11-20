@@ -64,27 +64,21 @@ void zero_padding_1d(unsigned int channels,
     }
 }
 
-void TensorShaderAvxBackend::Padding::ZeroPadding1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int th, unsigned int pad_left, unsigned int pad_right, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Padding::ZeroPadding1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int th, unsigned int pad_left, unsigned int pad_right, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    unsigned int outwidth = inwidth + pad_left + pad_right;
-
-    if (channels * inwidth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    unsigned int outwidth = inwidth + pad_left + pad_right;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    Util::CheckLength(channels * inwidth * batch, inmap);
+    Util::CheckLength(channels * outwidth * batch, outmap);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     zero_padding_1d(channels, inwidth, outwidth, th, pad_left, pad_right, inmap_ptr, outmap_ptr);
 }

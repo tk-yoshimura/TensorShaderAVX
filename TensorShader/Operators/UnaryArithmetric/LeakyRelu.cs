@@ -15,7 +15,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Elementwise.LeakyRelu(0, (uint)Shape.Length, slope, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.LeakyRelu((uint)Shape.Length, slope, inmap.Buffer, outmap.Buffer);
         }
     }
 }

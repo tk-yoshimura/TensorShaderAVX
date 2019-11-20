@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>2乗平均</summary>
         public static Field SquareAverage(Field x, int[] axes = null, bool keepdims = false) {
             Field y = new Field();
-            Link link = new Links.Aggregation.SquareMean(x, y, axes, keepdims);
+            Link link = new Links.Aggregation.SquareAverage(x, y, axes, keepdims);
 
             link.Forward();
 
@@ -16,14 +16,14 @@ namespace TensorShader {
 
 namespace TensorShader.Links.Aggregation {
     /// <summary>2乗平均</summary>
-    public class SquareMean : Aggregation {
+    public class SquareAverage : Aggregation {
         /// <summary>コンストラクタ</summary>
-        public SquareMean(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
+        public SquareAverage(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
             : base(infield, outfield, axes, keepdims) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(SquareMean(X.Value, Axes, KeepDims));
+            Y.AssignValue(SquareAverage(X.Value, Axes, KeepDims));
         }
 
         /// <summary>逆伝搬</summary>

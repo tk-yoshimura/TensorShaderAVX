@@ -47,28 +47,24 @@ void channel_to_space_3d(unsigned int inchannels, unsigned int outchannels,
     }
 }
 
-void TensorShaderAvxBackend::Transform::ChannelToSpace3D(unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int scale, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Transform::ChannelToSpace3D(unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    unsigned int inchannels = outchannels * scale * scale * scale;
-    unsigned int outwidth = inwidth * scale, outheight = inheight * scale, outdepth = indepth * scale;
-
-    if (inchannels * inwidth * inheight * indepth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    unsigned int inchannels = outchannels * scale * scale * scale;
+    unsigned int outwidth = inwidth * scale;
+    unsigned int outheight = inheight * scale;
+    unsigned int outdepth = indepth * scale;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    Util::CheckLength(inchannels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     channel_to_space_3d(inchannels, outchannels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, scale, inmap_ptr, outmap_ptr);
 }

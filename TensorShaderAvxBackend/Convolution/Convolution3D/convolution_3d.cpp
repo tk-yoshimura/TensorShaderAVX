@@ -74,34 +74,25 @@ void convolution_3d(unsigned int inchannels, unsigned int outchannels,
 
 void TensorShaderAvxBackend::Convolution::Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
                                                         unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
-                                                        cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap) {
+                                                        AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
-    unsigned int outheight = (inheight - kheight) / stride + 1;
-    unsigned int outdepth = (indepth - kdepth) / stride + 1;
-
-    if (inchannels * inwidth * inheight * indepth * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight * kdepth > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outheight = (inheight - kheight) / stride + 1;
+    unsigned int outdepth = (indepth - kdepth) / stride + 1;
+    
+    Util::CheckLength(inchannels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth * kheight * kdepth, kernel);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     convolution_3d(inchannels, outchannels, 
                    inwidth, outwidth, kwidth,

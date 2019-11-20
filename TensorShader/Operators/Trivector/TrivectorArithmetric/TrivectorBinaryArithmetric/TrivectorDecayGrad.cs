@@ -11,7 +11,7 @@ namespace TensorShader.Operators.TrivectorBinaryArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outmap = tensors[2];
 
-            TensorShaderAvxBackend.Trivector.DecayGrad(0, (uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Trivector.DecayGrad((uint)Shape.Length, inmap1.Buffer, inmap2.Buffer, outmap.Buffer);
         }
     }
 }

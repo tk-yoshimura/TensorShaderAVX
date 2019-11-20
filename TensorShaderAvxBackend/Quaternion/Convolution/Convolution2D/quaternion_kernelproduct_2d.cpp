@@ -36,15 +36,15 @@ void quaternion_kernelproduct_2d(unsigned int inchannels, unsigned int outchanne
                 for (unsigned int th = 0; th < batch; th++) {
                     for (unsigned int oy = 0, iy = ky; oy < outheight; oy++, iy += stride) {
                         for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix += stride) {
-                            __m256d u = _mm256_cvtps_pd(_mm_loadu_ps(inmap_ptr + inch + inchannels * (ix + inwidth * (iy + inheight * th))));
-                            __m256d v = _mm256_cvtps_pd(_mm_loadu_ps(outmap_ptr + outch + outchannels * (ox + outwidth * (oy + outheight * th))));
+                            __m256d u = _mm256_cvtps_pd(_mm_load_ps(inmap_ptr + inch + inchannels * (ix + inwidth * (iy + inheight * th))));
+                            __m256d v = _mm256_cvtps_pd(_mm_load_ps(outmap_ptr + outch + outchannels * (ox + outwidth * (oy + outheight * th))));
 
                             uv = _mm256_add_pd(_mm256_quaternionmulkernelgrad_pd(u, v), uv);
                         }
                     }
                 }
 
-                _mm_storeu_ps(kernel_ptr + inch + inchannels * (koutch + kerneloutchannels * (kx + kwidth * ky)), _mm256_cvtpd_ps(uv));
+                _mm_store_ps(kernel_ptr + inch + inchannels * (koutch + kerneloutchannels * (kx + kwidth * ky)), _mm256_cvtpd_ps(uv));
             }
         }
     }
@@ -66,15 +66,15 @@ void quaternion_kernelproduct_2d_transpose(unsigned int inchannels, unsigned int
                 for (unsigned int th = 0; th < batch; th++) {
                     for (unsigned int oy = 0, iy = ky; oy < outheight; oy++, iy += stride) {
                         for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix += stride) {
-                            __m256d u = _mm256_cvtps_pd(_mm_loadu_ps(inmap_ptr + inch + inchannels * (ix + inwidth * (iy + inheight * th))));
-                            __m256d v = _mm256_cvtps_pd(_mm_loadu_ps(outmap_ptr + outch + outchannels * (ox + outwidth * (oy + outheight * th))));
+                            __m256d u = _mm256_cvtps_pd(_mm_load_ps(inmap_ptr + inch + inchannels * (ix + inwidth * (iy + inheight * th))));
+                            __m256d v = _mm256_cvtps_pd(_mm_load_ps(outmap_ptr + outch + outchannels * (ox + outwidth * (oy + outheight * th))));
 
                             vu = _mm256_add_pd(_mm256_quaternionmulkernelgrad_pd(v, u), vu);
                         }
                     }
                 }
 
-                _mm_storeu_ps(kernel_ptr + inch + inchannels * (koutch + kerneloutchannels * (kx + kwidth * ky)), _mm256_cvtpd_ps(vu));
+                _mm_store_ps(kernel_ptr + inch + inchannels * (koutch + kerneloutchannels * (kx + kwidth * ky)), _mm256_cvtpd_ps(vu));
             }
         }
     }
@@ -83,37 +83,28 @@ void quaternion_kernelproduct_2d_transpose(unsigned int inchannels, unsigned int
 
 void TensorShaderAvxBackend::Quaternion::KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, 
                                                          unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool transpose,
-                                                         cli::array<float>^ inmap, cli::array<float>^ outmap, cli::array<float>^ kernel) {
+                                                         AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
-
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
-    unsigned int outheight = (inheight - kheight) / stride + 1;
 
     if (inchannels % 4 != 0 || outchannels % 4 != 0 || outch % 4 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight / 4 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (outch >= outchannels) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outheight = (inheight - kheight) / stride + 1;
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth * kheight / 4, kernel);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (transpose) {
         quaternion_kernelproduct_2d_transpose(inchannels, outchannels, 

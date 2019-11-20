@@ -27,13 +27,13 @@ void quaternion_kernelproduct_dense(unsigned int inchannels, unsigned int outcha
         __m256d uv = _mm256_setzero_pd();
             
         for (unsigned int th = 0; th < batch; th++) {
-            __m256d u = _mm256_cvtps_pd(_mm_loadu_ps(inmap_ptr + inch + inchannels * th));
-            __m256d v = _mm256_cvtps_pd(_mm_loadu_ps(outmap_ptr + outch + outchannels * th));
+            __m256d u = _mm256_cvtps_pd(_mm_load_ps(inmap_ptr + inch + inchannels * th));
+            __m256d v = _mm256_cvtps_pd(_mm_load_ps(outmap_ptr + outch + outchannels * th));
 
             uv = _mm256_add_pd(_mm256_quaternionmulkernelgrad_pd(u, v), uv);
         }
 
-        _mm_storeu_ps(kernel_ptr + inch + inchannels * koutch, _mm256_cvtpd_ps(uv));
+        _mm_store_ps(kernel_ptr + inch + inchannels * koutch, _mm256_cvtpd_ps(uv));
     }
 }
 
@@ -44,19 +44,19 @@ void quaternion_kernelproduct_dense_transpose(unsigned int inchannels, unsigned 
         __m256d vu = _mm256_setzero_pd();
 
         for (unsigned int th = 0; th < batch; th++) {
-            __m256d u = _mm256_cvtps_pd(_mm_loadu_ps(inmap_ptr + inch + inchannels * th));
-            __m256d v = _mm256_cvtps_pd(_mm_loadu_ps(outmap_ptr + outch + outchannels * th));
+            __m256d u = _mm256_cvtps_pd(_mm_load_ps(inmap_ptr + inch + inchannels * th));
+            __m256d v = _mm256_cvtps_pd(_mm_load_ps(outmap_ptr + outch + outchannels * th));
 
             vu = _mm256_add_pd(_mm256_quaternionmulkernelgrad_pd(v, u), vu);
         }
 
-        _mm_storeu_ps(kernel_ptr + inch + inchannels * koutch, _mm256_cvtpd_ps(vu));
+        _mm_store_ps(kernel_ptr + inch + inchannels * koutch, _mm256_cvtpd_ps(vu));
     }
 }
 
 
 void TensorShaderAvxBackend::Quaternion::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, bool transpose,
-                                                            cli::array<float>^ inmap, cli::array<float>^ outmap, cli::array<float>^ kernel) {
+                                                            AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
@@ -64,26 +64,17 @@ void TensorShaderAvxBackend::Quaternion::KernelProductDense(unsigned int inchann
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels / 4 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (outch >= outchannels) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    Util::CheckLength(inchannels * batch, inmap);
+    Util::CheckLength(outchannels * batch, outmap);
+    Util::CheckLength(inchannels * outchannels / 4, kernel);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (transpose) {
         quaternion_kernelproduct_dense_transpose(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernel_ptr);

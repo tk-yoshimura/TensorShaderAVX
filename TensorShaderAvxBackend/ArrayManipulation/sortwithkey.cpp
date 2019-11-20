@@ -65,23 +65,20 @@ void sortwithkey_stride1(unsigned int axislength, unsigned int slides, float* ke
     }
 }
 
-void TensorShaderAvxBackend::ArrayManipulation::SortWithKey(unsigned int stride, unsigned int axislength, unsigned int slides, cli::array<float>^ src_key, cli::array<float>^ src_value, cli::array<float>^ dst_key, cli::array<float>^ dst_value) {
+void TensorShaderAvxBackend::ArrayManipulation::SortWithKey(unsigned int stride, unsigned int axislength, unsigned int slides, AvxArray<float>^ src_key, AvxArray<float>^ src_value, AvxArray<float>^ dst_key, AvxArray<float>^ dst_value) {
 
     Util::CheckDuplicateArray(src_key, src_value, dst_key, dst_value);
-    Util::CheckOutOfRange(0, stride * axislength * slides, src_key, src_value, dst_key, dst_value);
+    Util::CheckLength(stride * axislength * slides, src_key, src_value, dst_key, dst_value);
 
-    Array::Copy(src_key, dst_key, (long long)(stride * axislength * slides));
-    Array::Copy(src_value, dst_value, (long long)(stride * axislength * slides));
+    AvxArray<float>::Copy(src_key, dst_key, (long long)(stride * axislength * slides));
+    AvxArray<float>::Copy(src_value, dst_value, (long long)(stride * axislength * slides));
 
     if (axislength <= 1) {
         return;
     }
 
-    pin_ptr<float> pinptr_key = &dst_key[0];
-    pin_ptr<float> pinptr_val = &dst_value[0];
-
-    float* key_ptr = pinptr_key;
-    float* val_ptr = pinptr_val;
+    float* key_ptr = (float*)(dst_key->Ptr.ToPointer());
+    float* val_ptr = (float*)(dst_value->Ptr.ToPointer());
 
     if (stride > 1) {
         sortwithkey(stride, axislength, slides, key_ptr, val_ptr);

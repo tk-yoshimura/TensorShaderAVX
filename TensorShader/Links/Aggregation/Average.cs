@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>平均</summary>
-        public static Field Mean(Field x, int[] axes = null, bool keepdims = false) {
+        public static Field Average(Field x, int[] axes = null, bool keepdims = false) {
             Field y = new Field();
-            Link link = new Links.Aggregation.Mean(x, y, axes, keepdims);
+            Link link = new Links.Aggregation.Average(x, y, axes, keepdims);
 
             link.Forward();
 
@@ -16,14 +16,14 @@ namespace TensorShader {
 
 namespace TensorShader.Links.Aggregation {
     /// <summary>平均</summary>
-    public class Mean : Aggregation {
+    public class Average : Aggregation {
         /// <summary>コンストラクタ</summary>
-        public Mean(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
+        public Average(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
             : base(infield, outfield, axes, keepdims) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(Mean(X.Value, Axes, KeepDims));
+            Y.AssignValue(Average(X.Value, Axes, KeepDims));
         }
 
         /// <summary>逆伝搬</summary>

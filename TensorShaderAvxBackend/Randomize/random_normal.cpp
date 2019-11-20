@@ -41,15 +41,13 @@ void random_normal(unsigned int length, unsigned __int64 seed, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Randomize::Normal(unsigned int index, unsigned int length, cli::array<float>^ dst, Random^ random) {
+void TensorShaderAvxBackend::Randomize::Normal(unsigned int length, AvxArray<float>^ dst, Random^ random) {
 
-    Util::CheckOutOfRange(index, length, dst);
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* dst_ptr = pinptr_dst;
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     unsigned __int64 seed = ((unsigned __int64)random->Next() + 1) * 0x100000000ull + ((unsigned __int64)random->Next() + 1);
 
-    random_normal(length, seed, dst_ptr + index);
+    random_normal(length, seed, dst_ptr);
 }

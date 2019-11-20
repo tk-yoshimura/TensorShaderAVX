@@ -46,21 +46,17 @@ void trivector_decaygrad(unsigned int length, float* src1_ptr, float* src2_ptr, 
     }
 }
 
-void TensorShaderAvxBackend::Trivector::DecayGrad(unsigned int index, unsigned int length, cli::array<float>^ src1, cli::array<float>^ src2, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Trivector::DecayGrad(unsigned int length, AvxArray<float>^ src1, AvxArray<float>^ src2, AvxArray<float>^ dst) {
 
-    Util::CheckOutOfRange(index, length, src1, src2, dst);
+    Util::CheckLength(length, src1, src2, dst);
 
     if (length % 3 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src1 = &src1[0];
-    pin_ptr<float> pinptr_src2 = &src2[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* src1_ptr = (float*)(src1->Ptr.ToPointer());
+    float* src2_ptr = (float*)(src2->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* src1_ptr = pinptr_src1;
-    float* src2_ptr = pinptr_src2;
-    float* dst_ptr = pinptr_dst;
-
-    trivector_decaygrad(length, src1_ptr + index, src2_ptr + index, dst_ptr + index);
+    trivector_decaygrad(length, src1_ptr, src2_ptr, dst_ptr);
 }

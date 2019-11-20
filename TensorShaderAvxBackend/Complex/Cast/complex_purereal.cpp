@@ -9,7 +9,7 @@ void complex_purereal(unsigned int length, float* srcreal_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Complex::PureReal(unsigned int length, cli::array<float>^ src_real, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Complex::PureReal(unsigned int length, AvxArray<float>^ src_real, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src_real, dst);
 
@@ -17,14 +17,11 @@ void TensorShaderAvxBackend::Complex::PureReal(unsigned int length, cli::array<f
         throw gcnew System::ArgumentException();
     }
 
-    Util::CheckOutOfRange(0, length / 2, src_real);
-    Util::CheckOutOfRange(0, length, dst);
+    Util::CheckLength(length / 2, src_real);
+    Util::CheckLength(length, dst);
 
-    pin_ptr<float> pinptr_srcreal = &src_real[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* srcreal_ptr = pinptr_srcreal;
-    float* dst_ptr = pinptr_dst;
+    float* srcreal_ptr = (float*)(src_real->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_purereal(length, srcreal_ptr, dst_ptr);
 }

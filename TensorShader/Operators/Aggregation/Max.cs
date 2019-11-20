@@ -11,7 +11,7 @@ namespace TensorShader.Operators.Aggregation {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Aggregation.Max(0, AxisLength * Stride, inmap.Buffer, 0, Stride, outmap.Buffer, Slides);
+            TensorShaderAvxBackend.Aggregation.Max(AxisLength * Stride, inmap.Buffer, Stride, outmap.Buffer, Slides);
         }
 
         /// <summary>操作を実行</summary>

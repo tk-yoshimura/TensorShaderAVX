@@ -15,7 +15,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Elementwise.Elu(0, (uint)Shape.Length, slope, inmap.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.Elu((uint)Shape.Length, slope, inmap.Buffer, outmap.Buffer);
         }
     }
 }

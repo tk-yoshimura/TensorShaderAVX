@@ -16,14 +16,19 @@ namespace TensorShaderAvxBackendTest.ElementwiseMultiArithmetric {
                     float[][] xs = new float[n][];
 
                     for (int j = 0; j < n; j++) {
-                        xs[j] = (new float[length + 2]).Select((_) => (float)rd.NextDouble()).ToArray();
+                        xs[j] = (new float[length + 1]).Select((_) => (float)rd.NextDouble()).ToArray();
                     }
 
-                    float[] y = new float[length + 2];
+                    AvxArray<float>[] vxs = xs.Select((x) => new AvxArray<float>(x)).ToArray();
 
-                    Elementwise.Sum(1, (uint)length, xs, y);
+                    float[] y = new float[length + 1];
+                    AvxArray<float> vy = y;
 
-                    for (int i = 1; i <= length; i++) {
+                    Elementwise.Sum((uint)length, vxs, vy);
+
+                    y = vy;
+
+                    for (int i = 0; i < length; i++) {
                         float sum = 0;
                         for (int j = 0; j < n; j++) {
                             sum += xs[j][i];
@@ -32,8 +37,7 @@ namespace TensorShaderAvxBackendTest.ElementwiseMultiArithmetric {
                         Assert.AreEqual(sum, y[i], 1e-5f, $"index:{i}");
                     }
 
-                    Assert.AreEqual(0f, y[0], $"index:0");
-                    Assert.AreEqual(0f, y[length + 1], $"index:{length + 1}");
+                    Assert.AreEqual(0f, y[length], $"index:{length}");
 
                     Console.WriteLine($"pass:{length}, {n}");
                 }
@@ -48,11 +52,14 @@ namespace TensorShaderAvxBackendTest.ElementwiseMultiArithmetric {
                 float[][] xs = (new float[n][]).Select((_) => new float[length]).ToArray();
                 float[] y = new float[length];
 
+                AvxArray<float>[] vxs = xs.Select((x) => new AvxArray<float>(x)).ToArray();
+                AvxArray<float> vy = y;
+
                 Stopwatch sw = new Stopwatch();
 
                 sw.Start();
 
-                Elementwise.Sum(0, (uint)length, xs, y);
+                Elementwise.Sum((uint)length, vxs, vy);
 
                 sw.Stop();
 

@@ -1,8 +1,8 @@
 namespace TensorShader.Operators.Aggregation {
     /// <summary>平均</summary>
-    internal class Mean : Aggregation {
+    internal class Average : Aggregation {
         /// <summary>コンストラクタ</summary>
-        public Mean(Shape shape, int axis)
+        public Average(Shape shape, int axis)
             : base(shape, axis){ }
 
         /// <summary>操作を実行</summary>
@@ -11,7 +11,7 @@ namespace TensorShader.Operators.Aggregation {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Aggregation.Average(0, AxisLength * Stride, inmap.Buffer, 0, Stride, outmap.Buffer, Slides);
+            TensorShaderAvxBackend.Aggregation.Average(AxisLength * Stride, inmap.Buffer, Stride, outmap.Buffer, Slides);
         }
 
         /// <summary>操作を実行</summary>

@@ -48,27 +48,25 @@ void averageunpool_3d(unsigned int channels, unsigned int outwidth, unsigned int
     }
 }
 
-void TensorShaderAvxBackend::Pool::AverageUnpool3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int stride, cli::array<float>^ inmap, cli::array<float>^ outmap) {
+void TensorShaderAvxBackend::Pool::AverageUnpool3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    if (channels * (outwidth / stride) * (outheight / stride) * (outdepth / stride) * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * outheight * outdepth * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    ArrayManipulation::Zeroset(channels * outwidth * outheight * outdepth * th, channels * outwidth * outheight * outdepth, outmap);
+    unsigned int inwidth = outwidth / stride;
+    unsigned int inheight = outheight / stride;
+    unsigned int indepth = outdepth / stride;
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
+    Util::CheckLength(channels * inwidth * inheight * indepth * batch, inmap);
+    Util::CheckLength(channels * outwidth * outheight * outdepth * batch, outmap);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
+    outmap->Zeroset(channels * outwidth * outheight * outdepth * th, channels * outwidth * outheight * outdepth);
+    
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     averageunpool_3d(channels, outwidth, outheight, outdepth, th, stride, inmap_ptr, outmap_ptr);
 }

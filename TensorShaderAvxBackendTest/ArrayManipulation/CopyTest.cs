@@ -17,7 +17,13 @@ namespace TensorShaderAvxBackendTest.ArrayManipulations {
 
                     float[] x_copy = (float[])x.Clone(), y_copy = (float[])y.Clone();
 
-                    ArrayManipulation.PatternCopy(copy_channels + 2, 1, copy_channels + 4, 2, copy_channels, slides, x, y);
+                    AvxArray<float> vx = x;
+                    AvxArray<float> vy = y;
+
+                    ArrayManipulation.PatternCopy(copy_channels + 2, 1, copy_channels + 4, 2, copy_channels, slides, vx, vy);
+
+                    x = vx;
+                    y = vy;
 
                     CollectionAssert.AreEqual(x_copy, x);
 

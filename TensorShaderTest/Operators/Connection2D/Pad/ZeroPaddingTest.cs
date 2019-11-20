@@ -33,7 +33,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
                                             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
 
-                                            TensorShaderAvxBackend.Randomize.Uniform(0, (uint)y_tensor.Length, y_tensor.Buffer, random);
+                                            TensorShaderAvxBackend.Randomize.Uniform((uint)y_tensor.Length, y_tensor.Buffer, random);
 
                                             ZeroPadding ope = new ZeroPadding(inwidth, inheight, channels, leftpad, rightpad, toppad, bottompad, batch);
 

@@ -11,11 +11,11 @@ void quaternion_conjugate(unsigned int length, float* src_ptr, float* dst_ptr) {
     __m256 sign = _mm256_castsi256_ps(_mm256_setr_epi32(0, 0x80000000u, 0x80000000u, 0x80000000u, 0, 0x80000000u, 0x80000000u, 0x80000000u));
 
     for (unsigned int i = 0; i < j; i += 8) {
-        __m256 x = _mm256_loadu_ps(src_ptr + i);
+        __m256 x = _mm256_load_ps(src_ptr + i);
 
         __m256 y = _mm256_xor_ps(sign, x);
 
-        _mm256_storeu_ps(dst_ptr + i, y);
+        _mm256_store_ps(dst_ptr + i, y);
     }
 
     if (k > 0) {
@@ -27,19 +27,16 @@ void quaternion_conjugate(unsigned int length, float* src_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Quaternion::Conjugate(unsigned int index, unsigned int length, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Quaternion::Conjugate(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst) {
 
-    Util::CheckOutOfRange(index, length, src, dst);
+    Util::CheckLength(length, src, dst);
 
     if (length % 4 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
-
-    quaternion_conjugate(length, src_ptr + index, dst_ptr + index);
+    quaternion_conjugate(length, src_ptr, dst_ptr);
 }

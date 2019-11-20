@@ -14,7 +14,7 @@ namespace TensorShader.Operators.RandomGeneration {
 
             Tensor refmap = tensors[0];
 
-            TensorShaderAvxBackend.Randomize.Uniform(0, (uint)refmap.Length, refmap.Buffer, Random);
+            TensorShaderAvxBackend.Randomize.Uniform((uint)refmap.Length, refmap.Buffer, Random);
         }
     }
 }

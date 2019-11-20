@@ -84,30 +84,20 @@ void kernelproduct_cw2d(unsigned int channels,
 
 void TensorShaderAvxBackend::Convolution::ChannelwiseKernelProduct2D(unsigned int channels, unsigned int inwidth, unsigned int inheight,
                                                                      unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int stride,
-                                                                     cli::array<float>^ inmap, cli::array<float>^ outmap, cli::array<float>^ kernel) {
+                                                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
     unsigned int outwidth = (inwidth - kwidth) / stride + 1;
     unsigned int outheight = (inheight - kheight) / stride + 1;
 
-    if (channels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (channels * kwidth * kheight > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
+    Util::CheckLength(channels * inwidth * inheight * batch, inmap);
+    Util::CheckLength(channels * outwidth * outheight * batch, outmap);
+    Util::CheckLength(channels * kwidth * kheight, kernel);
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
-
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     kernelproduct_cw2d(channels,
                        inwidth, outwidth, kwidth, 

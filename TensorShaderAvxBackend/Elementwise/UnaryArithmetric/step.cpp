@@ -2,6 +2,15 @@
 
 using namespace System;
 
+__forceinline __m256 _mm256_step_ps(__m256 x) {
+    __m256 zeros = _mm256_setzero_ps();
+    __m256 ones = _mm256_set1_ps(1);
+
+    __m256 y = _mm256_and_ps(ones, _mm256_cmp_ps(x, zeros, _CMP_GT_OS));
+
+    return y;
+}
+
 void step(unsigned int length, float* src_ptr, float* dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
@@ -9,11 +18,11 @@ void step(unsigned int length, float* src_ptr, float* dst_ptr) {
     __m256 ones = _mm256_set1_ps(1);
 
     for (unsigned int i = 0; i < j; i += 8) {
-        __m256 x = _mm256_loadu_ps(src_ptr + i);
+        __m256 x = _mm256_load_ps(src_ptr + i);
 
-        __m256 y = _mm256_and_ps(ones, _mm256_cmp_ps(x, zeros, _CMP_GT_OS));
+        __m256 y = _mm256_step_ps(x);
 
-        _mm256_storeu_ps(dst_ptr + i, y);
+        _mm256_store_ps(dst_ptr + i, y);
     }
 
     if (k > 0) {
@@ -21,26 +30,18 @@ void step(unsigned int length, float* src_ptr, float* dst_ptr) {
 
         __m256 x = _mm256_maskload_ps(src_ptr + j, mask);
 
-        __m256 y = _mm256_and_ps(ones, _mm256_cmp_ps(x, zeros, _CMP_GT_OS));
+        __m256 y = _mm256_step_ps(x);
 
         _mm256_maskstore_ps(dst_ptr + j, mask, y);
     }
 }
 
-void TensorShaderAvxBackend::Elementwise::Step(unsigned int index, unsigned int length, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Elementwise::Step(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst) {
     
-    Util::CheckOutOfRange(index, length, src, dst);
-    
-    if (length == 1) {
-        dst[index] = src[index] > (float)0 ? (float)1 : (float)0;
-        return;
-    }
+    Util::CheckLength(length, src, dst);
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
-
-    step(length, src_ptr + index, dst_ptr + index);
+    step(length, src_ptr, dst_ptr);
 }

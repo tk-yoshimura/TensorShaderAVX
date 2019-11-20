@@ -12,16 +12,19 @@ namespace TensorShaderAvxBackendTest.ArrayManipulations {
             Random rd = new Random(1234);
 
             for(int length = 0; length < 1000; length++) {
-                float[] x = (new float[length + 2]).Select((_) => (float)rd.NextDouble() * 10 - 5).ToArray();
+                float[] x = (new float[length + 1]).Select((_) => (float)rd.NextDouble() * 10 - 5).ToArray();
 
-                ArrayManipulation.Clear(1, (uint)length, 0.5f, x);
+                AvxArray<float> vx = x;
 
-                for(int i = 1; i <= length; i++) {
+                ArrayManipulation.Clear((uint)length, 0.5f, vx);
+
+                x = vx;
+
+                for(int i = 0; i < length; i++) {
                     Assert.AreEqual(0.5f, x[i], $"index:{i}");
                 }
 
-                Assert.AreNotEqual(0.5f, x[0], $"index:0");
-                Assert.AreNotEqual(0.5f, x[length + 1], $"index:{length + 1}");
+                Assert.AreNotEqual(0.5f, x[length], $"index:{length}");
 
                 Console.WriteLine($"pass:{length}");
             }
@@ -32,13 +35,13 @@ namespace TensorShaderAvxBackendTest.ArrayManipulations {
         public void SpeedTest() {
             int length = 10000000;
 
-            float[] x = new float[length];
+            AvxArray<float> vx = new float[length];
 
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            ArrayManipulation.Clear(0, (uint)length, 0.5f, x);
+            ArrayManipulation.Clear((uint)length, 0.5f, vx);
 
             sw.Stop();
 

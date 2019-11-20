@@ -31,7 +31,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                                     OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
                                     OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
 
-                                    TensorShaderAvxBackend.Randomize.Uniform(0, (uint)y_tensor.Length, y_tensor.Buffer, random);
+                                    TensorShaderAvxBackend.Randomize.Uniform((uint)y_tensor.Length, y_tensor.Buffer, random);
 
                                     ZeroPadding ope = new ZeroPadding(inwidth, inheight, indepth, channels, leftpad, rightpad, toppad, bottompad, frontpad, rearpad, batch);
 

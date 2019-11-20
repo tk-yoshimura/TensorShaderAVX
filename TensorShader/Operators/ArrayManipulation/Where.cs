@@ -25,7 +25,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
             Tensor incondition = tensors[0], intensor1 = tensors[1], intensor2 = tensors[2], outtensor = tensors[3];
 
-            TensorShaderAvxBackend.Elementwise.Lerp(0, (uint)incondition.Length, incondition.Buffer, intensor1.Buffer, intensor2.Buffer, outtensor.Buffer);
+            TensorShaderAvxBackend.Elementwise.Lerp((uint)incondition.Length, incondition.Buffer, intensor1.Buffer, intensor2.Buffer, outtensor.Buffer);
         }
 
         /// <summary>操作を実行</summary>

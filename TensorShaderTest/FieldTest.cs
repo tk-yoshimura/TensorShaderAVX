@@ -1149,7 +1149,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                OutputNode loss = VariableNode.Mean(ferr.Value).Save();
+                OutputNode loss = VariableNode.Average(ferr.Value).Save();
 
                 (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 

@@ -20,18 +20,15 @@ void argmax(unsigned int length, unsigned int channels, float* src_ptr, float* d
     }
 }
 
-void TensorShaderAvxBackend::Indexer::ArgMax(unsigned int length, unsigned int channels, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Indexer::ArgMax(unsigned int length, unsigned int channels, AvxArray<float>^ src, AvxArray<float>^ dst) {
 
     Util::CheckDuplicateArray(src, dst);
 
-    Util::CheckOutOfRange(0, length * channels, src);
-    Util::CheckOutOfRange(0, length, dst);
+    Util::CheckLength(length * channels, src);
+    Util::CheckLength(length, dst);
     
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
-
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     argmax(length, channels, src_ptr, dst_ptr);
 }

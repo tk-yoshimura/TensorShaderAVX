@@ -105,7 +105,7 @@
     <ClCompile Include="ArrayManipulation\pattern_copy.cpp" />
     <ClCompile Include="ArrayManipulation\sort.cpp" />
     <ClCompile Include="ArrayManipulation\sortwithkey.cpp" />
-    <ClCompile Include="ArrayManipulation\zeroset.cpp" />
+    <ClCompile Include="avxarray.cpp" />
     <ClCompile Include="Batchwise\mul_bnwise.cpp" />
     <ClCompile Include="Channelwise\add_chwise.cpp" />
     <ClCompile Include="Channelwise\divlvec_chwise.cpp" />

@@ -141,7 +141,7 @@ void broadcast_9_(unsigned int src_length, float* src_ptr, unsigned int dst_leng
     }
 }
 
-void TensorShaderAvxBackend::ArrayManipulation::Broadcast(unsigned int src_index, unsigned int src_length, cli::array<float>^ src, unsigned int dst_index, unsigned int dst_length, cli::array<float>^ dst, unsigned int slides) {
+void TensorShaderAvxBackend::ArrayManipulation::Broadcast(unsigned int src_length, AvxArray<float>^ src, unsigned int dst_length, AvxArray<float>^ dst, unsigned int slides) {
 
     Util::CheckDuplicateArray(src, dst);
 
@@ -160,39 +160,36 @@ void TensorShaderAvxBackend::ArrayManipulation::Broadcast(unsigned int src_index
     if (((dst_length * slides) / slides) != dst_length) {
         throw gcnew System::OverflowException();
     }
-
-    Util::CheckOutOfRange(src_index, src_length * slides, src);
-    Util::CheckOutOfRange(dst_index, dst_length * slides, dst);
-
+    
     if (src_length < 1 || dst_length < 1 || dst_length % src_length != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    Util::CheckLength(src_length * slides, src);
+    Util::CheckLength(dst_length * slides, dst);
 
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (src_length <= 1) {
-        broadcast_1(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_1(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
     else if (src_length <= 2) {
-        broadcast_2(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_2(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
     else if (src_length <= 3) {
-        broadcast_3(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_3(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
     else if (src_length <= 4) {
-        broadcast_4(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_4(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
     else if (src_length <= 7) {
-        broadcast_5_7(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_5_7(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
     else if (src_length <= 8) {
-        broadcast_8(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_8(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
     else {
-        broadcast_9_(src_length, src_ptr + src_index, dst_length, dst_ptr + dst_index, slides);
+        broadcast_9_(src_length, src_ptr, dst_length, dst_ptr, slides);
     }
 }

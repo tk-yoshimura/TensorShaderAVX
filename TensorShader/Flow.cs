@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using TensorShaderAvxBackend;
 
 namespace TensorShader {
     /// <summary>計算フロー</summary>
@@ -30,7 +31,19 @@ namespace TensorShader {
         public int BufferCount => tensors.Select((tensor) => tensor.Value.Buffer).Distinct().Count();
 
         /// <summary>保有バッファ総要素数</summary>
-        public int BufferSize => tensors.Select((tensor) => tensor.Value.Buffer).Distinct().Select((buffer)=>buffer.Length).Sum();
+        public ulong BufferSize {
+            get { 
+                ulong size_sum = 0;
+
+                checked { 
+                    foreach(ulong size in tensors.Select((tensor) => tensor.Value.Buffer).Distinct().Select((buffer) => buffer.Length)) {
+                        size_sum += size;
+                    }
+                }
+
+                return size_sum;
+            }
+        }
 
         /// <summary>入力テンソルテーブル</summary>
         public IReadOnlyDictionary<InputNode, Tensor> InTensors => intensors;
@@ -299,7 +312,7 @@ namespace TensorShader {
                 }
             }
 
-            List<float[]> buffers = buffers_list.Select((item) => new float[item.length]).ToList();
+            List<AvxArray<float>> buffers = buffers_list.Select((item) => (AvxArray<float>)(new float[item.length])).ToList();
 
             // テンソルテーブル確定
             foreach (var item in bufferid_table){

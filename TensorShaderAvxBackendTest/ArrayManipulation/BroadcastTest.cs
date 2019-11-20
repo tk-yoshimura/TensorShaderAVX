@@ -14,21 +14,24 @@ namespace TensorShaderAvxBackendTest.ArrayManipulations {
             for (uint src_length = 1; src_length <= 32; src_length++) {
                 for (uint dst_length = src_length; dst_length <= src_length * 32; dst_length += src_length) {
                     for (uint slides = 0; slides <= 4; slides++) {
-                        float[] x = (new float[src_length * slides + 2]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
-                        float[] y = (new float[dst_length * slides + 2]).Select((_) => (float)rd.NextDouble() + 1).ToArray();
+                        float[] x = (new float[src_length * slides + 1]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
+                        float[] y = (new float[dst_length * slides + 1]).Select((_) => (float)rd.NextDouble() + 1).ToArray();
 
-                        float v0 = y[0], v1 = y[dst_length * slides + 1];
+                        float v1 = y[dst_length * slides];
 
-                        ArrayManipulation.Broadcast(1, src_length, x, 1, dst_length, y, slides);
+                        AvxArray<float> vx = x, vy = y;
+
+                        ArrayManipulation.Broadcast(src_length, vx, dst_length, vy, slides);
+
+                        y = vy;
 
                         for (int j = 0; j < slides; j++) {
                             for (int i = 0; i < dst_length; i++) {
-                                Assert.AreEqual(x[i % src_length + j * src_length + 1], y[i + j * dst_length + 1]);
+                                Assert.AreEqual(x[i % src_length + j * src_length], y[i + j * dst_length]);
                             }
                         }
 
-                        Assert.AreEqual(v0, y[0]);
-                        Assert.AreEqual(v1, y[dst_length * slides + 1]);
+                        Assert.AreEqual(v1, y[dst_length * slides]);
 
                         Console.WriteLine($"pass: {src_length} {dst_length} {slides}");
                     }
@@ -45,17 +48,17 @@ namespace TensorShaderAvxBackendTest.ArrayManipulations {
             for (uint src_length = 1; src_length <= 32; src_length++) {
                 uint dst_length = src_length * 1000000;
 
-                float[] x = new float[src_length];
-                float[] y = new float[dst_length];
+                AvxArray<float> vx = new float[src_length];
+                AvxArray<float> vy = new float[dst_length];
 
-                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+                ArrayManipulation.Broadcast(src_length, vx, dst_length, vy, 1);
 
                 sw.Restart();
 
-                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
-                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
-                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
-                ArrayManipulation.Broadcast(0, src_length, x, 0, dst_length, y, 1);
+                ArrayManipulation.Broadcast(src_length, vx, dst_length, vy, 1);
+                ArrayManipulation.Broadcast(src_length, vx, dst_length, vy, 1);
+                ArrayManipulation.Broadcast(src_length, vx, dst_length, vy, 1);
+                ArrayManipulation.Broadcast(src_length, vx, dst_length, vy, 1);
 
                 sw.Stop();
 

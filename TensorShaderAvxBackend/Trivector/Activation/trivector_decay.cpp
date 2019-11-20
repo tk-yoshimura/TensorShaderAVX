@@ -23,19 +23,16 @@ void trivector_decay(unsigned int length, float* src_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Trivector::Decay(unsigned int index, unsigned int length, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Trivector::Decay(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst) {
 
-    Util::CheckOutOfRange(index, length, src, dst);
+    Util::CheckLength(length, src, dst);
 
     if (length % 3 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
-
-    trivector_decay(length, src_ptr + index, dst_ptr + index);
+    trivector_decay(length, src_ptr, dst_ptr);
 }

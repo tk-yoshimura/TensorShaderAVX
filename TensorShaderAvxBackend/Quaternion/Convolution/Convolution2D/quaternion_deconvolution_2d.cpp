@@ -54,16 +54,16 @@ void quaternion_deconvolution_2d(unsigned int inchannels, unsigned int outchanne
             for (unsigned int outch = 0; outch < outchannels; outch += 4) {
                 for (unsigned int ky = 0, oy = iy * stride; ky < kheight; ky++, oy++) {
                     for (unsigned int kx = 0, ox = ix * stride; kx < kwidth; kx++, ox++) {
-                        __m256d uv = _mm256_cvtps_pd(_mm_loadu_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy)));
+                        __m256d uv = _mm256_cvtps_pd(_mm_load_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy)));
 
                         for (unsigned int inch = 0, kinch = 0; inch < inchannels; inch += 4, kinch++) {
-                            __m256d u = _mm256_cvtps_pd(_mm_loadu_ps(inmap_ptr + inch + inchannels * (ix + inwidth * iy)));
-                            __m256d v = _mm256_cvtps_pd(_mm_loadu_ps(kernel_ptr + outch + outchannels * (kinch + kernelinchannels * (kx + kwidth * ky))));
+                            __m256d u = _mm256_cvtps_pd(_mm_load_ps(inmap_ptr + inch + inchannels * (ix + inwidth * iy)));
+                            __m256d v = _mm256_cvtps_pd(_mm_load_ps(kernel_ptr + outch + outchannels * (kinch + kernelinchannels * (kx + kwidth * ky))));
 
                             uv = _mm256_add_pd(_mm256_quaternionmul_pd(u, v), uv);
                         }
 
-                        _mm_storeu_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy), _mm256_cvtpd_ps(uv));
+                        _mm_store_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy), _mm256_cvtpd_ps(uv));
                     }
                 }
             }
@@ -87,16 +87,16 @@ void quaternion_deconvolution_2d_grad(unsigned int inchannels, unsigned int outc
             for (unsigned int outch = 0; outch < outchannels; outch += 4) {
                 for (unsigned int ky = 0, oy = iy * stride; ky < kheight; ky++, oy++) {
                     for (unsigned int kx = 0, ox = ix * stride; kx < kwidth; kx++, ox++) {
-                        __m256d vu = _mm256_cvtps_pd(_mm_loadu_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy)));
+                        __m256d vu = _mm256_cvtps_pd(_mm_load_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy)));
 
                         for (unsigned int inch = 0, kinch = 0; inch < inchannels; inch += 4, kinch++) {
-                            __m256d u = _mm256_cvtps_pd(_mm_loadu_ps(inmap_ptr + inch + inchannels * (ix + inwidth * iy)));
-                            __m256d v = _mm256_cvtps_pd(_mm_loadu_ps(kernel_ptr + outch + outchannels * (kinch + kernelinchannels * (kx + kwidth * ky))));
+                            __m256d u = _mm256_cvtps_pd(_mm_load_ps(inmap_ptr + inch + inchannels * (ix + inwidth * iy)));
+                            __m256d v = _mm256_cvtps_pd(_mm_load_ps(kernel_ptr + outch + outchannels * (kinch + kernelinchannels * (kx + kwidth * ky))));
 
                             vu = _mm256_add_pd(_mm256_quaternionmulgrad_pd(v, u), vu);
                         }
 
-                        _mm_storeu_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy), _mm256_cvtpd_ps(vu));
+                        _mm_store_ps(outmap_ptr + outch + outchannels * (ox + outwidth * oy), _mm256_cvtpd_ps(vu));
                     }
                 }
             }
@@ -106,39 +106,30 @@ void quaternion_deconvolution_2d_grad(unsigned int inchannels, unsigned int outc
 
 void TensorShaderAvxBackend::Quaternion::Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight, 
                                                          unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
-                                                         cli::array<float>^ inmap, cli::array<float>^ kernel, cli::array<float>^ outmap) {
+                                                         AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
-
-    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
-    unsigned int inheight = (outheight - kheight) / stride + 1;
 
     if (inchannels % 4 != 0 || outchannels % 4 != 0) {
         throw gcnew System::ArgumentException();
     }
 
-    if (inchannels * inwidth * inheight * batch > (unsigned int)inmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (outchannels * outwidth * outheight * batch > (unsigned int)outmap->Length) {
-        throw gcnew System::ArgumentException();
-    }
-    if (inchannels * outchannels * kwidth * kheight / 4 > (unsigned int)kernel->Length) {
-        throw gcnew System::ArgumentException();
-    }
     if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
-    ArrayManipulation::Zeroset(outchannels * outwidth * outheight * th, outchannels * outwidth * outheight, outmap);
+    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
+    unsigned int inheight = (outheight - kheight) / stride + 1;
 
-    pin_ptr<float> pinptr_inmap = &inmap[0];
-    pin_ptr<float> pinptr_outmap = &outmap[0];
-    pin_ptr<float> pinptr_kernel = &kernel[0];
+    Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
+    Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
+    Util::CheckLength(inchannels * outchannels * kwidth * kheight / 4, kernel);
 
-    float* inmap_ptr = pinptr_inmap;
-    float* outmap_ptr = pinptr_outmap;
-    float* kernel_ptr = pinptr_kernel;
+    outmap->Zeroset(outchannels * outwidth * outheight * th, outchannels * outwidth * outheight);
+
+    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
+    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (gradmode) {
         quaternion_deconvolution_2d_grad(inchannels, outchannels, 

@@ -8,11 +8,11 @@ void round(unsigned int length, float* src_ptr, float* dst_ptr) {
     __m256 p5 = _mm256_set1_ps(0.5);
 
     for (unsigned int i = 0; i < j; i += 8) {
-        __m256 x = _mm256_loadu_ps(src_ptr + i);
+        __m256 x = _mm256_load_ps(src_ptr + i);
 
         __m256 y = _mm256_floor_ps(_mm256_add_ps(x, p5));
 
-        _mm256_storeu_ps(dst_ptr + i, y);
+        _mm256_store_ps(dst_ptr + i, y);
     }
 
     if (k > 0) {
@@ -26,20 +26,12 @@ void round(unsigned int length, float* src_ptr, float* dst_ptr) {
     }
 }
 
-void TensorShaderAvxBackend::Elementwise::Round(unsigned int index, unsigned int length, cli::array<float>^ src, cli::array<float>^ dst) {
+void TensorShaderAvxBackend::Elementwise::Round(unsigned int length, AvxArray<float>^ src, AvxArray<float>^ dst) {
     
-    Util::CheckOutOfRange(index, length, src, dst);
-    
-    if (length == 1) {
-        dst[index] = (float)Math::Round(src[index], MidpointRounding::AwayFromZero);
-        return;
-    }
+    Util::CheckLength(length, src, dst);
 
-    pin_ptr<float> pinptr_src = &src[0];
-    pin_ptr<float> pinptr_dst = &dst[0];
+    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
-    float* src_ptr = pinptr_src;
-    float* dst_ptr = pinptr_dst;
-
-    round(length, src_ptr + index, dst_ptr + index);
+    round(length, src_ptr, dst_ptr);
 }

@@ -39,15 +39,15 @@ void trivector_mulqgrad(unsigned int length, float* v_ptr, float* u_ptr, float* 
     for (unsigned int i = 0, j = 0; i < length; i += 3, j += 4) {
         __m256d v = _mm256_cvtps_pd(_mm_maskload_ps(v_ptr + i, mask3));
         __m256d u = _mm256_cvtps_pd(_mm_maskload_ps(u_ptr + i, mask3));
-        __m256d q = _mm256_cvtps_pd(_mm_loadu_ps(q_ptr + j));
+        __m256d q = _mm256_cvtps_pd(_mm_load_ps(q_ptr + j));
 
         __m128 p = _mm256_cvtpd_ps(_mm256_trivectormulqgrad_pd(v, u, q));
 
-        _mm_storeu_ps(p_ptr + j, p);
+        _mm_store_ps(p_ptr + j, p);
     }
 }
 
-void TensorShaderAvxBackend::Trivector::MulQGrad(unsigned int vectorindex, unsigned int quaternionindex, unsigned int vectorlength, cli::array<float>^ src_vector_value, cli::array<float>^ src_vector_grad, cli::array<float>^ src_quaternion, cli::array<float>^ dst_quaternion) {
+void TensorShaderAvxBackend::Trivector::MulQGrad(unsigned int vectorlength, AvxArray<float>^ src_vector_value, AvxArray<float>^ src_vector_grad, AvxArray<float>^ src_quaternion, AvxArray<float>^ dst_quaternion) {
 
     Util::CheckDuplicateArray(src_vector_value, src_vector_grad, src_quaternion, dst_quaternion);
 
@@ -57,18 +57,13 @@ void TensorShaderAvxBackend::Trivector::MulQGrad(unsigned int vectorindex, unsig
 
     unsigned int quaternionlength = vectorlength / 3 * 4;
 
-    Util::CheckOutOfRange(vectorindex, vectorlength, src_vector_value, src_vector_grad);
-    Util::CheckOutOfRange(quaternionindex, quaternionlength, src_quaternion, dst_quaternion);
+    Util::CheckLength(vectorlength, src_vector_value, src_vector_grad);
+    Util::CheckLength(quaternionlength, src_quaternion, dst_quaternion);
 
-    pin_ptr<float> pinptr_v = &src_vector_value[0];
-    pin_ptr<float> pinptr_u = &src_vector_grad[0];
-    pin_ptr<float> pinptr_q = &src_quaternion[0];
-    pin_ptr<float> pinptr_p = &dst_quaternion[0];
+    float* v_ptr = (float*)(src_vector_value->Ptr.ToPointer());
+    float* u_ptr = (float*)(src_vector_grad->Ptr.ToPointer());
+    float* q_ptr = (float*)(src_quaternion->Ptr.ToPointer());
+    float* p_ptr = (float*)(dst_quaternion->Ptr.ToPointer());
 
-    float* v_ptr = pinptr_v;
-    float* u_ptr = pinptr_u;
-    float* q_ptr = pinptr_q;
-    float* p_ptr = pinptr_p;
-
-    trivector_mulqgrad(vectorlength, v_ptr + vectorindex, u_ptr + vectorindex, q_ptr + quaternionindex, p_ptr + quaternionindex);
+    trivector_mulqgrad(vectorlength, v_ptr, u_ptr, q_ptr, p_ptr);
 }

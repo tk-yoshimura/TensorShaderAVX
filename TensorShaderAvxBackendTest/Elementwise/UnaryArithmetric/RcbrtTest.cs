@@ -12,17 +12,20 @@ namespace TensorShaderAvxBackendTest.ElementwiseUnaryArithmetric {
             Random rd = new Random(1234);
 
             for(int length = 0; length < 1000; length++) {
-                float[] x = (new float[length + 2]).Select((_) => (float)rd.NextDouble() * 10 - 5).ToArray();
-                float[] y = new float[length + 2];
+                float[] x = (new float[length + 1]).Select((_) => (float)rd.NextDouble() * 10 - 5).ToArray();
+                float[] y = new float[length + 1];
 
-                Elementwise.Rcbrt(1, (uint)length, x, y);
+                AvxArray<float> vx = x, vy = y;
 
-                for(int i = 1; i <= length; i++) {
+                Elementwise.Rcbrt((uint)length, vx, vy);
+
+                y = vy;
+
+                for(int i = 0; i < length; i++) {
                     Assert.AreEqual(Math.Sign(x[i]) / Math.Pow(Math.Abs(x[i]), 1.0 / 3.0), y[i], 1e-3f, $"index:{i}");
                 }
 
-                Assert.AreEqual(0f, y[0], $"index:0");
-                Assert.AreEqual(0f, y[length + 1], $"index:{length + 1}");
+                Assert.AreEqual(0f, y[length], $"index:{length}");
 
                 Console.WriteLine($"pass:{length}");
             }
@@ -33,7 +36,11 @@ namespace TensorShaderAvxBackendTest.ElementwiseUnaryArithmetric {
             float[] x = new float[] { 0, 1, -1, float.PositiveInfinity, float.NegativeInfinity, float.NaN };
             float[] y = new float[x.Length];
 
-            Elementwise.Rcbrt(0, (uint)x.Length, x, y);
+            AvxArray<float> vx = x, vy = y;
+
+            Elementwise.Rcbrt((uint)x.Length, vx, vy);
+
+            y = vy;
 
             //Assert.IsTrue(float.IsNaN(y[0])); //_mm256_invcbrt_ps(zero) = +inf
             Assert.AreEqual(1, y[1], 1e-6f);
@@ -47,14 +54,14 @@ namespace TensorShaderAvxBackendTest.ElementwiseUnaryArithmetric {
         public void SpeedTest() {
             int length = 10000000;
 
-            float[] x = new float[length];
-            float[] y = new float[length];
+            AvxArray<float> vx = new float[length];
+            AvxArray<float> vy = new float[length];
 
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            Elementwise.Rcbrt(0, (uint)length, x, y);
+            Elementwise.Rcbrt((uint)length, vx, vy);
 
             sw.Stop();
 
