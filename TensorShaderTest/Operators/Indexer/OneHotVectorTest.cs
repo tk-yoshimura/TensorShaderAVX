@@ -6,7 +6,7 @@ using TensorShader.Operators.Indexer;
 
 namespace TensorShaderTest.Operators.Indexer {
     [TestClass]
-    public class OneOutVectorTest {
+    public class OneHotVectorTest {
         [TestMethod]
         public void ExecuteTest() {
             Random rd = new Random(1234);
