@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace TensorShader.Operators.ArrayManipulation {
     /// <summary>ソート</summary>
-    /// <remarks>4要素スライドソート</remarks>
     internal class SortWithKey : Operator {
         /// <summary>形状</summary>
         public Shape Shape { private set; get; }
