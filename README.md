@@ -1,5 +1,7 @@
 ![TensorShaderAVX](https://github.com/tk-yoshimura/TensorShaderAVX/blob/master/logo.svg)
 
+# *under development !*
+
 # TensorShaderAVX
 **Deep Learning .NET library, AVX accelerated.**
 
