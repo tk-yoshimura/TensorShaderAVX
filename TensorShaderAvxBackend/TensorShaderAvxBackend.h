@@ -408,7 +408,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
         
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, 
+                                    unsigned int batch, unsigned int kwidth, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,

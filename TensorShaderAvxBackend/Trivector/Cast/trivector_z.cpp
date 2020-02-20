@@ -19,7 +19,7 @@ void TensorShaderAvxBackend::Trivector::Z(unsigned int length, AvxArray<float>^ 
     Util::CheckLength(length, src);
     Util::CheckLength(length / 3, dst_z);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst_z->Ptr.ToPointer());
 
     trivector_z(length, src_ptr, dst_ptr);

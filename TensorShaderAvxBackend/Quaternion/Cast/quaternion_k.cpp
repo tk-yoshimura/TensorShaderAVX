@@ -19,7 +19,7 @@ void TensorShaderAvxBackend::Quaternion::K(unsigned int length, AvxArray<float>^
     Util::CheckLength(length, src);
     Util::CheckLength(length / 4, dst_k);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst_k->Ptr.ToPointer());
 
     quaternion_k(length, src_ptr, dst_ptr);

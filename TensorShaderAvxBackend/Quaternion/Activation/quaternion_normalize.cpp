@@ -40,7 +40,7 @@ void TensorShaderAvxBackend::Quaternion::Normalize(unsigned int length, AvxArray
         throw gcnew System::ArgumentException();
     }
     
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     quaternion_normalize(length, src_ptr, dst_ptr);

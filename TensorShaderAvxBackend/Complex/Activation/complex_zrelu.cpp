@@ -44,7 +44,7 @@ void TensorShaderAvxBackend::Complex::ZRelu(unsigned int length, AvxArray<float>
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_zrelu(length, src_ptr, dst_ptr);

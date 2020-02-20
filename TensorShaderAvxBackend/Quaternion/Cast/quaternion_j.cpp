@@ -19,7 +19,7 @@ void TensorShaderAvxBackend::Quaternion::J(unsigned int length, AvxArray<float>^
     Util::CheckLength(length, src);
     Util::CheckLength(length / 4, dst_j);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst_j->Ptr.ToPointer());
 
     quaternion_j(length, src_ptr, dst_ptr);

@@ -28,7 +28,7 @@ void TensorShaderAvxBackend::Elementwise::Sin(unsigned int length, AvxArray<floa
     
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     sin(length, src_ptr, dst_ptr);

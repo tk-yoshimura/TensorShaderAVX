@@ -36,7 +36,7 @@ void TensorShaderAvxBackend::Elementwise::SoftPlus(unsigned int length, AvxArray
 
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     softplus(length, src_ptr, dst_ptr);

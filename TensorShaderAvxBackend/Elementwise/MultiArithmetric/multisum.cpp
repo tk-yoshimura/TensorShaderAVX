@@ -26,7 +26,7 @@ void insertadd_1(unsigned int length, const float* __restrict src_ptr, float* re
     }
 }
 
-void insertadd_2(unsigned int length, float* src1_ptr, float* src2_ptr, float* ref_ptr) {
+void insertadd_2(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -54,7 +54,7 @@ void insertadd_2(unsigned int length, float* src1_ptr, float* src2_ptr, float* r
     }
 }
 
-void insertadd_3(unsigned int length, float* src1_ptr, float* src2_ptr, float* src3_ptr, float* ref_ptr) {
+void insertadd_3(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* src3_ptr, float* ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -86,7 +86,7 @@ void insertadd_3(unsigned int length, float* src1_ptr, float* src2_ptr, float* s
     }
 }
 
-void insertadd_4(unsigned int length, float* src1_ptr, float* src2_ptr, float* src3_ptr, float* src4_ptr, float* ref_ptr) {
+void insertadd_4(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* src3_ptr, float* src4_ptr, float* ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

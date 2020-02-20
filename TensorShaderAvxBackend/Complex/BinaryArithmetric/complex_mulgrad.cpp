@@ -11,7 +11,7 @@ __forceinline __m256 _mm256_complexmulgrad_ps(__m256 u, __m256 v) {
     return _mm256_fmsubadd_ps(uri, vrr, _mm256_mul_ps(uir, vii));
 }
 
-void complex_mulgrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
+void complex_mulgrad(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -43,8 +43,8 @@ void TensorShaderAvxBackend::Complex::MulGrad(unsigned int length, AvxArray<floa
         throw gcnew System::ArgumentException();
     }
 
-    float* src1_ptr = (float*)(src1->Ptr.ToPointer());
-    float* src2_ptr = (float*)(src2->Ptr.ToPointer());
+    const float* src1_ptr = (const float*)(src1->Ptr.ToPointer());
+    const float* src2_ptr = (const float*)(src2->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_mulgrad(length, src1_ptr, src2_ptr, dst_ptr);

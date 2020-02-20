@@ -30,7 +30,7 @@ void TensorShaderAvxBackend::Elementwise::DivConstant(unsigned int length, float
     
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     div_constant(length, c, src_ptr, dst_ptr);

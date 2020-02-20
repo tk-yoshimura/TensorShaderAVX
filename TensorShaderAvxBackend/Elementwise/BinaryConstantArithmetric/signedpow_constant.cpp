@@ -49,7 +49,7 @@ void TensorShaderAvxBackend::Elementwise::SignedPowConstant(unsigned int length,
     
     Util::CheckLength(length, src, dst);
     
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     signedpow_constant(length, c, src_ptr, dst_ptr);

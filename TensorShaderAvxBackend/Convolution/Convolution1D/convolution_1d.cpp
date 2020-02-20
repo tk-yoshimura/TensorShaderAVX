@@ -58,8 +58,8 @@ void convolution_1d(unsigned int inchannels, unsigned int outchannels,
                 _mm_maskstore_ps(outmap_ptr + outch + outchannels * ox, mask1, _mm256d_sum(uv_hi, uv_lo));
             }
 
-        inmap_ptr += inchannels * inwidth;
-        outmap_ptr += outchannels * outwidth;
+            inmap_ptr += inchannels * inwidth;
+            outmap_ptr += outchannels * outwidth;
 
         }
     }
@@ -77,9 +77,9 @@ void TensorShaderAvxBackend::Convolution::Convolution1D(unsigned int inchannels,
     Util::CheckLength(outchannels * outwidth * batch, outmap);
     Util::CheckLength(inchannels * outchannels * kwidth, kernel);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
-    float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
+    const float* kernel_ptr = (const float*)(kernel->Ptr.ToPointer());
 
     convolution_1d(inchannels, outchannels, 
                    inwidth, outwidth, kwidth, 

@@ -24,7 +24,7 @@ __forceinline __m128 _mm_trivectorsquashgrad_ps(__m128 v, __m128 g) {
     return u;
 }
 
-void trivector_squashgrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
+void trivector_squashgrad(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict dst_ptr) {
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
 
     for (unsigned int i = 0; i < length; i += 3) {
@@ -45,8 +45,8 @@ void TensorShaderAvxBackend::Trivector::SquashGrad(unsigned int length, AvxArray
         throw gcnew System::ArgumentException();
     }
 
-    float* src1_ptr = (float*)(src1->Ptr.ToPointer());
-    float* src2_ptr = (float*)(src2->Ptr.ToPointer());
+    const float* src1_ptr = (const float*)(src1->Ptr.ToPointer());
+    const float* src2_ptr = (const float*)(src2->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     trivector_squashgrad(length, src1_ptr, src2_ptr, dst_ptr);

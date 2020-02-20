@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void atan2(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
+void atan2(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -30,8 +30,8 @@ void TensorShaderAvxBackend::Elementwise::ArcTan2(unsigned int length, AvxArray<
 
     Util::CheckLength(length, src1, src2, dst);
 
-    float* src1_ptr = (float*)(src1->Ptr.ToPointer());
-    float* src2_ptr = (float*)(src2->Ptr.ToPointer());
+    const float* src1_ptr = (const float*)(src1->Ptr.ToPointer());
+    const float* src2_ptr = (const float*)(src2->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     atan2(length, src1_ptr, src2_ptr, dst_ptr);

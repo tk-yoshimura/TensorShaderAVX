@@ -31,7 +31,7 @@ void TensorShaderAvxBackend::Trivector::Decay(unsigned int length, AvxArray<floa
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     trivector_decay(length, src_ptr, dst_ptr);

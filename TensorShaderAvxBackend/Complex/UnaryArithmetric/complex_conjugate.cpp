@@ -35,7 +35,7 @@ void TensorShaderAvxBackend::Complex::Conjugate(unsigned int length, AvxArray<fl
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_conjugate(length, src_ptr, dst_ptr);

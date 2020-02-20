@@ -40,7 +40,7 @@ void TensorShaderAvxBackend::Elementwise::Step(unsigned int length, AvxArray<flo
     
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     step(length, src_ptr, dst_ptr);

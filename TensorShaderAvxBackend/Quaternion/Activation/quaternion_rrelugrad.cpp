@@ -4,7 +4,7 @@
 
 using namespace System;
 
-void quaternion_rrelugrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
+void quaternion_rrelugrad(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     const __m256 zeromins = _mm256_setr_ps(0, -HUGE_VALF, -HUGE_VALF, -HUGE_VALF, 0, -HUGE_VALF, -HUGE_VALF, -HUGE_VALF);
@@ -38,8 +38,8 @@ void TensorShaderAvxBackend::Quaternion::RReluGrad(unsigned int length, AvxArray
         throw gcnew System::ArgumentException();
     }
 
-    float* src1_ptr = (float*)(src1->Ptr.ToPointer());
-    float* src2_ptr = (float*)(src2->Ptr.ToPointer());
+    const float* src1_ptr = (const float*)(src1->Ptr.ToPointer());
+    const float* src2_ptr = (const float*)(src2->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     quaternion_rrelugrad(length, src1_ptr, src2_ptr, dst_ptr);

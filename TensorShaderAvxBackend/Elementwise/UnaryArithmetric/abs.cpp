@@ -42,7 +42,7 @@ void TensorShaderAvxBackend::Elementwise::Abs(unsigned int length, AvxArray<floa
     
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     abs(length, src_ptr, dst_ptr);

@@ -34,7 +34,7 @@ void TensorShaderAvxBackend::Elementwise::NanAsZero(unsigned int length, AvxArra
     
     Util::CheckLength(length, src, dst);
     
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     nanaszero(length, src_ptr, dst_ptr);

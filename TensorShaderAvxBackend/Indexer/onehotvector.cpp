@@ -56,7 +56,7 @@ void TensorShaderAvxBackend::Indexer::OneHotVector(unsigned int length, unsigned
     Util::CheckLength(length, src);
     Util::CheckLength(length * channels, dst);
     
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     onehotvector(length, channels, src_ptr, dst_ptr);

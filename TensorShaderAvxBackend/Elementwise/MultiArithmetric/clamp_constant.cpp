@@ -36,7 +36,7 @@ void TensorShaderAvxBackend::Elementwise::ClampConstant(unsigned int length, flo
     
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     clamp_constant(length, cmin, cmax, src_ptr, dst_ptr);

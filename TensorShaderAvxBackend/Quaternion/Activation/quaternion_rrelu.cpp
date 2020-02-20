@@ -35,7 +35,7 @@ void TensorShaderAvxBackend::Quaternion::RRelu(unsigned int length, AvxArray<flo
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     quaternion_rrelu(length, src_ptr, dst_ptr);

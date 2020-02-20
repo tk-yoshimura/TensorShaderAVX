@@ -30,7 +30,7 @@ void TensorShaderAvxBackend::Elementwise::MinimumConstant(unsigned int length, f
     
     Util::CheckLength(length, src, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     minimum_constant(length, c, src_ptr, dst_ptr);

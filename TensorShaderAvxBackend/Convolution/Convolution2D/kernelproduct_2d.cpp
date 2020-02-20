@@ -5,12 +5,13 @@ using namespace System;
 void kernelproduct_2d(unsigned int inchannels, unsigned int outchannels,
                       unsigned inwidth, unsigned outwidth, unsigned kwidth,
                       unsigned inheight, unsigned outheight, unsigned kheight,
-                      unsigned stride, unsigned batch, unsigned int outch,
+                      unsigned stride, unsigned batch, 
                       const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);
     
+    for (unsigned int outch = 0; outch < outchannels; outch++) {
     for (unsigned int inch = 0; inch < inch_sep; inch += 8) {
 
         for (unsigned int ky = 0; ky < kheight; ky++) {
@@ -73,6 +74,7 @@ void kernelproduct_2d(unsigned int inchannels, unsigned int outchannels,
             }
         }
     }
+
 }
 
 void TensorShaderAvxBackend::Convolution::KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,

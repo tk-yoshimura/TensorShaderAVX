@@ -27,7 +27,7 @@ void TensorShaderAvxBackend::Indexer::ArgMin(unsigned int length, unsigned int c
     Util::CheckLength(length * channels, src);
     Util::CheckLength(length, dst);
     
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     argmin(length, channels, src_ptr, dst_ptr);
