@@ -15,7 +15,7 @@ void complex_kernelproduct_2d(unsigned int inchannels, unsigned int outchannels,
                               unsigned int inwidth, unsigned int outwidth, unsigned int kwidth, 
                               unsigned int inheight, unsigned int outheight, unsigned int kheight,
                               unsigned int stride, unsigned int batch, unsigned int outch, 
-                              float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                              const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const unsigned int kerneloutchannels = outchannels / 2;
@@ -92,7 +92,7 @@ void complex_kernelproduct_2d_transpose(unsigned int inchannels, unsigned int ou
                                         unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                         unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                         unsigned int stride, unsigned int batch, unsigned int outch,
-                                        float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                        const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const unsigned int kerneloutchannels = outchannels / 2;

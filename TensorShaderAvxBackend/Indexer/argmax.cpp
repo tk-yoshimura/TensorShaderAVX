@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void argmax(unsigned int length, unsigned int channels, float* src_ptr, float* dst_ptr) {
+void argmax(unsigned int length, unsigned int channels, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     for (unsigned int n = 0; n < length; n++) {
         unsigned int idx = 0;
         float vmax = src_ptr[channels * n];

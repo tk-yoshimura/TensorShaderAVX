@@ -6,7 +6,7 @@ void linear_zoom_3d(unsigned int channels,
     unsigned int inwidth, unsigned int inheight, unsigned int indepth,
     unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
     unsigned int th,
-    float* inmap_ptr, float* outmap_ptr) {
+    const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * inheight * indepth * th;
     const unsigned int outmap_offset = channels * outwidth * outheight * outdepth * th;

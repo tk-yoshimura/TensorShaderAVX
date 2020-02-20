@@ -7,7 +7,7 @@ void zero_padding_1d(unsigned int channels,
                      unsigned int outwidth, 
                      unsigned int th, 
                      unsigned int pad_left, unsigned int pad_right, 
-                     float* inmap_ptr, float* outmap_ptr) {
+                     const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * th, outmap_offset = channels * outwidth * th;
     inmap_ptr += inmap_offset;

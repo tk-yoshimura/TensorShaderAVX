@@ -16,7 +16,7 @@ __forceinline __m256 _mm256_abs_ps(__m256 x) {
     return y;
 }
 
-void abs(unsigned int length, float* src_ptr, float* dst_ptr) {
+void abs(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

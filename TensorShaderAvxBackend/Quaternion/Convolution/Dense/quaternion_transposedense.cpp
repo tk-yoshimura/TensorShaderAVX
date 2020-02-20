@@ -38,7 +38,7 @@ __forceinline __m256d _mm256_quaternionmulgrad_pd(__m256d u, __m256d v) {
     return _mm256_fmadd_pd(u_xxxx, v_xyzw, _mm256_fmadd_pd(u_yyyy, v_yxwz, _mm256_fmadd_pd(u_zzzz, v_zwxy, _mm256_mul_pd(u_wwww, v_wzyx))));
 }
 
-void quaternion_transposedense(unsigned int inchannels, unsigned int outchannels, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void quaternion_transposedense(unsigned int inchannels, unsigned int outchannels, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inmap_offset = inchannels * th, outmap_offset = outchannels * th;
 
     inmap_ptr += inmap_offset;
@@ -58,7 +58,7 @@ void quaternion_transposedense(unsigned int inchannels, unsigned int outchannels
     }
 }
 
-void quaternion_transposedense_grad(unsigned int inchannels, unsigned int outchannels, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void quaternion_transposedense_grad(unsigned int inchannels, unsigned int outchannels, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inmap_offset = inchannels * th, outmap_offset = outchannels * th;
 
     inmap_ptr += inmap_offset;

@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void complex_purereal(unsigned int length, float* srcreal_ptr, float* dst_ptr) {
+void complex_purereal(unsigned int length, float* srcreal_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 2, j++) {
         dst_ptr[i] = srcreal_ptr[j];
         dst_ptr[i + 1] = 0;

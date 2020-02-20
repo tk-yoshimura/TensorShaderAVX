@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void quaternion_purei(unsigned int length, float* srci_ptr, float* dst_ptr) {
+void quaternion_purei(unsigned int length, float* srci_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 4, j++) {
         dst_ptr[i + 1] = srci_ptr[j];
         dst_ptr[i] = dst_ptr[i + 2] = dst_ptr[i + 3] = 0;

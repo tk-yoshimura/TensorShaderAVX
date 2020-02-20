@@ -20,7 +20,7 @@ __forceinline __m256 _mm256_quaternionmul_ps(__m256 u, __m256 v) {
     return _mm256_fmadd_ps(u_xxxx, v_xyzw, _mm256_fmadd_ps(u_yyyy, v_yxwz, _mm256_fmadd_ps(u_zzzz, v_zwxy, _mm256_mul_ps(u_wwww, v_wzyx))));
 }
 
-void quaternion_mul(unsigned int length, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void quaternion_mul(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

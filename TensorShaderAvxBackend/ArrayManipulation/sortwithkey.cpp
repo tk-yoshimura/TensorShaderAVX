@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void sortwithkey(unsigned int stride, unsigned int axislength, unsigned int slides, float* key_ptr, float* val_ptr) {
+void sortwithkey(unsigned int stride, unsigned int axislength, unsigned int slides, 
+                 float* __restrict key_ptr, float* __restrict val_ptr) {
+
     float temp;
     
     for (unsigned int k = 0; k < slides; k++) {
@@ -35,7 +37,9 @@ void sortwithkey(unsigned int stride, unsigned int axislength, unsigned int slid
     }
 }
 
-void sortwithkey_stride1(unsigned int axislength, unsigned int slides, float* key_ptr, float* val_ptr) {
+void sortwithkey_stride1(unsigned int axislength, unsigned int slides, 
+                         float* __restrict key_ptr, float* __restrict val_ptr) {
+
     float temp;
 
     for (unsigned int k = 0, idx = 0; k < slides; k++, idx += axislength) {

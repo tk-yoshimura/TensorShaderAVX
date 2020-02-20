@@ -10,7 +10,7 @@ __forceinline __m256 _mm256_clamp_constant_ps(__m256 x, float cmin, float cmax) 
     return y;
 }
 
-void clamp_constant(unsigned int length, float cmin, float cmax, float* src_ptr, float* dst_ptr) {
+void clamp_constant(unsigned int length, float cmin, float cmax, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

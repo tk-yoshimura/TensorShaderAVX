@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void sum_1(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_1(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     const __m128i mask1 = TensorShaderAvxBackend::masktable_m128(1);
@@ -51,7 +53,9 @@ void sum_1(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void sum_2(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_2(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     const __m128i mask2 = TensorShaderAvxBackend::masktable_m128(2);
@@ -100,7 +104,9 @@ void sum_2(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void sum_3(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_3(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m128i mask = TensorShaderAvxBackend::masktable_m128(3);
     
     while (slides > 0) {
@@ -122,7 +128,9 @@ void sum_3(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void sum_4(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_4(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     
@@ -164,7 +172,9 @@ void sum_4(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void sum_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_5_7(unsigned int src_length, const float* __restrict src_ptr, 
+             unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(dst_length);
     const __m128i mask_rem = TensorShaderAvxBackend::masktable_m128(dst_length - 4);
     
@@ -194,7 +204,9 @@ void sum_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_length, f
     }
 }
 
-void sum_8(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_8(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     while (slides > 0) {
         // u_hi : e4, e5, e6, e7   v_lo : e0, e1, e2, e3
         __m256d u_hi = _mm256_setzero_pd(), u_lo = _mm256_setzero_pd();
@@ -221,7 +233,9 @@ void sum_8(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void sum_9_(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void sum_9_(unsigned int src_length, const float* __restrict src_ptr, 
+            unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int r = dst_length & ~7u, s = dst_length - r;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(s);
     const __m128i masks = TensorShaderAvxBackend::masktable_m128(s & 3);
@@ -310,7 +324,7 @@ void TensorShaderAvxBackend::Aggregation::Sum(unsigned int src_length, AvxArray<
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (dst_length <= 1) {

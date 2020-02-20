@@ -8,7 +8,7 @@ __forceinline __m256 _mm256_clamp_ps(__m256 xval, __m256 xmin, __m256 xmax) {
     return y;
 }
 
-void clamp(unsigned int length, float* srcval_ptr, float* srcmin_ptr, float* srcmax_ptr, float* dst_ptr) {
+void clamp(unsigned int length, float* srcval_ptr, float* srcmin_ptr, float* srcmax_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
     
     for (unsigned int i = 0; i < j; i += 8) {

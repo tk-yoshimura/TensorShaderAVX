@@ -7,7 +7,7 @@ void deconvolution_cw3d(unsigned int channels,
                         unsigned inheight, unsigned outheight, unsigned kheight,
                         unsigned indepth, unsigned outdepth, unsigned kdepth,
                         unsigned stride, unsigned int th, 
-                        float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                        const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     
     const unsigned int inmap_offset = channels * inwidth * inheight * indepth * th, outmap_offset = channels * outwidth * outheight * outdepth * th;
     const unsigned int ch_sep = channels & ~7u, ch_rem = channels - ch_sep;

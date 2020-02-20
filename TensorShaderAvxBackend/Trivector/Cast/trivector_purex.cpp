@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void trivector_purex(unsigned int length, float* srcx_ptr, float* dst_ptr) {
+void trivector_purex(unsigned int length, float* srcx_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 3, j++) {
         dst_ptr[i] = srcx_ptr[j];
         dst_ptr[i + 1] = 0;

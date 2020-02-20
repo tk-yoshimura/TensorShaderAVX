@@ -15,7 +15,7 @@ void convolution_3d(unsigned int inchannels, unsigned int outchannels,
                     unsigned int inheight, unsigned int outheight, unsigned int kheight,
                     unsigned int indepth, unsigned int outdepth, unsigned int kdepth,
                     unsigned stride, unsigned int th, 
-                    float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                    const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
         
     const unsigned int inmap_offset = inchannels * inwidth * inheight * indepth * th, outmap_offset = outchannels * outwidth * outheight * outdepth * th;
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;

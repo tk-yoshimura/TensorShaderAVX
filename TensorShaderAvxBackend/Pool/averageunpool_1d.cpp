@@ -4,7 +4,7 @@
 
 using namespace System;
 
-void averageunpool_1d(unsigned int channels, unsigned int outwidth, unsigned int th, unsigned int stride, float* inmap_ptr, float* outmap_ptr) {
+void averageunpool_1d(unsigned int channels, unsigned int outwidth, unsigned int th, unsigned int stride, const float* __restrict inmap_ptr, float* outmap_ptr) {
     const unsigned int inwidth = outwidth / stride;
     const unsigned int grad_offset = channels * inwidth * th, map_offset = channels * outwidth * th;
     const unsigned int chsep = channels & ~7, chrem = channels - chsep;

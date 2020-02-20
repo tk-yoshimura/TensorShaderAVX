@@ -5,7 +5,7 @@ using namespace System;
 void space_to_channel_3d(unsigned int inchannels, unsigned int outchannels,
     unsigned int inwidth, unsigned int inheight, unsigned int indepth,
     unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-    unsigned int th, unsigned int scale, float* inmap_ptr, float* outmap_ptr) {
+    unsigned int th, unsigned int scale, const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = inchannels * inwidth * inheight * indepth * th, outmap_offset = outchannels * outwidth * outheight * outdepth * th;
     const unsigned int length = scale * inchannels;

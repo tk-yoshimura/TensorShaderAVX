@@ -4,7 +4,7 @@
 
 using namespace System;
 
-void complex_conjugate(unsigned int length, float* src_ptr, float* dst_ptr) {
+void complex_conjugate(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 

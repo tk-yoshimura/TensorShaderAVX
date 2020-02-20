@@ -4,7 +4,7 @@
 
 using namespace System;
 
-void maxpool_3d(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int th, unsigned int stride, float* inmap_ptr, float* outmap_ptr) {
+void maxpool_3d(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int th, unsigned int stride, const float* __restrict inmap_ptr, float* outmap_ptr) {
     const unsigned int outwidth = inwidth / stride, outheight = inheight / stride, outdepth = indepth / stride;
     const unsigned int inmap_offset = channels * inwidth * inheight * indepth * th, outmap_offset = channels * outwidth * outheight * outdepth * th;
     const unsigned int chsep = channels & ~7, chrem = channels - chsep;

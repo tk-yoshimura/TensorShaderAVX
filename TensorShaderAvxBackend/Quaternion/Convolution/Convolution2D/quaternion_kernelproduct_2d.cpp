@@ -24,7 +24,7 @@ void quaternion_kernelproduct_2d(unsigned int inchannels, unsigned int outchanne
                                  unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                  unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                  unsigned int stride, unsigned int batch, unsigned int outch, 
-                                 float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                 const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int kerneloutchannels = outchannels / 4, koutch = outch / 4;
     
@@ -54,7 +54,7 @@ void quaternion_kernelproduct_2d_transpose(unsigned int inchannels, unsigned int
                                            unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                            unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                            unsigned int stride, unsigned int batch, unsigned int outch, 
-                                           float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                           const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int kerneloutchannels = outchannels / 4, koutch = outch / 4;
 

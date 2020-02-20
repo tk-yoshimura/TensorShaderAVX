@@ -5,7 +5,7 @@ using namespace System;
 void deconvolution_cw1d(unsigned int channels, 
                         unsigned inwidth, unsigned outwidth, unsigned kwidth, 
                         unsigned stride, unsigned int th, 
-                        float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                        const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     
     const unsigned int inmap_offset = channels * inwidth * th, outmap_offset = channels * outwidth * th;
     const unsigned int ch_sep = channels & ~7u, ch_rem = channels - ch_sep;

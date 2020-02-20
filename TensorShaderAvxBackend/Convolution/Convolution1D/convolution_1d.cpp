@@ -13,7 +13,7 @@ __forceinline __m128 _mm256d_sum(__m256d hi, __m256d lo) {
 void convolution_1d(unsigned int inchannels, unsigned int outchannels, 
                     unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                     unsigned int batch,
-                    float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                    const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
         
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);

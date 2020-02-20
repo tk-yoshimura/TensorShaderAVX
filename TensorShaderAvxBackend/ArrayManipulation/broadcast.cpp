@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void broadcast_1(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_1(unsigned int src_length, const float* __restrict src_ptr, 
+                 unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = dst_length & ~7u, k = dst_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 
@@ -23,7 +25,9 @@ void broadcast_1(unsigned int src_length, float* src_ptr, unsigned int dst_lengt
     }
 }
 
-void broadcast_2(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_2(unsigned int src_length, const float* __restrict src_ptr, 
+                 unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = dst_length & ~7u, k = dst_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 
@@ -44,7 +48,9 @@ void broadcast_2(unsigned int src_length, float* src_ptr, unsigned int dst_lengt
     }
 }
 
-void broadcast_3(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_3(unsigned int src_length, const float* __restrict src_ptr, 
+                 unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = dst_length / 6 * 6, k = dst_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     const __m256i mask6 = TensorShaderAvxBackend::masktable_m256(6);
@@ -66,7 +72,9 @@ void broadcast_3(unsigned int src_length, float* src_ptr, unsigned int dst_lengt
     }
 }
 
-void broadcast_4(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_4(unsigned int src_length, const float* __restrict src_ptr, 
+                 unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = dst_length & ~7u, k = dst_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 
@@ -87,7 +95,9 @@ void broadcast_4(unsigned int src_length, float* src_ptr, unsigned int dst_lengt
     }
 }
 
-void broadcast_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_5_7(unsigned int src_length, const float* __restrict src_ptr, 
+                   unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(src_length);
 
     while (slides > 0) {
@@ -103,7 +113,9 @@ void broadcast_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_len
     }
 }
 
-void broadcast_8(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_8(unsigned int src_length, const float* __restrict src_ptr, 
+                 unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     while (slides > 0) {
         __m256 x = _mm256_loadu_ps(src_ptr);
 
@@ -117,7 +129,9 @@ void broadcast_8(unsigned int src_length, float* src_ptr, unsigned int dst_lengt
     }
 }
 
-void broadcast_9_(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void broadcast_9_(unsigned int src_length, const float* __restrict src_ptr, 
+                  unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int r = src_length & ~7u, s = src_length - r;    
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(s);
 
@@ -168,7 +182,7 @@ void TensorShaderAvxBackend::ArrayManipulation::Broadcast(unsigned int src_lengt
     Util::CheckLength(src_length * slides, src);
     Util::CheckLength(dst_length * slides, dst);
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (src_length <= 1) {

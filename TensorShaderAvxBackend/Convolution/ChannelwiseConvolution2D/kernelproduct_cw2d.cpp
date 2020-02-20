@@ -6,7 +6,7 @@ void kernelproduct_cw2d(unsigned int channels,
                         unsigned inwidth, unsigned outwidth, unsigned kwidth,
                         unsigned inheight, unsigned outheight, unsigned kheight,
                         unsigned stride, unsigned batch, 
-                        float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                        const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int ch_sep = channels & ~7u, ch_rem = channels - ch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(ch_rem);

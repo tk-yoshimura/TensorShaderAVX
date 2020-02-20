@@ -37,7 +37,7 @@ void trivector_kernelproduct_2d(unsigned int inchannels, unsigned int outchannel
                                 unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                 unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                 unsigned int stride, unsigned int batch, unsigned int outch, 
-                                float* inmap_ptr, float* outmap_ptr, float* kernelvalue_ptr, float* kernelgrad_ptr) {
+                                const float* __restrict inmap_ptr, float* __restrict outmap_ptr, float* kernelvalue_ptr, float* kernelgrad_ptr) {
 
     const unsigned int kernelinchannels = inchannels / 3 * 4, kerneloutchannels = outchannels / 3, koutch = outch / 3;
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
@@ -69,7 +69,7 @@ void trivector_kernelproduct_2d_transpose(unsigned int inchannels, unsigned int 
                                           unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                           unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                           unsigned int stride, unsigned int batch, unsigned int outch,
-                                          float* inmap_ptr, float* outmap_ptr, float* kernelvalue_ptr, float* kernelgrad_ptr) {
+                                          const float* __restrict inmap_ptr, float* __restrict outmap_ptr, float* kernelvalue_ptr, float* kernelgrad_ptr) {
 
     const unsigned int kernelinchannels = inchannels / 3 * 4, kerneloutchannels = outchannels / 3, koutch = outch / 3;
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);

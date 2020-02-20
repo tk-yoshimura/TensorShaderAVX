@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void pattern_copy_1_3(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, float* src_ptr, float* dst_ptr) {
+void pattern_copy_1_3(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, 
+                      const float* __restrict src_ptr, float* __restrict dst_ptr) {
+
     const unsigned int j = copy_length & ~3, k = copy_length - j;
     const __m128i mask = TensorShaderAvxBackend::masktable_m128(k);
 
@@ -17,7 +19,9 @@ void pattern_copy_1_3(unsigned int src_stride, unsigned int dst_stride, unsigned
     }
 }
 
-void pattern_copy_4(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, float* src_ptr, float* dst_ptr) {
+void pattern_copy_4(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, 
+                    const float* __restrict src_ptr, float* __restrict dst_ptr) {
+
     while (slides > 0) {
         __m128 x = _mm_loadu_ps(src_ptr);
 
@@ -29,7 +33,9 @@ void pattern_copy_4(unsigned int src_stride, unsigned int dst_stride, unsigned i
     }
 }
 
-void pattern_copy_5_7(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, float* src_ptr, float* dst_ptr) {
+void pattern_copy_5_7(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, 
+                      const float* __restrict src_ptr, float* __restrict dst_ptr) {
+
     const unsigned int j = copy_length & ~7, k = copy_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 
@@ -44,7 +50,9 @@ void pattern_copy_5_7(unsigned int src_stride, unsigned int dst_stride, unsigned
     }
 }
 
-void pattern_copy_8(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, float* src_ptr, float* dst_ptr) {
+void pattern_copy_8(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, 
+                    const float* __restrict src_ptr, float* __restrict dst_ptr) {
+
     while (slides > 0) {
         __m256 x = _mm256_loadu_ps(src_ptr);
 
@@ -56,7 +64,9 @@ void pattern_copy_8(unsigned int src_stride, unsigned int dst_stride, unsigned i
     }
 }
 
-void pattern_copy_9_(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, float* src_ptr, float* dst_ptr) {
+void pattern_copy_9_(unsigned int src_stride, unsigned int dst_stride, unsigned int copy_length, unsigned int slides, 
+                     const float* __restrict src_ptr, float* __restrict dst_ptr) {
+
     const unsigned int j = copy_length & ~7, k = copy_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 
@@ -95,7 +105,7 @@ void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_str
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (copy_length <= 3) {
@@ -132,7 +142,7 @@ void TensorShaderAvxBackend::ArrayManipulation::PatternCopy(unsigned int src_off
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer()) + src_offset;
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer()) + src_offset;
     float* dst_ptr = (float*)(dst->Ptr.ToPointer()) + dst_offset;
 
     if (copy_length <= 3) {

@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void complex_pureimag(unsigned int length, float* srcimag_ptr, float* dst_ptr) {
+void complex_pureimag(unsigned int length, float* srcimag_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 2, j++) {
         dst_ptr[i] = 0;
         dst_ptr[i + 1] = srcimag_ptr[j];

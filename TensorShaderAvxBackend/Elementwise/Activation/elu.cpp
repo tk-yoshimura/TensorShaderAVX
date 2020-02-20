@@ -18,7 +18,7 @@ __forceinline __m256 _mm256_elu_ps(__m256 x, float slope) {
     return y;
 }
 
-void elu(unsigned int length, float slope, float* src_ptr, float* dst_ptr) {
+void elu(unsigned int length, float slope, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

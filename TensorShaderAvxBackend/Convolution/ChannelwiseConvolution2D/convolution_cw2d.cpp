@@ -6,7 +6,7 @@ void convolution_cw2d(unsigned int channels,
                       unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                       unsigned int inheight, unsigned int outheight, unsigned int kheight,
                       unsigned stride, unsigned int th, 
-                      float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                      const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
         
     const unsigned int inmap_offset = channels * inwidth * inheight * th, outmap_offset = channels * outwidth * outheight * th;
     const unsigned int ch_sep = channels & ~7u, ch_rem = channels - ch_sep;

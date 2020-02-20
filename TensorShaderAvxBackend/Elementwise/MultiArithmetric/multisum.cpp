@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void insertadd_1(unsigned int length, float* src_ptr, float* ref_ptr) {
+void insertadd_1(unsigned int length, const float* __restrict src_ptr, float* ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

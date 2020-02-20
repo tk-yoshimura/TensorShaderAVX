@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void average_1(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_1(unsigned int src_length, const float* __restrict src_ptr, 
+               unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     const __m128i mask1 = TensorShaderAvxBackend::masktable_m128(1);
@@ -52,7 +54,9 @@ void average_1(unsigned int src_length, float* src_ptr, unsigned int dst_length,
     }
 }
 
-void average_2(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_2(unsigned int src_length, const float* __restrict src_ptr, 
+               unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     const __m128i mask2 = TensorShaderAvxBackend::masktable_m128(2);
@@ -102,7 +106,9 @@ void average_2(unsigned int src_length, float* src_ptr, unsigned int dst_length,
     }
 }
 
-void average_3(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_3(unsigned int src_length, const float* __restrict src_ptr, 
+               unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m128i mask = TensorShaderAvxBackend::masktable_m128(3);
     const __m256d inv = _mm256_set1_pd((double)dst_length / (double)src_length);
 
@@ -125,7 +131,9 @@ void average_3(unsigned int src_length, float* src_ptr, unsigned int dst_length,
     }
 }
 
-void average_4(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_4(unsigned int src_length, const float* __restrict src_ptr, 
+               unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     const __m256d inv = _mm256_set1_pd((double)dst_length / (double)src_length);
@@ -168,7 +176,9 @@ void average_4(unsigned int src_length, float* src_ptr, unsigned int dst_length,
     }
 }
 
-void average_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_5_7(unsigned int src_length, const float* __restrict src_ptr, 
+                 unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(dst_length);
     const __m128i mask_rem = TensorShaderAvxBackend::masktable_m128(dst_length - 4);
     const __m256d inv = _mm256_set1_pd((double)dst_length / (double)src_length);
@@ -199,7 +209,9 @@ void average_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_lengt
     }
 }
 
-void average_8(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_8(unsigned int src_length, const float* __restrict src_ptr, 
+               unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m256d inv = _mm256_set1_pd((double)dst_length / (double)src_length);
 
     while (slides > 0) {
@@ -228,7 +240,9 @@ void average_8(unsigned int src_length, float* src_ptr, unsigned int dst_length,
     }
 }
 
-void average_9_(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void average_9_(unsigned int src_length, const float* __restrict src_ptr, 
+                unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int r = dst_length & ~7u, s = dst_length - r;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(s);
     const __m128i masks = TensorShaderAvxBackend::masktable_m128(s & 3);
@@ -318,7 +332,7 @@ void TensorShaderAvxBackend::Aggregation::Average(unsigned int src_length, AvxAr
         throw gcnew System::ArgumentException();
     }
 
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (dst_length <= 1) {

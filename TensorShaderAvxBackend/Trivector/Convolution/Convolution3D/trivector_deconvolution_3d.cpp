@@ -64,7 +64,7 @@ void trivector_deconvolution_3d(unsigned int inchannels, unsigned int outchannel
                                 unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                 unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                 unsigned int indepth, unsigned int outdepth, unsigned int kdepth,
-                                unsigned int stride, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                unsigned int stride, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inmap_offset = inchannels * inwidth * inheight * indepth * th;
     const unsigned int outmap_offset = outchannels * outwidth * outheight * outdepth * th;
@@ -104,7 +104,7 @@ void trivector_deconvolution_3d_grad(unsigned int inchannels, unsigned int outch
                                      unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                      unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                      unsigned int indepth, unsigned int outdepth, unsigned int kdepth,
-                                     unsigned int stride, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                     unsigned int stride, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inmap_offset = inchannels * inwidth * inheight * indepth * th;
     const unsigned int outmap_offset = outchannels * outwidth * outheight * outdepth * th;

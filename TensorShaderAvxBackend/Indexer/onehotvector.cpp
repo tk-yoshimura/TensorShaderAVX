@@ -17,7 +17,7 @@ __forceinline __m256 _mm256_onehotvector_ps(__m256 x, __m256 idx) {
     return y;
 }
 
-void onehotvector(unsigned int length, unsigned int channels, float* src_ptr, float* dst_ptr) {
+void onehotvector(unsigned int length, unsigned int channels, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = channels & ~7u, k = channels - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
 

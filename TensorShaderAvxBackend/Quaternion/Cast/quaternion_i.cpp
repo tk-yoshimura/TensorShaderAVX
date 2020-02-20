@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void quaternion_i(unsigned int length, float* src_ptr, float* dst_ptr) {
+void quaternion_i(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 4, j++) {
         dst_ptr[j] = src_ptr[i + 1];
     }

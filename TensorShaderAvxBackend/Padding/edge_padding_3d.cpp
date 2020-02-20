@@ -9,7 +9,7 @@ void edge_padding_3d(unsigned int channels,
                      unsigned int pad_left, unsigned int pad_right,
                      unsigned int pad_top, unsigned int pad_bottom,
                      unsigned int pad_front, unsigned int pad_rear,
-                     float* inmap_ptr, float* outmap_ptr) {
+                     const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * inheight * indepth * th;
     const unsigned int outmap_offset = channels * outwidth * outheight * outdepth * th;

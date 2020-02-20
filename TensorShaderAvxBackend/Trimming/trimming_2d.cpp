@@ -8,7 +8,7 @@ void trimming_2d(unsigned int channels,
                  unsigned int th,
                  unsigned int trim_left, unsigned int trim_right,
                  unsigned int trim_top, unsigned int trim_bottom,
-                 float* inmap_ptr, float* outmap_ptr) {
+                 const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * inheight * th, outmap_offset = channels * outwidth * outheight * th;
     inmap_ptr += inmap_offset;

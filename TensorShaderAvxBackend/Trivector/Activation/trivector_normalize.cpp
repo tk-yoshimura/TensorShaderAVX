@@ -11,7 +11,7 @@ __forceinline __m128 _mm_trivectornormalize_ps(__m128 u) {
     return v;
 }
 
-void trivector_normalize(unsigned int length, float* src_ptr, float* dst_ptr) {
+void trivector_normalize(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
 
     for (unsigned int i = 0; i < length; i += 3) {

@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void random_uniform(unsigned int length, unsigned __int64 seed, float* dst_ptr) {
+void random_uniform(unsigned int length, unsigned __int64 seed, float* __restrict dst_ptr) {
     const double inv = 1.0 / 0xFFFFFFFFu;
 
     union {

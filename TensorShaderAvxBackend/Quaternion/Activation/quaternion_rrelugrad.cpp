@@ -4,7 +4,7 @@
 
 using namespace System;
 
-void quaternion_rrelugrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void quaternion_rrelugrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     const __m256 zeromins = _mm256_setr_ps(0, -HUGE_VALF, -HUGE_VALF, -HUGE_VALF, 0, -HUGE_VALF, -HUGE_VALF, -HUGE_VALF);

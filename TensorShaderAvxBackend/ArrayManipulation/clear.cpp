@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void clear(unsigned int length, float c, float* dst_ptr) {
+void clear(unsigned int length, float c, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     __m256 fillc = _mm256_set1_ps(c);

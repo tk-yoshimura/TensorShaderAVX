@@ -62,7 +62,7 @@ __forceinline __m256d _mm256_trivectormulgrad_pd(__m256d v, __m256d q) {
 
 void trivector_deconvolution_1d(unsigned int inchannels, unsigned int outchannels,
                                 unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
-                                unsigned int stride, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                unsigned int stride, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inmap_offset = inchannels * inwidth * th, outmap_offset = outchannels * outwidth * th;
     const unsigned int kerneloutchannels = outchannels / 3 * 4, kernelinchannels = inchannels / 3;
@@ -91,7 +91,7 @@ void trivector_deconvolution_1d(unsigned int inchannels, unsigned int outchannel
 
 void trivector_deconvolution_1d_grad(unsigned int inchannels, unsigned int outchannels,
                                      unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
-                                     unsigned int stride, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                     unsigned int stride, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inmap_offset = inchannels * inwidth * th, outmap_offset = outchannels * outwidth * th;
     const unsigned int kerneloutchannels = outchannels / 3 * 4, kernelinchannels = inchannels / 3;

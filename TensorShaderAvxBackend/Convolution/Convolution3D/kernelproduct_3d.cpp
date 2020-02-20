@@ -7,7 +7,7 @@ void kernelproduct_3d(unsigned int inchannels, unsigned int outchannels,
                       unsigned inheight, unsigned outheight, unsigned kheight,
                       unsigned indepth, unsigned outdepth, unsigned kdepth,
                       unsigned stride, unsigned batch, unsigned int outch,
-                      float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                      const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);

@@ -60,7 +60,7 @@ __forceinline __m256d _mm256_trivectormulgrad_pd(__m256d v, __m256d q) {
     return u;
 }
 
-void trivector_dense(unsigned int inchannels, unsigned int outchannels, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void trivector_dense(unsigned int inchannels, unsigned int outchannels, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inmap_offset = inchannels * th, outmap_offset = outchannels * th;
     const unsigned int kernelinchannels = inchannels / 3 * 4;
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
@@ -82,7 +82,7 @@ void trivector_dense(unsigned int inchannels, unsigned int outchannels, unsigned
     }
 }
 
-void trivector_dense_grad(unsigned int inchannels, unsigned int outchannels, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void trivector_dense_grad(unsigned int inchannels, unsigned int outchannels, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inmap_offset = inchannels * th, outmap_offset = outchannels * th;
     const unsigned int kernelinchannels = inchannels / 3 * 4;
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);

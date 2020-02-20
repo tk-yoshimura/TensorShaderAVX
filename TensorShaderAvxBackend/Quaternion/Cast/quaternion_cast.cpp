@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void quaternion_cast(unsigned int length, float* srcr_ptr, float* srci_ptr, float* srcj_ptr, float* srck_ptr, float* dst_ptr) {
+void quaternion_cast(unsigned int length, float* srcr_ptr, float* srci_ptr, float* srcj_ptr, float* srck_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 4, j++) {
         dst_ptr[i] = srcr_ptr[j];
         dst_ptr[i + 1] = srci_ptr[j];

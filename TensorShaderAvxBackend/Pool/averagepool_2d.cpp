@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void broadcastpool_2d(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int th, unsigned int stride, float* inmap_ptr, float* outmap_ptr) {
+void broadcastpool_2d(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int th, unsigned int stride, const float* __restrict inmap_ptr, float* outmap_ptr) {
     const unsigned int outwidth = inwidth / stride, outheight = inheight / stride;
     const unsigned int inmap_offset = channels * inwidth * inheight * th, outmap_offset = channels * outwidth * outheight * th;
     const unsigned int chsep = channels & ~7, chrem = channels - chsep;

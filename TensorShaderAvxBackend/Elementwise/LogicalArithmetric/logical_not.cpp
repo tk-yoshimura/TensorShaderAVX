@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void logical_not(unsigned int length, float* src_ptr, float* dst_ptr) {
+void logical_not(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     __m256 ones = _mm256_set1_ps(1);

@@ -10,7 +10,7 @@ __forceinline __m128 _mm256d_sum(__m256d hi, __m256d lo) {
     return _mm_cvtpd_ps(w);
 }
 
-void transposedense(unsigned int inchannels, unsigned int outchannels, unsigned int th, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void transposedense(unsigned int inchannels, unsigned int outchannels, unsigned int th, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inmap_offset = inchannels * th, outmap_offset = outchannels * th;
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);

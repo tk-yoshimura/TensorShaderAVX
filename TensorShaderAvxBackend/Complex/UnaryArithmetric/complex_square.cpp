@@ -13,7 +13,7 @@ __forceinline __m256 _mm256_complexsquare_ps(__m256 u) {
     return _mm256_fmaddsub_ps(uri, urr, _mm256_mul_ps(uir, uii));
 }
 
-void complex_square(unsigned int length, float* src_ptr, float* dst_ptr) {
+void complex_square(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
     

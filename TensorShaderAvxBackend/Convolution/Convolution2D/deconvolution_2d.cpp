@@ -14,7 +14,7 @@ void deconvolution_2d(unsigned int inchannels, unsigned int outchannels,
                       unsigned inwidth, unsigned outwidth, unsigned kwidth, 
                       unsigned inheight, unsigned outheight, unsigned kheight,
                       unsigned stride, unsigned int th, 
-                      float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                      const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     
     const unsigned int inmap_offset = inchannels * inwidth * inheight * th, outmap_offset = outchannels * outwidth * outheight * th;
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;

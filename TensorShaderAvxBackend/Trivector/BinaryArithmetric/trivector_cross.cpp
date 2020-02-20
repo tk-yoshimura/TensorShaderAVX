@@ -12,7 +12,7 @@ __forceinline __m128 _mm_trivectorcross_ps(__m128 u, __m128 v) {
     return _mm_fmsub_ps(u_yzx, v_zxy, _mm_mul_ps(u_zxy, v_yzx));
 }
 
-void trivector_cross(unsigned int length, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void trivector_cross(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
 
     for (unsigned int i = 0; i < length; i += 3) {

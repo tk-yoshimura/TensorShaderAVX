@@ -4,7 +4,7 @@
 
 using namespace System;
 
-__forceinline __m256 _mm256_maskloadnz_ps(float* ptr, __m256 nz, __m256i mask) {
+__forceinline __m256 _mm256_maskloadnz_ps(const float* __restrict ptr, __m256 nz, __m256i mask) {
     union {
         float f;
         unsigned int i;
@@ -19,7 +19,9 @@ __forceinline __m256 _mm256_maskloadnz_ps(float* ptr, __m256 nz, __m256i mask) {
     );
 }
 
-void min_1(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_1(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256 vmax = _mm256_set1_ps(HUGE_VALF);
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
@@ -57,7 +59,9 @@ void min_1(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void min_2(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_2(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256 vmax = _mm256_set1_ps(HUGE_VALF);
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
@@ -93,7 +97,9 @@ void min_2(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void min_3(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_3(unsigned int src_length, const float* __restrict src_ptr, unsigned int dst_length, 
+           float* __restrict dst_ptr, unsigned int slides) {
+
     const __m128 vmax = _mm_set1_ps(HUGE_VALF);
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
 
@@ -114,7 +120,9 @@ void min_3(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void min_4(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_4(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int j = src_length & ~7u, k = src_length - j;
     const __m256 vmax = _mm256_set1_ps(HUGE_VALF);
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
@@ -147,7 +155,9 @@ void min_4(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void min_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_5_7(unsigned int src_length, const float* __restrict src_ptr, 
+             unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m256 vmax = _mm256_set1_ps(HUGE_VALF);
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(dst_length);
 
@@ -168,7 +178,9 @@ void min_5_7(unsigned int src_length, float* src_ptr, unsigned int dst_length, f
     }
 }
 
-void min_8(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_8(unsigned int src_length, const float* __restrict src_ptr, 
+           unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const __m256 vmax = _mm256_set1_ps(HUGE_VALF);
 
     while (slides > 0) {
@@ -188,7 +200,9 @@ void min_8(unsigned int src_length, float* src_ptr, unsigned int dst_length, flo
     }
 }
 
-void min_9_(unsigned int src_length, float* src_ptr, unsigned int dst_length, float* dst_ptr, unsigned int slides) {
+void min_9_(unsigned int src_length, const float* __restrict src_ptr, 
+            unsigned int dst_length, float* __restrict dst_ptr, unsigned int slides) {
+
     const unsigned int r = dst_length & ~7u, s = dst_length - r;
     const __m256 vmax = _mm256_set1_ps(HUGE_VALF);
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(s);
@@ -250,7 +264,7 @@ void TensorShaderAvxBackend::Aggregation::Min(unsigned int src_length, AvxArray<
         throw gcnew System::ArgumentException();
     }
     
-    float* src_ptr = (float*)(src->Ptr.ToPointer());
+    const float* src_ptr = (const float*)(src->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     if (dst_length <= 1) {

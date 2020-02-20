@@ -25,7 +25,7 @@ __forceinline __m256 _mm256_quaternionsquashgrad_ps(__m256 v, __m256 g) {
     return u;
 }
 
-void quaternion_squashgrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void quaternion_squashgrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

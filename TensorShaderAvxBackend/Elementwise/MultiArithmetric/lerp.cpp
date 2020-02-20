@@ -10,7 +10,7 @@ __forceinline __m256 _mm256_lerp_ps(__m256 xc, __m256 x1, __m256 x2) {
     return y;
 }
 
-void lerp(unsigned int length, float* srcc_ptr, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void lerp(unsigned int length, float* srcc_ptr, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     

@@ -23,7 +23,7 @@ __forceinline __m256d _mm256_quaternionmulkernelgrad_pd(__m256d u, __m256d v) {
 void quaternion_kernelproduct_1d(unsigned int inchannels, unsigned int outchannels, 
                                  unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                  unsigned int stride, unsigned int batch, unsigned int outch, 
-                                 float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                 const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int kerneloutchannels = outchannels / 4, koutch = outch / 4;
     
@@ -48,7 +48,7 @@ void quaternion_kernelproduct_1d(unsigned int inchannels, unsigned int outchanne
 void quaternion_kernelproduct_1d_transpose(unsigned int inchannels, unsigned int outchannels, 
                                            unsigned int inwidth, unsigned int outwidth, unsigned int kwidth, 
                                            unsigned int stride, unsigned int batch, unsigned int outch, 
-                                           float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                                           const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
 
     const unsigned int kerneloutchannels = outchannels / 4, koutch = outch / 4;
 

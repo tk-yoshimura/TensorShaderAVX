@@ -12,7 +12,7 @@ __forceinline __m128 _mm256d_sum(__m256d hi, __m256d lo) {
 
 void convolution_pw(unsigned int inchannels, unsigned int outchannels, 
                     unsigned points, unsigned int th,
-                    float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+                    const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
         
     const unsigned int inmap_offset = inchannels * points * th, outmap_offset = outchannels * points * th;
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;

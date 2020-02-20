@@ -5,7 +5,7 @@ using namespace System;
 void neighbor_zoom_1d(unsigned int channels,
                       unsigned int inwidth, unsigned int outwidth,
                       unsigned int th,
-                      float* inmap_ptr, float* outmap_ptr) {
+                      const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * th, outmap_offset = channels * outwidth * th;
     inmap_ptr += inmap_offset;

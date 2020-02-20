@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void add_chwise(unsigned int veclength, unsigned int maplength, float* srcvec_ptr, float* srcmap_ptr, float* dstmap_ptr) {
+void add_chwise(unsigned int veclength, unsigned int maplength, 
+                const float* __restrict srcvec_ptr, const float* __restrict srcmap_ptr, float* __restrict dstmap_ptr) {
+
     const unsigned int maplength_sep = maplength / veclength * veclength, maplength_rem = maplength - maplength_sep;
     
     {
@@ -71,8 +73,8 @@ void TensorShaderAvxBackend::Channelwise::Add(unsigned int vector_length, unsign
         vector_length *= 2;
     }
 
-    float* srcvec_ptr = (float*)(srcvector->Ptr.ToPointer());
-    float* srcmap_ptr = (float*)(srcmap->Ptr.ToPointer());
+    const float* srcvec_ptr = (const float*)(srcvector->Ptr.ToPointer());
+    const float* srcmap_ptr = (const float*)(srcmap->Ptr.ToPointer());
     float* dstmap_ptr = (float*)(dstmap->Ptr.ToPointer());
 
     if (vector_length == 1) {

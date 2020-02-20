@@ -13,7 +13,7 @@ __forceinline __m256 _mm256_complex_zrelugrad_ps(__m256 x1, __m256 x2) {
     return y;
 }
 
-void complex_zrelugrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void complex_zrelugrad(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {

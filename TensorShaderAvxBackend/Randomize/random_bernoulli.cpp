@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void random_bernoulli(unsigned int length, unsigned __int64 seed, double prob, float* dst_ptr) {
+void random_bernoulli(unsigned int length, unsigned __int64 seed, double prob, float* __restrict dst_ptr) {
     const unsigned __int64 thr = (unsigned __int64)((double)(0x1000000000000ull) * prob);
      
     unsigned __int64 x = seed;

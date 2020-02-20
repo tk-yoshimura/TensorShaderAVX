@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void complex_cast(unsigned int length, float* srcreal_ptr, float* srcimag_ptr, float* dst_ptr) {
+void complex_cast(unsigned int length, float* srcreal_ptr, float* srcimag_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 2, j++) {
         dst_ptr[i] = srcreal_ptr[j];
         dst_ptr[i + 1] = srcimag_ptr[j];

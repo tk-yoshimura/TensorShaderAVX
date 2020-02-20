@@ -2,7 +2,9 @@
 
 using namespace System;
 
-void mul_bnwise(unsigned int veclength, unsigned int maplength, float* srcvec_ptr, float* srcmap_ptr, float* dstmap_ptr) {
+void mul_bnwise(unsigned int veclength, unsigned int maplength, 
+                const float* __restrict srcvec_ptr, const float* __restrict srcmap_ptr, float* __restrict dstmap_ptr) {
+
     const unsigned int length = maplength / veclength;
     const unsigned int j = length & ~7u, k = length - j;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(k);
@@ -42,8 +44,8 @@ void TensorShaderAvxBackend::Batchwise::Mul(unsigned int vector_length, unsigned
     Util::CheckLength(vector_length, srcvector);
     Util::CheckLength(map_length, srcmap, dstmap);
 
-    float* srcvec_ptr = (float*)(srcvector->Ptr.ToPointer());
-    float* srcmap_ptr = (float*)(srcmap->Ptr.ToPointer());
+    const float* srcvec_ptr = (const float*)(srcvector->Ptr.ToPointer());
+    const float* srcmap_ptr = (const float*)(srcmap->Ptr.ToPointer());
     float* dstmap_ptr = (float*)(dstmap->Ptr.ToPointer());
 
     if (vector_length == 1) {

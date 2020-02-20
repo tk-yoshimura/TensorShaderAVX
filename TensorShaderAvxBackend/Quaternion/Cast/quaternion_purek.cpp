@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void quaternion_purek(unsigned int length, float* srck_ptr, float* dst_ptr) {
+void quaternion_purek(unsigned int length, float* srck_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 4, j++) {
         dst_ptr[i + 3] = srck_ptr[j];
         dst_ptr[i + 0] = dst_ptr[i + 1] = dst_ptr[i + 2] = 0;

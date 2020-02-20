@@ -10,7 +10,7 @@ __forceinline __m256 _mm256_lessthan_ps(__m256 x1, __m256 x2) {
     return y;
 }
 
-void lessthan(unsigned int length, float* src1_ptr, float* src2_ptr, float* dst_ptr) {
+void lessthan(unsigned int length, float* src1_ptr, float* src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     __m256 ones = _mm256_set1_ps(1);

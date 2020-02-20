@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void sort(unsigned int stride, unsigned int axislength, unsigned int slides, float* ref_ptr) {
+void sort(unsigned int stride, unsigned int axislength, unsigned int slides, float* __restrict ref_ptr) {
     float temp;
 
     for (unsigned int k = 0; k < slides; k++) {
@@ -34,7 +34,7 @@ void sort(unsigned int stride, unsigned int axislength, unsigned int slides, flo
     }
 }
 
-void sort_stride1(unsigned int axislength, unsigned int slides, float* ref_ptr) {
+void sort_stride1(unsigned int axislength, unsigned int slides, float* __restrict ref_ptr) {
     float temp;
 
     for (unsigned int k = 0, idx = 0; k < slides; k++, idx += axislength) {

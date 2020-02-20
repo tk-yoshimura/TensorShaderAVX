@@ -14,7 +14,7 @@ __forceinline __m256 _mm256_sign_ps(__m256 x) {
     return y;
 }
 
-void sign(unsigned int length, float* src_ptr, float* dst_ptr) {
+void sign(unsigned int length, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     __m256 zeros = _mm256_setzero_ps();

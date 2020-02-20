@@ -11,7 +11,7 @@ __forceinline __m256 _mm256_greaterthanequal_constant_ps(float c, __m256 x) {
     return y;
 }
 
-void greaterthanorequal_constant(unsigned int length, float c, float* src_ptr, float* dst_ptr) {
+void greaterthanorequal_constant(unsigned int length, float c, const float* __restrict src_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     __m256 fillc = _mm256_set1_ps(c);

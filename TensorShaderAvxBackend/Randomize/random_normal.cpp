@@ -4,7 +4,7 @@
 
 using namespace System;
 
-void random_normal(unsigned int length, unsigned __int64 seed, float* dst_ptr) {
+void random_normal(unsigned int length, unsigned __int64 seed, float* __restrict dst_ptr) {
     const double inv = 1.0 / 0x100000000ull, pi2 = 6.2831853071795865;
 
     union {

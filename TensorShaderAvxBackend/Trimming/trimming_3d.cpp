@@ -9,7 +9,7 @@ void trimming_3d(unsigned int channels,
                  unsigned int trim_left, unsigned int trim_right,
                  unsigned int trim_top, unsigned int trim_bottom,
                  unsigned int trim_front, unsigned int trim_rear,
-                 float* inmap_ptr, float* outmap_ptr) {
+                 const float* __restrict inmap_ptr, float* outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * inheight * indepth * th;
     const unsigned int outmap_offset = channels * outwidth * outheight * outdepth * th;

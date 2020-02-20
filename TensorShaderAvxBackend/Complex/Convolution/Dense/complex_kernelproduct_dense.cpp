@@ -11,7 +11,7 @@ __forceinline __m256d _mm256_complexmulkernelgrad_pd(__m256d u, __m256d v) {
     return _mm256_fmsubadd_pd(vri, urr, _mm256_mul_pd(vir, uii));
 }
 
-void complex_kernelproduct_dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void complex_kernelproduct_dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);
     
@@ -64,7 +64,7 @@ void complex_kernelproduct_dense(unsigned int inchannels, unsigned int outchanne
     }
 }
 
-void complex_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
+void complex_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);
 
