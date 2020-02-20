@@ -19,7 +19,7 @@ namespace TensorShader.Links.Evaluation.Classify {
     public class ConfusionMatrix : ClassifyEvaluation {
         /// <summary>コンストラクタ</summary>
         public ConfusionMatrix(Field xfield, Field tfield, Field yfield)
-            : base( xfield, tfield, yfield ) { }
+            : base(xfield, tfield, yfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
@@ -40,7 +40,7 @@ namespace TensorShader.Links.Evaluation.Classify {
                     new Shape(ShapeType.Matrix, channels, channels, batch)
                 );
 
-            Y.AssignValue(Sum(x_table * t_table, axes: new int[]{ 2 }));
+            Y.AssignValue(Sum(x_table * t_table, axes: new int[] { 2 }));
         }
     }
 }

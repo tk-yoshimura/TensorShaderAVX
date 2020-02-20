@@ -11,12 +11,13 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
         public void ExecuteTest() {
             Random rd = new Random(1234);
 
-            {
-                Shape shape = new Shape(ShapeType.Map, 17, 8, 2, 4, 1, 3, 67);
+            foreach (Shape shape in new Shape[]{
+                   new Shape(ShapeType.Map, 16, 19, 23, 8, 1, 5, 6),
+                   new Shape(ShapeType.Map, 17, 9, 2, 4, 1, 3, 67) }) {
 
                 for (int axis = 0; axis < shape.Ndim; axis++) {
                     int stride = 1, length = shape[axis];
-                    for(int i = 0; i < axis; i++) {
+                    for (int i = 0; i < axis; i++) {
                         stride *= shape[i];
                     }
 

@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>絶対値制限</summary>
-        public static Field LimitAbs(Field x1, Field x2) {
+        public static Field LimitAbs(Field x, Field range) {
             Field y = new Field();
-            Link link = new Links.BinaryArithmetric.LimitAbs(x1, x2, y);
+            Link link = new Links.BinaryArithmetric.LimitAbs(x, range, y);
 
             link.Forward();
 
@@ -19,7 +19,7 @@ namespace TensorShader.Links.BinaryArithmetric {
     internal class LimitAbs : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public LimitAbs(Field infield1, Field infield2, Field outfield)
-            : base(infield1, infield2, outfield ) { }
+            : base(infield1, infield2, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

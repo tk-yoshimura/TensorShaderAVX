@@ -9,7 +9,7 @@ namespace TensorShader.Links.LogicalArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public LogicalUnaryArithmetric(Field infield, Field outfield)
-            : base(new Field[]{ infield }, outfield) { }
+            : base(new Field[] { infield }, outfield) { }
 
         /// <summary>逆伝搬</summary>
         public override sealed void Backward() {

@@ -20,9 +20,7 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
 
                 float[] yval = xval.Select((v) => v * rate).ToArray();
 
-                Tensor x_tensor = new Tensor(Shape.Vector(length), xval);
-
-                ParameterField x = x_tensor;
+                ParameterField x = new Tensor(Shape.Vector(length), xval);
 
                 (Flow flow, _) = Flow.Optimize(x);
                 flow.Execute();
@@ -30,13 +28,13 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
                 x.AddUpdater(new GradNormClipping(x, limit));
                 x.Update();
 
-                AssertError.Tolerance(yval, x.GradTensor.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(yval, x.GradState, 1e-7f, 1e-5f);
 
-                float post_norm = x.GradTensor.State.Select((v) => v * v).Sum();
+                float post_norm = x.GradState.Select((v) => v * v).Sum();
 
                 Assert.AreEqual(limit, post_norm, 1e-5f);
 
-                CollectionAssert.AreEqual(xval, x.ValueTensor.State);
+                CollectionAssert.AreEqual(xval, x.State);
             }
 
             {
@@ -44,9 +42,7 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
 
                 float[] xval = (new float[length]).Select((_, idx) => 0.1f * ((float)idx * 3 - length)).ToArray();
 
-                Tensor x_tensor = new Tensor(Shape.Vector(length), xval);
-
-                ParameterField x = x_tensor;
+                ParameterField x = new Tensor(Shape.Vector(length), xval);
 
                 (Flow flow, _) = Flow.Optimize(x);
                 flow.Execute();
@@ -54,9 +50,9 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
                 x.AddUpdater(new GradNormClipping(x, limit));
                 x.Update();
 
-                AssertError.Tolerance(xval, x.GradTensor.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(xval, x.GradState, 1e-7f, 1e-5f);
 
-                CollectionAssert.AreEqual(xval, x.ValueTensor.State);
+                CollectionAssert.AreEqual(xval, x.State);
             }
         }
     }

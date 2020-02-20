@@ -73,17 +73,18 @@ namespace TensorShader.Functions.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim)
-            : this(trim, trim, trim, trim, trim, trim){ }
+            : this(trim, trim, trim, trim, trim, trim) { }
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim_left, int trim_right, int trim_top, int trim_bottom, int trim_front, int trim_rear)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.TrimLeft = trim_left;
             this.TrimRight = trim_right;
             this.TrimTop = trim_top;
             this.TrimBottom = trim_bottom;
             this.TrimFront = trim_front;
-            this.TrimRear  = trim_rear;
+            this.TrimRear = trim_rear;
         }
 
         /// <summary>出力テンソル形状を返す</summary>
@@ -93,9 +94,9 @@ namespace TensorShader.Functions.Connection3D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map3D(inshape.Channels,
-                                         checked(inshape.Width  - TrimLeft  - TrimRight ),
-                                         checked(inshape.Height - TrimTop   - TrimBottom),
-                                         checked(inshape.Depth  - TrimFront - TrimRear  ),
+                                         inshape.Width - TrimLeft - TrimRight,
+                                         inshape.Height - TrimTop - TrimBottom,
+                                         inshape.Depth - TrimFront - TrimRear,
                                          inshape.Batch);
 
             return new Shape[] { outshape };

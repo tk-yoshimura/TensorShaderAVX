@@ -8,7 +8,8 @@ namespace TensorShader.Functions.Aggregation {
 
         /// <summary>コンストラクタ</summary>
         public Aggregation(int axis)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 
@@ -21,7 +22,7 @@ namespace TensorShader.Functions.Aggregation {
             int[] lengths = shape;
             lengths[Axis] = 1;
 
-            return new Shape[]{ new Shape(shape.Type, lengths) };
+            return new Shape[] { new Shape(shape.Type, lengths) };
         }
 
         /// <summary>入力テンソル形状をチェックする</summary>

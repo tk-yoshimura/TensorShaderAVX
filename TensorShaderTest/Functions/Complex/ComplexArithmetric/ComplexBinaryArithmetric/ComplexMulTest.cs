@@ -24,7 +24,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 2; i++) {
+                for (int i = 0; i < y.Length / 2; i++) {
                     Complex a = new Complex(x1[i * 2], x1[i * 2 + 1]);
                     Complex b = new Complex(x2[i * 2], x2[i * 2 + 1]);
                     Complex c = a * b;
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 2; i++) {
+                for (int i = 0; i < y.Length / 2; i++) {
                     Complex a = new Complex(x1[i * 2], x1[i * 2 + 1]);
                     Complex c = a * a;
 

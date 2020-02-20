@@ -41,8 +41,9 @@ namespace TensorShader.Functions.Connection3D {
         public Shape KernelShape { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public PointwiseKernelProduct(Shape inshape, Shape outshape) :
-            base(inputs: 2, outputs: 1, allow_resubstitution : false) {
+        public PointwiseKernelProduct(Shape inshape, Shape outshape)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
@@ -67,11 +68,11 @@ namespace TensorShader.Functions.Connection3D {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0] != InShape) {
-                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index:0, inshapes[0], InShape));
+                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index: 0, inshapes[0], InShape));
             }
 
             if (inshapes[1] != OutShape) {
-                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index:1, inshapes[1], OutShape));
+                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index: 1, inshapes[1], OutShape));
             }
         }
 

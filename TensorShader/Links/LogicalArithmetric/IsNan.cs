@@ -19,7 +19,7 @@ namespace TensorShader.Links.LogicalArithmetric {
     public class IsNan : LogicalUnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public IsNan(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

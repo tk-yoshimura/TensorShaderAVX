@@ -20,10 +20,9 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             VariableField f1 = new Tensor(Shape.Map1D(ch, length), x1);
             VariableField f2 = new Tensor(Shape.Map1D(ch, length), x2);
 
-            Field fout = Xor(f1, f2);
-            StoreField output = fout.Save();
+            StoreField output = Xor(f1, f2);
 
-            Flow flow = Flow.Inference(output);
+            (Flow flow, _) = Flow.Inference(output);
             flow.Execute();
 
             CollectionAssert.AreEqual(idxes.Select((idx) => Math.Max(x1[idx], x2[idx]) - Math.Min(x1[idx], x2[idx])).ToArray(), output.State);

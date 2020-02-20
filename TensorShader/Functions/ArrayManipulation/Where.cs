@@ -32,7 +32,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Where(Shape shape)
-            : base(inputs: 3, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
+
             this.Shape = shape;
         }
 
@@ -40,15 +41,15 @@ namespace TensorShader.Functions.ArrayManipulation {
         public override Shape[] OutputShapes(params Shape[] inshapes) {
             CheckInputShapes(inshapes);
 
-            return new Shape[]{ Shape };
+            return new Shape[] { Shape };
         }
 
         public override void CheckInputShapes(params Shape[] inshapes) {
             base.CheckInputShapes(inshapes);
 
-            for(int i = 1; i < inshapes.Length; i++) {
+            for (int i = 1; i < inshapes.Length; i++) {
                 if (inshapes[i] != inshapes[0]) {
-                    throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index:i, inshapes[i], inshapes[0]));
+                    throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index: i, inshapes[i], inshapes[0]));
                 }
             }
         }
@@ -60,7 +61,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             Tensor incondition = intensors[0], intensor1 = intensors[1], intensor2 = intensors[2], outtensor = outtensors[0];
 
             return (
-                new Tensor[]{ incondition, intensor1, intensor2, outtensor },
+                new Tensor[] { incondition, intensor1, intensor2, outtensor },
                 new Operators.ArrayManipulation.Where(incondition.Shape)
                 );
         }

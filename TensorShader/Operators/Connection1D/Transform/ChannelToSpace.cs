@@ -24,7 +24,7 @@ namespace TensorShader.Operators.Connection1D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(inchannels, inwidth, batch)),
-                (ArgumentType.Out, Shape.Map1D(inchannels / scale, checked(inwidth * scale), batch)),
+                (ArgumentType.Out, Shape.Map1D(inchannels / scale, inwidth * scale, batch)),
             };
 
             this.InChannels = inchannels;

@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.ArrayManipulation {
     /// <summary>ソート</summary>
+    /// <remarks>4要素スライドソート</remarks>
     internal class SortWithKey : Operator {
         /// <summary>形状</summary>
         public Shape Shape { private set; get; }
@@ -23,7 +23,7 @@ namespace TensorShader.Operators.ArrayManipulation {
             };
 
             int stride = 1;
-            for(int i = 0; i < axis; i++) {
+            for (int i = 0; i < axis; i++) {
                 stride *= shape[i];
             }
 
@@ -38,7 +38,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
             Tensor intensor_key = tensors[0], intensor_value = tensors[1];
             Tensor outtensor_key = tensors[2], outtensor_value = tensors[3];
-            
+
             TensorShaderAvxBackend.ArrayManipulation.SortWithKey((uint)Stride, (uint)AxisLength, (uint)(outtensor_key.Length / (Stride * AxisLength)), intensor_key.Buffer, intensor_value.Buffer, outtensor_key.Buffer, outtensor_value.Buffer);
         }
 

@@ -1,61 +1,61 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexConvolution;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]
     public class ComplexKernelProduct2DTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2, 3 }) {
-                foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                    foreach (int outchannels in new int[] { 6, 14 }) {
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+                    foreach (int outchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
                         foreach (int kheight in new int[] { 1, 3, 5 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int stride in new int[] { 1, 2, 3 }) {
-                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
+                                    foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
+                                        int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                            float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-                                            System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
-                                                .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
+                                        System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
+                                            .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
 
-                                            System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
-                                                .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
+                                        System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
+                                            .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
 
-                                            ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
-                                            ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
+                                        ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
+                                        ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
 
-                                            ComplexFilter2D gw = Reference(x, y, kwidth, kheight, stride);
+                                        ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
-                                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-                                            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+                                        OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
 
-                                            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, stride, transpose:false, batch);
+                                        ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
 
-                                            ope.Execute(x_tensor, y_tensor, gw_tensor);
+                                        ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-                                            float[] gw_expect = gw.ToArray();
-                                            float[] gw_actual = gw_tensor.State;
+                                        float[] gw_expect = gw.ToArray();
+                                        float[] gw_actual = gw_tensor.State;
 
-                                            CollectionAssert.AreEqual(xval, x_tensor.State);
-                                            CollectionAssert.AreEqual(yval, y_tensor.State);
+                                        CollectionAssert.AreEqual(xval, x_tensor.State);
+                                        CollectionAssert.AreEqual(yval, y_tensor.State);
 
-                                            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+                                        AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
-                                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
-                                        }
                                     }
                                 }
                             }
@@ -68,78 +68,78 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         [TestMethod]
-        public void OverflowTest() {
-            foreach(bool transpose in new bool[] { false, true }) { 
-                foreach (int batch in new int[] { 1, 2, 3 }) {
-                    foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                        foreach (int outchannels in new int[] { 6, 14 }) {
-                            foreach (int kheight in new int[] { 1, 3, 5 }) {
-                                foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                    foreach (int stride in new int[] { 1, 2, 3 }) {
-                                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                                int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+        public void LargeMapTest() {
+            Random random = new Random(1234);
 
-                                                float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                                float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+            float max_err = 0;
 
-                                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+            int batch = 3;
+            int inchannels = 98, outchannels = 100;
+            int kwidth = 5, kheight = 3;
+            int inwidth = 250, inheight = 196;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+            float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-                                                ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, stride, transpose, batch);
+            System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
+                .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
 
-                                                ope.Execute(x_tensor, y_tensor, gw_tensor);
+            System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
+                .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
 
-                                                CollectionAssert.AreEqual(xval, x_tensor.State);
-                                                CollectionAssert.AreEqual(yval, y_tensor.State);
+            ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
+            ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
 
-                                                gw_tensor.CheckOverflow();
+            ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
-                                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch},{transpose}");
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+
+            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
+
+            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
         }
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3, stride = 2;
-            int outwidth = (inwidth - ksize) / stride + 1, outheight = (inheight - ksize) / stride + 1;
+            int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
 
             OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, ksize, ksize));
 
-            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize, stride);
+            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
-        public static ComplexFilter2D Reference(ComplexMap2D x, ComplexMap2D gy, int kwidth, int kheight, int stride) {
+        public static ComplexFilter2D Reference(ComplexMap2D x, ComplexMap2D gy, int kwidth, int kheight) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, outw = gy.Width, outh = gy.Height;
 
-            if (outw != (inw - kwidth) / stride + 1 || outh != (inh - kheight) / stride + 1) {
+            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1) {
                 throw new ArgumentException("mismatch shape");
             }
 
@@ -149,23 +149,18 @@ namespace TensorShaderTest.Operators.Complex {
                 return new System.Numerics.Complex(z1.Real * z2.Real + z1.Imaginary * z2.Imaginary, z1.Imaginary * z2.Real - z1.Real * z2.Imaginary);
             };
 
-            for(int kx, ky = 0; ky < kheight; ky++) {
-                for(kx = 0; kx < kwidth; kx++) {
-                    for(int th = 0; th < batch; th++) {
-                        for(int inch, outch = 0; outch < outchannels; outch++) {
-                            for(inch = 0; inch < inchannels; inch++) {
-                                System.Numerics.Complex sum = 0;
-
-                                for(int ix, iy = ky, ox, oy = 0; oy < outh; iy += stride, oy++) {
-                                    for(ix = kx, ox = 0; ox < outw; ix += stride, ox++) {
-                                        sum += mul_grad(gy[outch, ox, oy, th], x[inch, ix, iy, th]);
+            for (int kx, ky = 0; ky < kheight; ky++) {
+                for (kx = 0; kx < kwidth; kx++) {
+                    for (int th = 0; th < batch; th++) {
+                        for (int ix, iy = ky, ox, oy = 0; oy < outh; iy++, oy++) {
+                            for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                                for (int inch, outch = 0; outch < outchannels; outch++) {
+                                    for (inch = 0; inch < inchannels; inch++) {
+                                        w[inch, outch, kx, ky] += mul_grad(gy[outch, ox, oy, th], x[inch, ix, iy, th]);
                                     }
                                 }
-
-                                w[inch, outch, kx, ky] += sum;
                             }
                         }
-
                     }
                 }
             }
@@ -175,8 +170,8 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17;
-            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, batch = 1;
+            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, inwidth = 13, inheight = 17;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 1;
 
             float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -190,74 +185,74 @@ namespace TensorShaderTest.Operators.Complex {
             ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
             ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
 
-            ComplexFilter2D gw = Reference(x, y, kwidth, kheight, stride);
+            ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
             float[] gw_expect = {
-                4.600008000e+00f,  -2.809800000e-02f,  4.628652000e+00f,  -2.818200000e-02f,  4.657296000e+00f,  -2.826600000e-02f,
-                4.516260000e+00f,  -2.801400000e-02f,  4.544568000e+00f,  -2.809800000e-02f,  4.572876000e+00f,  -2.818200000e-02f,
-                4.432512000e+00f,  -2.793000000e-02f,  4.460484000e+00f,  -2.801400000e-02f,  4.488456000e+00f,  -2.809800000e-02f,
-                4.348764000e+00f,  -2.784600000e-02f,  4.376400000e+00f,  -2.793000000e-02f,  4.404036000e+00f,  -2.801400000e-02f,
-                4.685940000e+00f,  -2.835000000e-02f,  4.714584000e+00f,  -2.843400000e-02f,  4.743228000e+00f,  -2.851800000e-02f,
-                4.601184000e+00f,  -2.826600000e-02f,  4.629492000e+00f,  -2.835000000e-02f,  4.657800000e+00f,  -2.843400000e-02f,
-                4.516428000e+00f,  -2.818200000e-02f,  4.544400000e+00f,  -2.826600000e-02f,  4.572372000e+00f,  -2.835000000e-02f,
-                4.431672000e+00f,  -2.809800000e-02f,  4.459308000e+00f,  -2.818200000e-02f,  4.486944000e+00f,  -2.826600000e-02f,
-                4.771872000e+00f,  -2.860200000e-02f,  4.800516000e+00f,  -2.868600000e-02f,  4.829160000e+00f,  -2.877000000e-02f,
-                4.686108000e+00f,  -2.851800000e-02f,  4.714416000e+00f,  -2.860200000e-02f,  4.742724000e+00f,  -2.868600000e-02f,
-                4.600344000e+00f,  -2.843400000e-02f,  4.628316000e+00f,  -2.851800000e-02f,  4.656288000e+00f,  -2.860200000e-02f,
-                4.514580000e+00f,  -2.835000000e-02f,  4.542216000e+00f,  -2.843400000e-02f,  4.569852000e+00f,  -2.851800000e-02f,
-                5.717124000e+00f,  -3.137400000e-02f,  5.745768000e+00f,  -3.145800000e-02f,  5.774412000e+00f,  -3.154200000e-02f,
-                5.620272000e+00f,  -3.129000000e-02f,  5.648580000e+00f,  -3.137400000e-02f,  5.676888000e+00f,  -3.145800000e-02f,
-                5.523420000e+00f,  -3.120600000e-02f,  5.551392000e+00f,  -3.129000000e-02f,  5.579364000e+00f,  -3.137400000e-02f,
-                5.426568000e+00f,  -3.112200000e-02f,  5.454204000e+00f,  -3.120600000e-02f,  5.481840000e+00f,  -3.129000000e-02f,
-                5.803056000e+00f,  -3.162600000e-02f,  5.831700000e+00f,  -3.171000000e-02f,  5.860344000e+00f,  -3.179400000e-02f,
-                5.705196000e+00f,  -3.154200000e-02f,  5.733504000e+00f,  -3.162600000e-02f,  5.761812000e+00f,  -3.171000000e-02f,
-                5.607336000e+00f,  -3.145800000e-02f,  5.635308000e+00f,  -3.154200000e-02f,  5.663280000e+00f,  -3.162600000e-02f,
-                5.509476000e+00f,  -3.137400000e-02f,  5.537112000e+00f,  -3.145800000e-02f,  5.564748000e+00f,  -3.154200000e-02f,
-                5.888988000e+00f,  -3.187800000e-02f,  5.917632000e+00f,  -3.196200000e-02f,  5.946276000e+00f,  -3.204600000e-02f,
-                5.790120000e+00f,  -3.179400000e-02f,  5.818428000e+00f,  -3.187800000e-02f,  5.846736000e+00f,  -3.196200000e-02f,
-                5.691252000e+00f,  -3.171000000e-02f,  5.719224000e+00f,  -3.179400000e-02f,  5.747196000e+00f,  -3.187800000e-02f,
-                5.592384000e+00f,  -3.162600000e-02f,  5.620020000e+00f,  -3.171000000e-02f,  5.647656000e+00f,  -3.179400000e-02f,
-                6.834240000e+00f,  -3.465000000e-02f,  6.862884000e+00f,  -3.473400000e-02f,  6.891528000e+00f,  -3.481800000e-02f,
-                6.724284000e+00f,  -3.456600000e-02f,  6.752592000e+00f,  -3.465000000e-02f,  6.780900000e+00f,  -3.473400000e-02f,
-                6.614328000e+00f,  -3.448200000e-02f,  6.642300000e+00f,  -3.456600000e-02f,  6.670272000e+00f,  -3.465000000e-02f,
-                6.504372000e+00f,  -3.439800000e-02f,  6.532008000e+00f,  -3.448200000e-02f,  6.559644000e+00f,  -3.456600000e-02f,
-                6.920172000e+00f,  -3.490200000e-02f,  6.948816000e+00f,  -3.498600000e-02f,  6.977460000e+00f,  -3.507000000e-02f,
-                6.809208000e+00f,  -3.481800000e-02f,  6.837516000e+00f,  -3.490200000e-02f,  6.865824000e+00f,  -3.498600000e-02f,
-                6.698244000e+00f,  -3.473400000e-02f,  6.726216000e+00f,  -3.481800000e-02f,  6.754188000e+00f,  -3.490200000e-02f,
-                6.587280000e+00f,  -3.465000000e-02f,  6.614916000e+00f,  -3.473400000e-02f,  6.642552000e+00f,  -3.481800000e-02f,
-                7.006104000e+00f,  -3.515400000e-02f,  7.034748000e+00f,  -3.523800000e-02f,  7.063392000e+00f,  -3.532200000e-02f,
-                6.894132000e+00f,  -3.507000000e-02f,  6.922440000e+00f,  -3.515400000e-02f,  6.950748000e+00f,  -3.523800000e-02f,
-                6.782160000e+00f,  -3.498600000e-02f,  6.810132000e+00f,  -3.507000000e-02f,  6.838104000e+00f,  -3.515400000e-02f,
-                6.670188000e+00f,  -3.490200000e-02f,  6.697824000e+00f,  -3.498600000e-02f,  6.725460000e+00f,  -3.507000000e-02f,
-                7.951356000e+00f,  -3.792600000e-02f,  7.980000000e+00f,  -3.801000000e-02f,  8.008644000e+00f,  -3.809400000e-02f,
-                7.828296000e+00f,  -3.784200000e-02f,  7.856604000e+00f,  -3.792600000e-02f,  7.884912000e+00f,  -3.801000000e-02f,
-                7.705236000e+00f,  -3.775800000e-02f,  7.733208000e+00f,  -3.784200000e-02f,  7.761180000e+00f,  -3.792600000e-02f,
-                7.582176000e+00f,  -3.767400000e-02f,  7.609812000e+00f,  -3.775800000e-02f,  7.637448000e+00f,  -3.784200000e-02f,
-                8.037288000e+00f,  -3.817800000e-02f,  8.065932000e+00f,  -3.826200000e-02f,  8.094576000e+00f,  -3.834600000e-02f,
-                7.913220000e+00f,  -3.809400000e-02f,  7.941528000e+00f,  -3.817800000e-02f,  7.969836000e+00f,  -3.826200000e-02f,
-                7.789152000e+00f,  -3.801000000e-02f,  7.817124000e+00f,  -3.809400000e-02f,  7.845096000e+00f,  -3.817800000e-02f,
-                7.665084000e+00f,  -3.792600000e-02f,  7.692720000e+00f,  -3.801000000e-02f,  7.720356000e+00f,  -3.809400000e-02f,
-                8.123220000e+00f,  -3.843000000e-02f,  8.151864000e+00f,  -3.851400000e-02f,  8.180508000e+00f,  -3.859800000e-02f,
-                7.998144000e+00f,  -3.834600000e-02f,  8.026452000e+00f,  -3.843000000e-02f,  8.054760000e+00f,  -3.851400000e-02f,
-                7.873068000e+00f,  -3.826200000e-02f,  7.901040000e+00f,  -3.834600000e-02f,  7.929012000e+00f,  -3.843000000e-02f,
-                7.747992000e+00f,  -3.817800000e-02f,  7.775628000e+00f,  -3.826200000e-02f,  7.803264000e+00f,  -3.834600000e-02f,
-                9.068472000e+00f,  -4.120200000e-02f,  9.097116000e+00f,  -4.128600000e-02f,  9.125760000e+00f,  -4.137000000e-02f,
-                8.932308000e+00f,  -4.111800000e-02f,  8.960616000e+00f,  -4.120200000e-02f,  8.988924000e+00f,  -4.128600000e-02f,
-                8.796144000e+00f,  -4.103400000e-02f,  8.824116000e+00f,  -4.111800000e-02f,  8.852088000e+00f,  -4.120200000e-02f,
-                8.659980000e+00f,  -4.095000000e-02f,  8.687616000e+00f,  -4.103400000e-02f,  8.715252000e+00f,  -4.111800000e-02f,
-                9.154404000e+00f,  -4.145400000e-02f,  9.183048000e+00f,  -4.153800000e-02f,  9.211692000e+00f,  -4.162200000e-02f,
-                9.017232000e+00f,  -4.137000000e-02f,  9.045540000e+00f,  -4.145400000e-02f,  9.073848000e+00f,  -4.153800000e-02f,
-                8.880060000e+00f,  -4.128600000e-02f,  8.908032000e+00f,  -4.137000000e-02f,  8.936004000e+00f,  -4.145400000e-02f,
-                8.742888000e+00f,  -4.120200000e-02f,  8.770524000e+00f,  -4.128600000e-02f,  8.798160000e+00f,  -4.137000000e-02f,
-                9.240336000e+00f,  -4.170600000e-02f,  9.268980000e+00f,  -4.179000000e-02f,  9.297624000e+00f,  -4.187400000e-02f,
-                9.102156000e+00f,  -4.162200000e-02f,  9.130464000e+00f,  -4.170600000e-02f,  9.158772000e+00f,  -4.179000000e-02f,
-                8.963976000e+00f,  -4.153800000e-02f,  8.991948000e+00f,  -4.162200000e-02f,  9.019920000e+00f,  -4.170600000e-02f,
-                8.825796000e+00f,  -4.145400000e-02f,  8.853432000e+00f,  -4.153800000e-02f,  8.881068000e+00f,  -4.162200000e-02f,
+                5.428623200e+01f,  -1.534390000e-01f,  5.461484600e+01f,  -1.537250000e-01f,  5.494346000e+01f,  -1.540110000e-01f,
+                5.400109000e+01f,  -1.531530000e-01f,  5.432856000e+01f,  -1.534390000e-01f,  5.465603000e+01f,  -1.537250000e-01f,
+                5.371594800e+01f,  -1.528670000e-01f,  5.404227400e+01f,  -1.531530000e-01f,  5.436860000e+01f,  -1.534390000e-01f,
+                5.343080600e+01f,  -1.525810000e-01f,  5.375598800e+01f,  -1.528670000e-01f,  5.408117000e+01f,  -1.531530000e-01f,
+                5.527207400e+01f,  -1.542970000e-01f,  5.560068800e+01f,  -1.545830000e-01f,  5.592930200e+01f,  -1.548690000e-01f,
+                5.498350000e+01f,  -1.540110000e-01f,  5.531097000e+01f,  -1.542970000e-01f,  5.563844000e+01f,  -1.545830000e-01f,
+                5.469492600e+01f,  -1.537250000e-01f,  5.502125200e+01f,  -1.540110000e-01f,  5.534757800e+01f,  -1.542970000e-01f,
+                5.440635200e+01f,  -1.534390000e-01f,  5.473153400e+01f,  -1.537250000e-01f,  5.505671600e+01f,  -1.540110000e-01f,
+                5.625791600e+01f,  -1.551550000e-01f,  5.658653000e+01f,  -1.554410000e-01f,  5.691514400e+01f,  -1.557270000e-01f,
+                5.596591000e+01f,  -1.548690000e-01f,  5.629338000e+01f,  -1.551550000e-01f,  5.662085000e+01f,  -1.554410000e-01f,
+                5.567390400e+01f,  -1.545830000e-01f,  5.600023000e+01f,  -1.548690000e-01f,  5.632655600e+01f,  -1.551550000e-01f,
+                5.538189800e+01f,  -1.542970000e-01f,  5.570708000e+01f,  -1.545830000e-01f,  5.603226200e+01f,  -1.548690000e-01f,
+                6.710217800e+01f,  -1.645930000e-01f,  6.743079200e+01f,  -1.648790000e-01f,  6.775940600e+01f,  -1.651650000e-01f,
+                6.677242000e+01f,  -1.643070000e-01f,  6.709989000e+01f,  -1.645930000e-01f,  6.742736000e+01f,  -1.648790000e-01f,
+                6.644266200e+01f,  -1.640210000e-01f,  6.676898800e+01f,  -1.643070000e-01f,  6.709531400e+01f,  -1.645930000e-01f,
+                6.611290400e+01f,  -1.637350000e-01f,  6.643808600e+01f,  -1.640210000e-01f,  6.676326800e+01f,  -1.643070000e-01f,
+                6.808802000e+01f,  -1.654510000e-01f,  6.841663400e+01f,  -1.657370000e-01f,  6.874524800e+01f,  -1.660230000e-01f,
+                6.775483000e+01f,  -1.651650000e-01f,  6.808230000e+01f,  -1.654510000e-01f,  6.840977000e+01f,  -1.657370000e-01f,
+                6.742164000e+01f,  -1.648790000e-01f,  6.774796600e+01f,  -1.651650000e-01f,  6.807429200e+01f,  -1.654510000e-01f,
+                6.708845000e+01f,  -1.645930000e-01f,  6.741363200e+01f,  -1.648790000e-01f,  6.773881400e+01f,  -1.651650000e-01f,
+                6.907386200e+01f,  -1.663090000e-01f,  6.940247600e+01f,  -1.665950000e-01f,  6.973109000e+01f,  -1.668810000e-01f,
+                6.873724000e+01f,  -1.660230000e-01f,  6.906471000e+01f,  -1.663090000e-01f,  6.939218000e+01f,  -1.665950000e-01f,
+                6.840061800e+01f,  -1.657370000e-01f,  6.872694400e+01f,  -1.660230000e-01f,  6.905327000e+01f,  -1.663090000e-01f,
+                6.806399600e+01f,  -1.654510000e-01f,  6.838917800e+01f,  -1.657370000e-01f,  6.871436000e+01f,  -1.660230000e-01f,
+                7.991812400e+01f,  -1.757470000e-01f,  8.024673800e+01f,  -1.760330000e-01f,  8.057535200e+01f,  -1.763190000e-01f,
+                7.954375000e+01f,  -1.754610000e-01f,  7.987122000e+01f,  -1.757470000e-01f,  8.019869000e+01f,  -1.760330000e-01f,
+                7.916937600e+01f,  -1.751750000e-01f,  7.949570200e+01f,  -1.754610000e-01f,  7.982202800e+01f,  -1.757470000e-01f,
+                7.879500200e+01f,  -1.748890000e-01f,  7.912018400e+01f,  -1.751750000e-01f,  7.944536600e+01f,  -1.754610000e-01f,
+                8.090396600e+01f,  -1.766050000e-01f,  8.123258000e+01f,  -1.768910000e-01f,  8.156119400e+01f,  -1.771770000e-01f,
+                8.052616000e+01f,  -1.763190000e-01f,  8.085363000e+01f,  -1.766050000e-01f,  8.118110000e+01f,  -1.768910000e-01f,
+                8.014835400e+01f,  -1.760330000e-01f,  8.047468000e+01f,  -1.763190000e-01f,  8.080100600e+01f,  -1.766050000e-01f,
+                7.977054800e+01f,  -1.757470000e-01f,  8.009573000e+01f,  -1.760330000e-01f,  8.042091200e+01f,  -1.763190000e-01f,
+                8.188980800e+01f,  -1.774630000e-01f,  8.221842200e+01f,  -1.777490000e-01f,  8.254703600e+01f,  -1.780350000e-01f,
+                8.150857000e+01f,  -1.771770000e-01f,  8.183604000e+01f,  -1.774630000e-01f,  8.216351000e+01f,  -1.777490000e-01f,
+                8.112733200e+01f,  -1.768910000e-01f,  8.145365800e+01f,  -1.771770000e-01f,  8.177998400e+01f,  -1.774630000e-01f,
+                8.074609400e+01f,  -1.766050000e-01f,  8.107127600e+01f,  -1.768910000e-01f,  8.139645800e+01f,  -1.771770000e-01f,
+                9.273407000e+01f,  -1.869010000e-01f,  9.306268400e+01f,  -1.871870000e-01f,  9.339129800e+01f,  -1.874730000e-01f,
+                9.231508000e+01f,  -1.866150000e-01f,  9.264255000e+01f,  -1.869010000e-01f,  9.297002000e+01f,  -1.871870000e-01f,
+                9.189609000e+01f,  -1.863290000e-01f,  9.222241600e+01f,  -1.866150000e-01f,  9.254874200e+01f,  -1.869010000e-01f,
+                9.147710000e+01f,  -1.860430000e-01f,  9.180228200e+01f,  -1.863290000e-01f,  9.212746400e+01f,  -1.866150000e-01f,
+                9.371991200e+01f,  -1.877590000e-01f,  9.404852600e+01f,  -1.880450000e-01f,  9.437714000e+01f,  -1.883310000e-01f,
+                9.329749000e+01f,  -1.874730000e-01f,  9.362496000e+01f,  -1.877590000e-01f,  9.395243000e+01f,  -1.880450000e-01f,
+                9.287506800e+01f,  -1.871870000e-01f,  9.320139400e+01f,  -1.874730000e-01f,  9.352772000e+01f,  -1.877590000e-01f,
+                9.245264600e+01f,  -1.869010000e-01f,  9.277782800e+01f,  -1.871870000e-01f,  9.310301000e+01f,  -1.874730000e-01f,
+                9.470575400e+01f,  -1.886170000e-01f,  9.503436800e+01f,  -1.889030000e-01f,  9.536298200e+01f,  -1.891890000e-01f,
+                9.427990000e+01f,  -1.883310000e-01f,  9.460737000e+01f,  -1.886170000e-01f,  9.493484000e+01f,  -1.889030000e-01f,
+                9.385404600e+01f,  -1.880450000e-01f,  9.418037200e+01f,  -1.883310000e-01f,  9.450669800e+01f,  -1.886170000e-01f,
+                9.342819200e+01f,  -1.877590000e-01f,  9.375337400e+01f,  -1.880450000e-01f,  9.407855600e+01f,  -1.883310000e-01f,
+                1.055500160e+02f,  -1.980550000e-01f,  1.058786300e+02f,  -1.983410000e-01f,  1.062072440e+02f,  -1.986270000e-01f,
+                1.050864100e+02f,  -1.977690000e-01f,  1.054138800e+02f,  -1.980550000e-01f,  1.057413500e+02f,  -1.983410000e-01f,
+                1.046228040e+02f,  -1.974830000e-01f,  1.049491300e+02f,  -1.977690000e-01f,  1.052754560e+02f,  -1.980550000e-01f,
+                1.041591980e+02f,  -1.971970000e-01f,  1.044843800e+02f,  -1.974830000e-01f,  1.048095620e+02f,  -1.977690000e-01f,
+                1.065358580e+02f,  -1.989130000e-01f,  1.068644720e+02f,  -1.991990000e-01f,  1.071930860e+02f,  -1.994850000e-01f,
+                1.060688200e+02f,  -1.986270000e-01f,  1.063962900e+02f,  -1.989130000e-01f,  1.067237600e+02f,  -1.991990000e-01f,
+                1.056017820e+02f,  -1.983410000e-01f,  1.059281080e+02f,  -1.986270000e-01f,  1.062544340e+02f,  -1.989130000e-01f,
+                1.051347440e+02f,  -1.980550000e-01f,  1.054599260e+02f,  -1.983410000e-01f,  1.057851080e+02f,  -1.986270000e-01f,
+                1.075217000e+02f,  -1.997710000e-01f,  1.078503140e+02f,  -2.000570000e-01f,  1.081789280e+02f,  -2.003430000e-01f,
+                1.070512300e+02f,  -1.994850000e-01f,  1.073787000e+02f,  -1.997710000e-01f,  1.077061700e+02f,  -2.000570000e-01f,
+                1.065807600e+02f,  -1.991990000e-01f,  1.069070860e+02f,  -1.994850000e-01f,  1.072334120e+02f,  -1.997710000e-01f,
+                1.061102900e+02f,  -1.989130000e-01f,  1.064354720e+02f,  -1.991990000e-01f,  1.067606540e+02f,  -1.994850000e-01f,
             };
 
             float[] gw_actual = gw.ToArray();
 
-            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
         }
     }
 }

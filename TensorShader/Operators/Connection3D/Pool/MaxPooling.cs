@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection3D {
     /// <summary>最大値プーリング</summary>
@@ -36,9 +35,7 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Pool.MaxPool3D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, (uint)Batch, (uint)th, (uint)Stride, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Pool.MaxPool3D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, (uint)Batch, (uint)Stride, inmap.Buffer, outmap.Buffer);
         }
     }
 }

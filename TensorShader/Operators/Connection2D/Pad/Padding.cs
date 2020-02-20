@@ -34,7 +34,7 @@ namespace TensorShader.Operators.Connection2D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(channels, inwidth, inheight, batch)),
-                (ArgumentType.Out, Shape.Map2D(channels, checked(inwidth + pad_left + pad_right), checked(inheight + pad_top + pad_bottom), batch)),
+                (ArgumentType.Out, Shape.Map2D(channels, inwidth + pad_left + pad_right, inheight + pad_top + pad_bottom, batch)),
             };
 
             this.Channels = channels;

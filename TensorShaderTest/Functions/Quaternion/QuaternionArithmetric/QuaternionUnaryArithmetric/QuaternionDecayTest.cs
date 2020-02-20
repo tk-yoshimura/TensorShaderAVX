@@ -22,7 +22,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 4; i++) {
+                for (int i = 0; i < y.Length / 4; i++) {
                     Quaternion z = new Quaternion(x1[i * 4 + 1], x1[i * 4 + 2], x1[i * 4 + 3], x1[i * 4]);
                     Quaternion q = z * (z.Length() * z.Length() / (z.Length() * z.Length() + 1));
 

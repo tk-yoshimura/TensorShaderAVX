@@ -19,7 +19,7 @@ namespace TensorShader.Links.TrivectorArithmetric {
     public class TrivectorNormalize : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public TrivectorNormalize(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

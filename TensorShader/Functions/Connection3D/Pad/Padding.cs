@@ -23,11 +23,12 @@ namespace TensorShader.Functions.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public Padding(int pad)
-            : this(pad, pad, pad, pad, pad, pad){ }
+            : this(pad, pad, pad, pad, pad, pad) { }
 
         /// <summary>コンストラクタ</summary>
         public Padding(int pad_left, int pad_right, int pad_top, int pad_bottom, int pad_front, int pad_rear)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
             this.PadTop = pad_top;
@@ -43,9 +44,9 @@ namespace TensorShader.Functions.Connection3D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map3D(inshape.Channels,
-                                         checked(inshape.Width  + PadLeft  + PadRight ),
-                                         checked(inshape.Height + PadTop   + PadBottom),
-                                         checked(inshape.Depth  + PadFront + PadRear  ),
+                                         inshape.Width + PadLeft + PadRight,
+                                         inshape.Height + PadTop + PadBottom,
+                                         inshape.Depth + PadFront + PadRear,
                                          inshape.Batch);
 
             return new Shape[] { outshape };

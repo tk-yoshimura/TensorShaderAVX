@@ -28,14 +28,14 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field Y => OutField;
 
         /// <summary>入力形状</summary>
-        protected Shape InShape{ private set; get; }
+        protected Shape InShape { private set; get; }
 
         /// <summary>出力形状</summary>
         protected Shape OutShape { private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public Broadcast(Field infield, Field outfield, Shape shape)
-            : base(new Field[]{ infield }, outfield){
+            : base(new Field[] { infield }, outfield) {
             if (shape.Ndim < infield.Shape.Ndim) {
                 throw new ArgumentException(ExceptionMessage.Broadcast(infield.Shape, shape));
             }
@@ -48,7 +48,7 @@ namespace TensorShader.Links.ArrayManipulation {
                     axes_keepdims.Add(i);
                 }
             }
-            for(int i = infield.Shape.Ndim; i < shape.Ndim; i++) {
+            for (int i = infield.Shape.Ndim; i < shape.Ndim; i++) {
                 axes_abandondims.Add(i);
             }
 

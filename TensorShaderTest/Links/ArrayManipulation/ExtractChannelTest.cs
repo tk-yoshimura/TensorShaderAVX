@@ -12,26 +12,20 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Shape outshape = new Shape(ShapeType.Map, 23, 32);
 
             float[] xval = (new float[inshape.Length]).Select((_, idx) => (float)(idx)).Reverse().ToArray();
-
             float[] tval = (new float[outshape.Length]).Select((_, idx) => (float)(idx * 2)).ToArray();
 
-            Tensor xtensor = new Tensor(inshape, xval);
-            Tensor ttensor = new Tensor(outshape, tval);
-
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(inshape, xval);
+            VariableField t = new Tensor(outshape, tval);
 
             Field y = ExtractChannel(x, 13, 23);
 
-            StoreField o = y.Save();
-
             Field err = y - t;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

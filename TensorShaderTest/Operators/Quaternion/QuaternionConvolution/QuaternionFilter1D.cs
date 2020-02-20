@@ -5,9 +5,9 @@ namespace TensorShaderTest.Operators.Quaternion {
     public class QuaternionFilter1D {
         private readonly Quaternion[] val;
 
-        public int InChannels{ private set; get; }
-        public int OutChannels{ private set; get; }
-        public int KernelWidth{ private set; get; }
+        public int InChannels { private set; get; }
+        public int OutChannels { private set; get; }
+        public int KernelWidth { private set; get; }
         public int Length => InChannels * OutChannels * KernelWidth;
 
         public QuaternionFilter1D(int inchannels, int outchannels, int kwidth, Quaternion[] val = null) {
@@ -54,9 +54,9 @@ namespace TensorShaderTest.Operators.Quaternion {
         }
 
         public static bool operator ==(QuaternionFilter1D filter1, QuaternionFilter1D filter2) {
-            if (filter1.KernelWidth  != filter2.KernelWidth)   return false;
-            if (filter1.InChannels  != filter2.InChannels)   return false;
-            if (filter1.OutChannels != filter2.OutChannels)  return false;
+            if (filter1.KernelWidth != filter2.KernelWidth) return false;
+            if (filter1.InChannels != filter2.InChannels) return false;
+            if (filter1.OutChannels != filter2.OutChannels) return false;
 
             return filter1.val.SequenceEqual(filter2.val);
         }

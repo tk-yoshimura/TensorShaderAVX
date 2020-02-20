@@ -22,19 +22,19 @@ namespace TensorShader {
 
         /// <summary>コンストラクタ</summary>
         public Link(Field[] infields, Field outfield) {
-            foreach(Field infield in infields) {
+            foreach (Field infield in infields) {
                 infield.InLinks.Add(this);
             }
 
-            bool enable_backprob = infields.Select((field)=>field.EnableBackprop).Any((b)=>b);
-            
+            bool enable_backprob = infields.Select((field) => field.EnableBackprop).Any((b) => b);
+
             if (outfield.OutLink != null) {
                 throw new ArgumentNullException(nameof(outfield));
             }
 
             outfield.OutLink = this;
             outfield.EnableBackprop = enable_backprob;
-            
+
             this.infields = new List<Field>(infields);
             this.outfield = outfield;
         }

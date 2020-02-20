@@ -28,7 +28,7 @@ namespace TensorShader.Links.TrivectorConvolution {
 
         /// <summary>コンストラクタ</summary>
         public TrivectorDense(Field infield, Field kernelfield, Field outfield)
-            : base(new Field[]{ infield, kernelfield }, outfield) { }
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

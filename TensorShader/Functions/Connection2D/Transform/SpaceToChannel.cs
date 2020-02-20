@@ -36,7 +36,8 @@ namespace TensorShader.Functions.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public SpaceToChannel(int scale)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Scale = scale;
         }
 
@@ -47,7 +48,7 @@ namespace TensorShader.Functions.Connection2D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map2D(
-                checked(inshape.Channels * Scale * Scale),
+                inshape.Channels * Scale * Scale,
                 inshape.Width / Scale,
                 inshape.Height / Scale,
                 inshape.Batch);

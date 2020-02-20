@@ -19,7 +19,7 @@ namespace TensorShader.Links.UnaryArithmetric {
     internal class Floor : UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Floor(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

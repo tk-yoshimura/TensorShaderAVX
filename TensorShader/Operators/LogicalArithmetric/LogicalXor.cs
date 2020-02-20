@@ -3,7 +3,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
     internal class LogicalXor : BinaryArithmetric.BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public LogicalXor(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

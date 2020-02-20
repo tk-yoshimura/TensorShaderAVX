@@ -19,7 +19,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
     public class QuaternionDecay : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public QuaternionDecay(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
@@ -33,7 +33,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(QuaternionDecayGrad(Y.Grad,　X.Value));
+                X.AddGrad(QuaternionDecayGrad(Y.Grad, X.Value));
             }
         }
     }

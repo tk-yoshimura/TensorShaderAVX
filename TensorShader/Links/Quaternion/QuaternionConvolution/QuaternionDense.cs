@@ -28,7 +28,7 @@ namespace TensorShader.Links.QuaternionConvolution {
 
         /// <summary>コンストラクタ</summary>
         public QuaternionDense(Field infield, Field kernelfield, Field outfield)
-            : base(new Field[]{ infield, kernelfield }, outfield) { }
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

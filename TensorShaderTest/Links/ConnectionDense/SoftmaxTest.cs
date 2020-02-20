@@ -21,26 +21,20 @@ namespace TensorShaderTest.Links.ConnectionDense {
                   0, 1, 0,
                   0, 1, 1 };
 
-            Tensor xtensor = new Tensor(Shape.Map0D(channels, batch), xval);
-            Tensor ttensor = new Tensor(Shape.Map0D(channels, batch), tval);
+            ParameterField x = new Tensor(Shape.Map0D(channels, batch), xval);
+            VariableField t = new Tensor(Shape.Map0D(channels, batch), tval);
 
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
-
-            Field y = Softmax(x);
+            StoreField y = Softmax(x);
             Field err = y - t;
-
-            OutputNode ynode = y.Value.Save();
-
-            (Flow flow, Parameters parameters) = Flow.Optimize(err);
+            (Flow flow, _) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] y_actual = ynode.Tensor.State;
+            float[] y_actual = y.State;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal y");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

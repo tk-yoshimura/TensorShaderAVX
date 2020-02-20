@@ -36,7 +36,8 @@ namespace TensorShader.Functions.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public MaxPooling(int stride)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Stride = stride;
         }
 

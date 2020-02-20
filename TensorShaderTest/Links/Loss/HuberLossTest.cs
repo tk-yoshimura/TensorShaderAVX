@@ -14,33 +14,29 @@ namespace TensorShaderTest.Links.Loss {
             int length = 24;
 
             float[] xval = (new float[length]).Select((_, idx) => idx * idx / 144f - 0.5f).ToArray();
-            float[] tval =  (new float[length]).Select((_, idx) => ((float)idx - 12) / 12).ToArray();
+            float[] tval = (new float[length]).Select((_, idx) => ((float)idx - 12) / 12).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
-            ParameterField x = xtensor;
-            VariableField  t = ttensor;
+            StoreField loss = HuberLoss(x, t, delta);
 
-            Field loss = HuberLoss(x, t, delta);
+            StoreField diff = Abs(x - t);
 
-            OutputNode diffnode = Abs(x - t).Value.Save();
-            OutputNode lossnode = loss.Value.Save();
-
-            (Flow flow, Parameters Parameters) = Flow.Optimize(loss);
+            (Flow flow, Parameters parameters) = Flow.Optimize(loss);
 
             flow.Execute();
 
-            float[] diff = diffnode.Tensor.State;
+            float[] diffval = diff.State;
 
-            Assert.IsTrue(diff.Where((v) => v > delta).Count() > 0);
-            Assert.IsTrue(diff.Where((v) => v < delta).Count() > 0);
+            Assert.IsTrue(diffval.Where((v) => v > delta).Count() > 0);
+            Assert.IsTrue(diffval.Where((v) => v < delta).Count() > 0);
 
-            float[] loss_actual = lossnode.Tensor.State;
+            float[] loss_actual = loss.State;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-7f, 1e-5f, $"not equal loss");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

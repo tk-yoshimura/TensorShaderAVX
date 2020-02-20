@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>最大値逆プーリング</summary>
@@ -38,9 +37,7 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor gradmap = tensors[0], valmap = tensors[1], poolmap = tensors[2], outmap = tensors[3];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Pool.MaxUnpool2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, (uint)th, (uint)Stride, gradmap.Buffer, poolmap.Buffer, valmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Pool.MaxUnpool2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, (uint)Stride, gradmap.Buffer, poolmap.Buffer, valmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

@@ -11,29 +11,25 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             const int length = 12, ch = 4, batch = 5;
 
             float[] xval = (new float[length * ch * batch]).Select((_, idx) => (float)idx).ToArray();
-            float[] vval = new float[batch]{ 0, 0.2f, 0.6f, 0.4f, 1 };
+            float[] vval = new float[batch] { 0, 0.2f, 0.6f, 0.4f, 1 };
             float[] yval = (new float[length * ch * batch]).Select((_, idx) => (float)idx).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(new Shape(ShapeType.Map, length, ch, batch), xval);
-            Tensor vtensor = new Tensor(new Shape(ShapeType.Vector, batch), vval);
-            Tensor ytensor = new Tensor(new Shape(ShapeType.Map, length, ch, batch), yval);
-
-            ParameterField x = xtensor;
-            ParameterField v = vtensor;
-            VariableField y = ytensor;
+            ParameterField x = new Tensor(new Shape(ShapeType.Map, length, ch, batch), xval);
+            ParameterField v = new Tensor(new Shape(ShapeType.Vector, batch), vval);
+            VariableField y = new Tensor(new Shape(ShapeType.Map, length, ch, batch), yval);
 
             Field f = BatchwiseMul(x, v);
             Field err = Abs(f - y);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gv_actual = v.GradTensor.State;
+            float[] gv_actual = v.GradState;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-6f, 1e-4f, $"not equal gv");
         }

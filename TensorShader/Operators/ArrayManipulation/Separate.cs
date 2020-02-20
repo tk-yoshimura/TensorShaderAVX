@@ -10,7 +10,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Separate(Shape inshape, Shape[] outshapes, int axis) {
-            if(!CheckShape(inshape, outshapes, axis)){
+            if (!CheckShape(inshape, outshapes, axis)) {
                 throw new ArgumentException(ExceptionMessage.Separate(axis, inshape, outshapes));
             }
 
@@ -21,9 +21,9 @@ namespace TensorShader.Operators.ArrayManipulation {
             this.out_strides = new uint[outshapes.Length];
             this.in_stride = 0;
 
-            for(int i = 0; i < outshapes.Length; i++) {
+            for (int i = 0; i < outshapes.Length; i++) {
                 out_strides[i] = 1;
-                for(int j = 0; j <= axis; j++) {
+                for (int j = 0; j <= axis; j++) {
                     out_strides[i] *= (uint)outshapes[i][j];
                 }
 
@@ -39,7 +39,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
             uint index = 0, slides = (uint)intensor.Length / in_stride;
 
-            for(int i = 1; i < tensors.Length; i++) {
+            for (int i = 1; i < tensors.Length; i++) {
                 Tensor outtensor = tensors[i];
 
                 TensorShaderAvxBackend.ArrayManipulation.PatternCopy(in_stride, index, out_strides[i - 1], 0, out_strides[i - 1],
@@ -57,14 +57,14 @@ namespace TensorShader.Operators.ArrayManipulation {
             int ndim = inshape.Ndim;
             int length = 0;
 
-            foreach(Shape outshape in outshapes) {
+            foreach (Shape outshape in outshapes) {
                 if (outshape.Ndim != ndim) {
                     return false;
                 }
 
                 length += outshape[axis];
 
-                for(int i = 0; i < ndim; i++) {
+                for (int i = 0; i < ndim; i++) {
                     if (i == axis) {
                         continue;
                     }

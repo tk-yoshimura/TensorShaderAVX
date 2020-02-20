@@ -14,7 +14,7 @@ namespace TensorShader.Links.Evaluation.Classify {
 
         /// <summary>コンストラクタ</summary>
         public ClassifyEvaluation(Field xfield, Field tfield, Field yfield)
-            : base(new Field[] { xfield, tfield }, yfield ) {
+            : base(new Field[] { xfield, tfield }, yfield) {
             if (X.Shape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElementsWithIndex(0, X.Shape, ("Ndim", 2)));
             }

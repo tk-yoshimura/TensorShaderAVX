@@ -9,15 +9,15 @@ namespace TensorShaderTest {
         [TestMethod]
         public void MinimumTest() {
             {
-                var v1 = new InputNode(Shape.Scalar());
+                var v1 = new InputNode(Shape.Scalar);
                 var v2 = v1.Save();
 
                 Flow flow = Flow.FromInputs(v1);
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v2];
 
-                intensor.State = new float[]{ 2 };
-                outtensor.State = new float[]{ 255 };
+                intensor.State = new float[] { 2 };
+                outtensor.State = new float[] { 255 };
 
                 flow.Execute();
 
@@ -29,9 +29,9 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar(), new float[] { 1 });
+                Tensor tensor = new Tensor(Shape.Scalar, new float[] { 1 });
 
-                var v1 = new InputNode(Shape.Scalar(), tensor);
+                var v1 = new InputNode(Shape.Scalar, tensor);
                 v1.Update(v1);
 
                 Flow flow = Flow.FromInputs(v1);
@@ -48,7 +48,7 @@ namespace TensorShaderTest {
         [TestMethod]
         public void DirectTest() {
             {
-                var v1 = new InputNode(Shape.Scalar());
+                var v1 = new InputNode(Shape.Scalar);
                 var v2 = -v1;
                 var v3 = -v2;
                 var v4 = v3.Save();
@@ -57,7 +57,7 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v4];
 
-                intensor.State = new float[]{ 2 };
+                intensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -67,9 +67,9 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar());
+                Tensor tensor = new Tensor(Shape.Scalar);
 
-                var v1 = new InputNode(Shape.Scalar(), tensor);
+                var v1 = new InputNode(Shape.Scalar, tensor);
                 var v2 = -v1;
                 var v3 = -v2;
                 var v4 = v3.Save();
@@ -79,7 +79,7 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v4], outtensor2 = flow.OutTensors[v5];
 
-                intensor.State = new float[]{ 2 };
+                intensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -90,9 +90,9 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar());
+                Tensor tensor = new Tensor(Shape.Scalar);
 
-                var v1 = new InputNode(Shape.Scalar(), tensor);
+                var v1 = new InputNode(Shape.Scalar, tensor);
                 var v2 = -v1;
                 var v5 = v2.Update(v1);
                 var v3 = -v2;
@@ -102,7 +102,7 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v4], outtensor2 = flow.OutTensors[v5];
 
-                intensor.State = new float[]{ 2 };
+                intensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -115,7 +115,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In1Out2Test() {
-            var v1 = new InputNode(Shape.Scalar());
+            var v1 = new InputNode(Shape.Scalar);
             var v2 = -v1;
             var v3 = -v2;
             var v4 = v3.Save();
@@ -155,8 +155,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In2Out1Test() {
-            var v1 = new InputNode(Shape.Scalar());
-            var v2 = new InputNode(Shape.Scalar());
+            var v1 = new InputNode(Shape.Scalar);
+            var v2 = new InputNode(Shape.Scalar);
             var v3 = v1 + v2;
             v3 += v1;
 
@@ -167,8 +167,8 @@ namespace TensorShaderTest {
 
             Tensor intensor1 = flow.InTensors[v1], intensor2 = flow.InTensors[v2], outtensor = flow.OutTensors[v5];
 
-            intensor1.State = new float[]{ 2 };
-            intensor2.State = new float[]{ 4 };
+            intensor1.State = new float[] { 2 };
+            intensor2.State = new float[] { 4 };
 
             flow.Execute();
 
@@ -180,7 +180,7 @@ namespace TensorShaderTest {
         [TestMethod]
         public void ResidualConnectionTest() {
             {
-                var v1 = new InputNode(Shape.Scalar()); //x
+                var v1 = new InputNode(Shape.Scalar); //x
                 var v2 = Rcp(v1); // 1/x
                 var v3 = Rcp(v2); // x
                 var v4 = Rcp(v3); // 1/x
@@ -195,7 +195,7 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v10], outtensor2 = flow.OutTensors[v11];
 
-                intensor.State = new float[]{ 2 };
+                intensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -206,9 +206,9 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar());
+                Tensor tensor = new Tensor(Shape.Scalar);
 
-                var v1 = new InputNode(Shape.Scalar(), tensor); //x
+                var v1 = new InputNode(Shape.Scalar, tensor); //x
                 var v2 = Rcp(v1); // 1/x
                 var v3 = Rcp(v2); // x
                 var v4 = Rcp(v3); // 1/x
@@ -219,13 +219,13 @@ namespace TensorShaderTest {
                 var v9 = v8 + v1;  // 2/x + 3x
                 var v10 = v9.Save(); // 2/x + 3x
                 var v11 = v7.Save(); // 1/x + 2x
-                var v12 = v5.Update(v1);
+                _ = v5.Update(v1);
 
                 Flow flow = Flow.FromInputs(v1);
 
                 Tensor outtensor1 = flow.OutTensors[v10], outtensor2 = flow.OutTensors[v11];
 
-                tensor.State = new float[]{ 2 };
+                tensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -237,9 +237,9 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar());
+                Tensor tensor = new Tensor(Shape.Scalar);
 
-                var v1 = new InputNode(Shape.Scalar(), tensor); //x
+                var v1 = new InputNode(Shape.Scalar, tensor); //x
                 var v2 = Rcp(v1); // 1/x
                 var v3 = Rcp(v2); // x
                 var v4 = Rcp(v3); // 1/x
@@ -248,15 +248,15 @@ namespace TensorShaderTest {
                 var v7 = v3 + v6;  // 1/x + 2x
                 var v8 = v7 + v2;  // 2/x + 2x
                 var v9 = v8 + v1;  // 2/x + 3x
-                var v10 = v9.Save(); // 2/x + 3x
+                _ = v9.Save(); // 2/x + 3x
                 var v11 = v7.Save(); // 1/x + 2x
-                var v12 = v5.Update(v1);
+                _ = v5.Update(v1);
 
                 Flow flow = Flow.FromOutputs(v11);
 
                 Tensor outtensor = flow.OutTensors[v11];
 
-                tensor.State = new float[]{ 2 };
+                tensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -267,9 +267,9 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar());
+                Tensor tensor = new Tensor(Shape.Scalar);
 
-                var v1 = new InputNode(Shape.Scalar(), tensor); //x
+                var v1 = new InputNode(Shape.Scalar, tensor); //x
                 var v2 = Rcp(v1); // 1/x
                 var v3 = Rcp(v2); // x
                 var v4 = Rcp(v3); // 1/x
@@ -278,13 +278,13 @@ namespace TensorShaderTest {
                 var v7 = v3 + v6;  // 1/x + 2x
                 var v8 = v7 + v2;  // 2/x + 2x
                 var v9 = v8 + v1;  // 2/x + 3x
-                var v10 = v9.Save(); // 2/x + 3x
-                var v11 = v7.Save(); // 1/x + 2x
+                _ = v9.Save(); // 2/x + 3x
+                _ = v7.Save(); // 1/x + 2x
                 var v12 = v5.Update(v1);
 
                 Flow flow = Flow.FromOutputs(v12);
 
-                tensor.State = new float[]{ 2 };
+                tensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -297,7 +297,7 @@ namespace TensorShaderTest {
         [TestMethod]
         public void Direct2Test() {
             {
-                var v1 = new InputNode(Shape.Scalar());
+                var v1 = new InputNode(Shape.Scalar);
                 var v2 = v1 + 1;
                 var v3 = v2 + 2;
                 var v4 = v3.Save();
@@ -306,7 +306,7 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v4];
 
-                intensor.State = new float[]{ 2 };
+                intensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -316,19 +316,19 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar());
+                Tensor tensor = new Tensor(Shape.Scalar);
 
-                var v1 = new InputNode(Shape.Scalar(), tensor);
+                var v1 = new InputNode(Shape.Scalar, tensor);
                 var v2 = v1 + 1;
                 var v3 = v2 + 2;
                 var v4 = v3.Save();
-                var v5 = v3.Update(v1);
+                _ = v3.Update(v1);
 
                 Flow flow = Flow.FromInputs(v1);
 
                 Tensor outtensor = flow.OutTensors[v4];
 
-                tensor.State = new float[]{ 2 };
+                tensor.State = new float[] { 2 };
 
                 flow.Execute();
 
@@ -342,9 +342,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void CounterTest() {
-            Tensor t = new Tensor(Shape.Scalar(), new float[] { 1 } );
+            Tensor t = new Tensor(Shape.Scalar, new float[] { 1 });
 
-            var v1 = new InputNode(Shape.Scalar(), t);
+            var v1 = new InputNode(Shape.Scalar, t);
             var v2 = v1 + 1;
             var v3 = v2.Update(v1);
 
@@ -366,9 +366,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void DoubleFlowTest() {
-            Tensor t = new Tensor(Shape.Scalar(), new float[] { 1 } );
+            Tensor t = new Tensor(Shape.Scalar, new float[] { 1 });
 
-            var v1 = new InputNode(Shape.Scalar(), t);
+            var v1 = new InputNode(Shape.Scalar, t);
             var v2 = v1 + 1;
             var v3 = v2.Update(v1);
 
@@ -398,13 +398,13 @@ namespace TensorShaderTest {
         [TestMethod]
         public void CrossTest() {
             {
-                Tensor t1 = new Tensor(Shape.Scalar(), new float[] { 1 } );
-                Tensor t2 = new Tensor(Shape.Scalar(), new float[] { 3 } );
+                Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
+                Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
 
-                var v1 = new InputNode(Shape.Scalar(), t1);
+                var v1 = new InputNode(Shape.Scalar, t1);
                 var v2 = v1 + 1;
 
-                var v4 = new InputNode(Shape.Scalar(), t2);
+                var v4 = new InputNode(Shape.Scalar, t2);
                 var v5 = v4 + 1;
 
                 var v3 = v2.Update(v4);
@@ -428,13 +428,13 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Scalar(), new float[] { 1 } );
-                Tensor t2 = new Tensor(Shape.Scalar(), new float[] { 3 } );
+                Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
+                Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
 
-                var v1 = new InputNode(Shape.Scalar(), t1);
+                var v1 = new InputNode(Shape.Scalar, t1);
                 var v2 = v1 + 1;
 
-                var v4 = new InputNode(Shape.Scalar(), t2);
+                var v4 = new InputNode(Shape.Scalar, t2);
 
                 var v3 = v2.Update(v4);
                 var v5 = v4.Update(v1);
@@ -457,12 +457,12 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Scalar(), new float[] { 1 } );
-                Tensor t2 = new Tensor(Shape.Scalar(), new float[] { 3 } );
+                Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
+                Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
 
-                var v1 = new InputNode(Shape.Scalar(), t1);
+                var v1 = new InputNode(Shape.Scalar, t1);
 
-                var v4 = new InputNode(Shape.Scalar(), t2);
+                var v4 = new InputNode(Shape.Scalar, t2);
                 var v5 = v4 + 1;
 
                 var v3 = v1.Update(v4);
@@ -488,17 +488,17 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void ParallelTest() {
-            Tensor t1 = new Tensor(Shape.Scalar(), new float[] { 1 });
-            Tensor t2 = new Tensor(Shape.Scalar(), new float[] { 3 } );
-            Tensor t3 = new Tensor(Shape.Scalar(), new float[] { 5 } );
+            Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
+            Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
+            Tensor t3 = new Tensor(Shape.Scalar, new float[] { 5 });
 
-            var v1 = new InputNode(Shape.Scalar(), t1);
+            var v1 = new InputNode(Shape.Scalar, t1);
             var v2 = v1 + 1;
 
-            var v4 = new InputNode(Shape.Scalar(), t2);
+            var v4 = new InputNode(Shape.Scalar, t2);
             var v5 = v4 + 1;
 
-            var v7 = new InputNode(Shape.Scalar(), t3);
+            var v7 = new InputNode(Shape.Scalar, t3);
             var v8 = v7 + 1;
 
             var v3 = v2.Update(v4);
@@ -529,12 +529,12 @@ namespace TensorShaderTest {
         [TestMethod]
         public void ReshapeTest() {
             float[] u = new float[12] { 7, 10, 2, 5, 11, 3, 8, 9, 4, 12, 1, 6, };
-            Tensor t = new Tensor(Shape.Map0D(3, 4), u );
+            Tensor t = new Tensor(Shape.Map0D(3, 4), u);
 
-            { 
+            {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
                 var v2 = v1 + 1;
-                var v3 = Reshape(v2, Shape.Vector(12)).Save();
+                _ = Reshape(v2, Shape.Vector(12)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();
@@ -543,10 +543,10 @@ namespace TensorShaderTest {
                 Assert.AreEqual(2, flow.BufferCount);
             }
 
-            { 
+            {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
-                var v2 = Reshape(v1, Shape.Vector(12)).Save();
-                var v3 = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
+                _ = Reshape(v1, Shape.Vector(12)).Save();
+                _ = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();
@@ -555,10 +555,10 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.BufferCount);
             }
 
-            { 
+            {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
-                var v2 = Reshape(Reshape(v1, Shape.Vector(12)), Shape.Map0D(2, 6)).Save();
-                var v3 = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
+                _ = Reshape(Reshape(v1, Shape.Vector(12)), Shape.Map0D(2, 6)).Save();
+                _ = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();
@@ -567,11 +567,11 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.BufferCount);
             }
 
-            { 
+            {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
                 var v2 = v1 + 1;
-                var v3 = Reshape(v2, Shape.Vector(12)).Save();
-                var v4 = Reshape(v2, Shape.Map1D(2, 3, 2)).Save();
+                _ = Reshape(v2, Shape.Vector(12)).Save();
+                _ = Reshape(v2, Shape.Map1D(2, 3, 2)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();

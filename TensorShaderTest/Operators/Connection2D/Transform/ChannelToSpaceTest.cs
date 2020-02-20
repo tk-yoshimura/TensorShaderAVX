@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -15,8 +15,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int outchannels in new int[] { 3, 5 }) {
                     foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                            foreach (int inheight in new int[] { 5, 7, 11 }) {
+                        foreach (int inheight in new int[] { 5, 7, 11 }) {
+                            foreach (int inwidth in new int[] { 5, 7, 11 }) {
                                 int outwidth = inwidth * scale, outheight = inheight * scale, inchannels = outchannels * scale * scale;
 
                                 float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -60,17 +60,12 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ChannelToSpace ope = new ChannelToSpace(inwidth, inheight, inchannels, scale);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/channel_to_space_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
         public static Map2D Reference(Map2D x, int scale) {
@@ -101,43 +96,6 @@ namespace TensorShaderTest.Operators.Connection2D {
                     }
                 }
 
-            }
-
-            return y;
-        }
-
-        public static Map2D OptimizedReference(Map2D x, int scale) {
-            int inchannels = x.Channels, batch = x.Batch;
-            if (inchannels % (scale * scale) != 0) {
-                throw new ArgumentException(nameof(scale));
-            }
-
-            int inw = x.Width, inh = x.Height, outw = inw * scale, outh = inh * scale;
-            int outchannels = inchannels / (scale * scale);
-
-            Map2D y = new Map2D(outchannels, outw, outh, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ix, iy = 0; iy < inh; iy++) {
-                    for (ix = 0; ix < inw; ix++) {
-                        int inmap_idx = (ix + iy * inw) * inchannels + th * inw * inh * inchannels;
-                        int outmap_org = (ix * scale + iy * inw * scale * scale) * outchannels + th * outw * outh * outchannels;
-
-                        for (int ky = 0; ky < scale; ky++) {
-                            int outmap_idx = outmap_org;
-
-                            for (int i = 0; i < scale * outchannels; i++) {
-                                y[outmap_idx] = x[inmap_idx];
-
-                                inmap_idx++;
-                                outmap_idx++;
-                            }
-
-                            outmap_org += inw * scale * outchannels;
-                        }
-
-                    }
-                }
             }
 
             return y;
@@ -230,40 +188,6 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{scale},{inwidth},{inheight}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int outchannels in new int[] { 3, 5 }) {
-                    foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                            foreach (int inheight in new int[] { 5, 7, 11 }) {
-                                int outwidth = inwidth * scale, outheight = inheight * scale, inchannels = outchannels * scale * scale;
-
-                                float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-
-                                Map2D x = new Map2D(inchannels, inwidth, inheight, batch, xval);
-
-                                Map2D y = Reference(x, scale);
-                                Map2D y_optimized = OptimizedReference(x, scale);
-
-                                float[] y_expect = y.ToArray();
-                                float[] y_actual = y_optimized.ToArray();
-
-                                AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{scale},{inwidth},{inheight},{batch}");
-
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{scale},{inwidth},{inheight},{batch}");
-
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

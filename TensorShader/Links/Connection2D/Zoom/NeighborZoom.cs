@@ -27,7 +27,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public NeighborZoom(Field infield, Field outfield)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
         }
 
         /// <summary>順伝搬</summary>
@@ -42,7 +42,7 @@ namespace TensorShader.Links.Connection2D {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(AveragePooling2D(Y.Grad, stride:2));
+                X.AddGrad(AveragePooling2D(Y.Grad, stride: 2));
             }
         }
     }

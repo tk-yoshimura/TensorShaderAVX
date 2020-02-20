@@ -44,8 +44,9 @@ namespace TensorShader.Functions.TrivectorConvolution {
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorKernelProductDense(Shape inshape, Shape outshape, bool transpose) :
-            base(inputs: 3, outputs: 1, allow_resubstitution : false) {
+        public TrivectorKernelProductDense(Shape inshape, Shape outshape, bool transpose)
+            : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 2), ("Type", ShapeType.Map)));
             }
@@ -79,11 +80,11 @@ namespace TensorShader.Functions.TrivectorConvolution {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0] != InShape) {
-                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index:0, inshapes[0], InShape));
+                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index: 0, inshapes[0], InShape));
             }
 
             if (inshapes[1] != OutShape) {
-                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index:1, inshapes[1], OutShape));
+                throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index: 1, inshapes[1], OutShape));
             }
         }
 

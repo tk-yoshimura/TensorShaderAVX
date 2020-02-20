@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection3D {
     /// <summary>トリミング</summary>
@@ -35,11 +34,11 @@ namespace TensorShader.Operators.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int inwidth, int inheight, int indepth, int channels, int trim_left, int trim_right, int trim_top, int trim_bottom, int trim_front, int trim_rear, int batch = 1) {
-            int outwidth  = inwidth - trim_left - trim_right;
+            int outwidth = inwidth - trim_left - trim_right;
             int outheight = inheight - trim_top - trim_bottom;
-            int outdepth  = indepth - trim_front - trim_rear;
+            int outdepth = indepth - trim_front - trim_rear;
 
-            if (trim_left < 0 || trim_right < 0 || trim_top < 0 || trim_bottom < 0 || trim_front < 0 || trim_rear < 0)  {
+            if (trim_left < 0 || trim_right < 0 || trim_top < 0 || trim_bottom < 0 || trim_front < 0 || trim_rear < 0) {
                 throw new ArgumentException($"{nameof(trim_left)}, {nameof(trim_right)}, {nameof(trim_top)}, {nameof(trim_bottom)}");
             }
 
@@ -55,7 +54,7 @@ namespace TensorShader.Operators.Connection3D {
             this.TrimTop = trim_top;
             this.TrimBottom = trim_bottom;
             this.TrimFront = trim_front;
-            this.TrimRear  = trim_rear;
+            this.TrimRear = trim_rear;
 
             this.Batch = batch;
         }
@@ -66,12 +65,10 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Trimming.Trimming3D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth, 
-                                                           (uint)Batch, (uint)th, 
-                                                           (uint)TrimLeft, (uint)TrimRight, (uint)TrimTop, (uint)TrimBottom, (uint)TrimFront, (uint)TrimRear,
-                                                           inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Trimming.Trimming3D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth,
+                                                        (uint)Batch,
+                                                        (uint)TrimLeft, (uint)TrimRight, (uint)TrimTop, (uint)TrimBottom, (uint)TrimFront, (uint)TrimRear,
+                                                        inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection3D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
@@ -14,12 +14,12 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             Random rd = new Random(1234);
 
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int channels in new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }) {
+            foreach (int batch in new int[] { 1, 2, 3 }) {
+                foreach (int channels in new int[] { 1, 2, 3, 5 }) {
                     foreach (int stride in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                            foreach (int inheight in new int[] { 5, 7, 11 }) {
-                                foreach (int indepth in new int[] { 5, 7, 11 }) {
+                        foreach (int indepth in new int[] { stride, 5, 7, 8, 11 }) {
+                            foreach (int inheight in new int[] { stride, 5, 7, 8, 11 }) {
+                                foreach (int inwidth in new int[] { stride, 5, 7, 8, 11 }) {
                                     int outwidth = inwidth / stride, outheight = inheight / stride, outdepth = indepth / stride;
 
                                     float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_) => (float)rd.NextDouble()).ToArray();
@@ -55,7 +55,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                                     AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{stride},{inwidth},{inheight},{indepth},{batch}");
 
-                                    Console.WriteLine($"pass: {channels},{stride},{inwidth},{inheight},{batch}");
+                                    Console.WriteLine($"pass: {channels},{stride},{inwidth},{inheight},{indepth},{batch}");
 
                                 }
                             }
@@ -124,27 +124,22 @@ namespace TensorShaderTest.Operators.Connection3D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 64, inheight = 64, indepth = 64, channels = 32, stride = 2;
+            int inwidth = 64, inheight = 64, indepth = 64, channels = 32, stride = 2, batch = 4;
             int outwidth = inwidth / stride, outheight = inheight / stride, outdepth = inheight / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth));
-            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth));
-            OverflowCheckedTensor gx_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth));
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor gx_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
 
-            MaxUnpooling ope = new MaxUnpooling(inwidth, inheight, indepth, channels, stride);
+            MaxUnpooling ope = new MaxUnpooling(inwidth, inheight, indepth, channels, stride, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/maxunpool_3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
-            ope.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
-            ope.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
-            ope.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

@@ -14,29 +14,23 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             float[] x2val = (new float[length]).Select((_, idx) => (float)idx + 1).Reverse().ToArray();
             float[] x3val = (new float[length]).Select((_, idx) => (float)idx % 5).ToArray();
 
-            float[] yval =  (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
+            float[] yval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            Tensor x1tensor = new Tensor(Shape.Vector(length), x1val);
-            Tensor x2tensor = new Tensor(Shape.Vector(length), x2val);
-            Tensor x3tensor = new Tensor(Shape.Vector(length), x3val);
-
-            Tensor ytensor =  new Tensor(Shape.Vector(length), yval);
-
-            ParameterField x1 = x1tensor;
-            ParameterField x2 = x2tensor;
-            ParameterField x3 = x3tensor;
-            VariableField y_actual = ytensor;
+            ParameterField x1 = new Tensor(Shape.Vector(length), x1val);
+            ParameterField x2 = new Tensor(Shape.Vector(length), x2val);
+            ParameterField x3 = new Tensor(Shape.Vector(length), x3val);
+            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
             Field y_expect = Sum(x1, x2, x3);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx1_actual = x1.GradTensor.State;
-            float[] gx2_actual = x2.GradTensor.State;
-            float[] gx3_actual = x3.GradTensor.State;
+            float[] gx1_actual = x1.GradState;
+            float[] gx2_actual = x2.GradState;
+            float[] gx3_actual = x3.GradState;
 
             AssertError.Tolerance(gx_expect, gx1_actual, 1e-7f, 1e-5f, $"not equal gx1");
 

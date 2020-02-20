@@ -47,22 +47,18 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
                   0
             };
 
-            Tensor xtensor = new Tensor(Shape.Map0D(channels, batch), xval);
-            Tensor ttensor = new Tensor(Shape.Vector(batch), tval);
+            VariableField x = new Tensor(Shape.Map0D(channels, batch), xval);
+            VariableField t = new Tensor(Shape.Vector(batch), tval);
 
-            VariableField x = xtensor;
-            VariableField t = ttensor;
+            StoreField matches = Matches(x, t);
 
-            Field matches = Matches(x, t);
-            OutputNode matches_node = matches.Value.Save();
-
-            Flow flow = Flow.Inference(matches_node);
+            (Flow flow, _) = Flow.Inference(matches);
 
             flow.Execute();
 
-            float[] matches_actual = matches_node.Tensor.State;
+            float[] matches_actual = matches.State;
 
-            Assert.AreEqual(Shape.Vector(channels), matches_node.Shape);
+            Assert.AreEqual(Shape.Vector(channels), matches.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 1, 2 }, matches_actual);
         }
     }

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection1D {
     /// <summary>チャネルごとの1次元逆畳み込み</summary>
@@ -12,19 +10,13 @@ namespace TensorShader.Operators.Connection1D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution(int outwidth, int channels, int kwidth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
+        public ChannelwiseDeconvolution(int inwidth, int channels, int kwidth, int batch = 1) {
 
-            int inwidth = (outwidth - kwidth) / stride + 1;
+            int outwidth = inwidth + kwidth - 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(channels, inwidth, batch)),
@@ -34,7 +26,6 @@ namespace TensorShader.Operators.Connection1D {
 
             this.Channels = channels;
             this.KernelWidth = kwidth;
-            this.Stride = stride;
             this.Batch = batch;
         }
 
@@ -44,17 +35,15 @@ namespace TensorShader.Operators.Connection1D {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Convolution.ChannelwiseDeconvolution1D((uint)Channels,
-                                                                        (uint)outmap.Width, (uint)Batch, (uint)th,
-                                                                        (uint)KernelWidth, (uint)Stride,
-                                                                        inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Convolution.ChannelwiseDeconvolution1D((uint)Channels,
+                                                                           (uint)inmap.Width, (uint)Batch,
+                                                                           (uint)KernelWidth,
+                                                                           inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor infilter, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, infilter, outmap });
+            Execute(new Tensor[] { inmap, infilter, outmap });
         }
     }
 }

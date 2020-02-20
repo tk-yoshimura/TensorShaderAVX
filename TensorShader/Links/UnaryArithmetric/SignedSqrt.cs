@@ -19,7 +19,7 @@ namespace TensorShader.Links.UnaryArithmetric {
     internal class SignedSqrt : UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public SignedSqrt(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

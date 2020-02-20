@@ -5,11 +5,11 @@ namespace TensorShaderTest.Operators.Connection3D {
     public class Map3D {
         private readonly double[] val;
 
-        public int Channels{ private set; get; }
-        public int Width{ private set; get; }
-        public int Height{ private set; get; }
+        public int Channels { private set; get; }
+        public int Width { private set; get; }
+        public int Height { private set; get; }
         public int Depth { private set; get; }
-        public int Batch{ private set; get; }
+        public int Batch { private set; get; }
         public int Length => Channels * Width * Height * Depth * Batch;
 
         public Map3D(int channels, int width, int height, int depth, int batch, float[] val = null) {
@@ -24,9 +24,9 @@ namespace TensorShaderTest.Operators.Connection3D {
             }
 
             this.val = (val is null) ? new double[length] : val.Select((v) => (double)v).ToArray();
-            this.Width  = width;
+            this.Width = width;
             this.Height = height;
-            this.Depth  = depth;
+            this.Depth = depth;
             this.Channels = channels;
             this.Batch = batch;
         }
@@ -58,11 +58,11 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         public static bool operator ==(Map3D map1, Map3D map2) {
-            if (map1.Width    != map2.Width)     return false;
-            if (map1.Height   != map2.Height)    return false;
-            if (map1.Depth    != map2.Depth)     return false;
-            if (map1.Channels != map2.Channels)  return false;
-            if (map1.Batch    != map2.Batch)     return false;
+            if (map1.Width != map2.Width) return false;
+            if (map1.Height != map2.Height) return false;
+            if (map1.Depth != map2.Depth) return false;
+            if (map1.Channels != map2.Channels) return false;
+            if (map1.Batch != map2.Batch) return false;
 
             return map1.val.SequenceEqual(map2.val);
         }
@@ -80,7 +80,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         public float[] ToArray() {
-            return val.Select((v)=>(float)v).ToArray();
+            return val.Select((v) => (float)v).ToArray();
         }
     }
 }

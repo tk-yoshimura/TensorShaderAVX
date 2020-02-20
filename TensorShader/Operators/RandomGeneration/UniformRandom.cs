@@ -3,7 +3,7 @@ using System;
 namespace TensorShader.Operators.RandomGeneration {
     /// <summary>一様乱数を生成(XorShift)</summary>
     /// <remarks>値域 : [0, 1)</remarks>
-    internal class UniformRandom : RandomGeneration{
+    internal class UniformRandom : RandomGeneration {
         /// <summary>コンストラクタ</summary>
         public UniformRandom(Shape shape, Random random)
             : base(shape, random) { }

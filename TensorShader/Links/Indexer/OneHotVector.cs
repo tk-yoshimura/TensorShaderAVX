@@ -28,7 +28,7 @@ namespace TensorShader.Links.Indexer {
 
         /// <summary>コンストラクタ</summary>
         public OneHotVector(Field infield, Field outfield, int channels)
-            : base(new Field[]{ infield }, outfield){
+            : base(new Field[] { infield }, outfield) {
             this.Channels = channels;
         }
 

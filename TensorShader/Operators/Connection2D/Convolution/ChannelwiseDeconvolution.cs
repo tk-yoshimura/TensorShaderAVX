@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>チャネルごとの2次元逆畳み込み</summary>
@@ -16,20 +14,14 @@ namespace TensorShader.Operators.Connection2D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelHeight { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution(int outwidth, int outheight, int channels, int kwidth, int kheight, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
+        public ChannelwiseDeconvolution(int inwidth, int inheight, int channels, int kwidth, int kheight, int batch = 1) {
 
-            int inwidth = (outwidth - kwidth) / stride + 1;
-            int inheight = (outheight - kheight) / stride + 1;
+            int outwidth = inwidth + kwidth - 1;
+            int outheight = inheight + kheight - 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(channels, inwidth, inheight, batch)),
@@ -40,7 +32,6 @@ namespace TensorShader.Operators.Connection2D {
             this.Channels = channels;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.Stride = stride;
             this.Batch = batch;
         }
 
@@ -50,17 +41,15 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Convolution.ChannelwiseDeconvolution2D((uint)Channels,
-                                                                              (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, (uint)th,
-                                                                              (uint)KernelWidth, (uint)KernelHeight, (uint)Stride,
-                                                                              inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Convolution.ChannelwiseDeconvolution2D((uint)Channels,
+                                                                           (uint)inmap.Width, (uint)inmap.Height, (uint)Batch,
+                                                                           (uint)KernelWidth, (uint)KernelHeight,
+                                                                           inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor infilter, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, infilter, outmap });
+            Execute(new Tensor[] { inmap, infilter, outmap });
         }
     }
 }

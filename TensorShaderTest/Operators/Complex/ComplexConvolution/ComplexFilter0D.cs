@@ -5,8 +5,8 @@ namespace TensorShaderTest.Operators.Complex {
     public class ComplexFilter0D {
         private readonly System.Numerics.Complex[] val;
 
-        public int InChannels{ private set; get; }
-        public int OutChannels{ private set; get; }
+        public int InChannels { private set; get; }
+        public int OutChannels { private set; get; }
         public int Length => InChannels * OutChannels;
 
         public ComplexFilter0D(int inchannels, int outchannels, System.Numerics.Complex[] val = null) {
@@ -52,8 +52,8 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         public static bool operator ==(ComplexFilter0D filter1, ComplexFilter0D filter2) {
-            if (filter1.InChannels  != filter2.InChannels)   return false;
-            if (filter1.OutChannels != filter2.OutChannels)  return false;
+            if (filter1.InChannels != filter2.InChannels) return false;
+            if (filter1.OutChannels != filter2.OutChannels) return false;
 
             return filter1.val.SequenceEqual(filter2.val);
         }

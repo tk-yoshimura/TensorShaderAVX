@@ -16,34 +16,27 @@ namespace TensorShaderTest.Links.Trivector {
 
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length / 3), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length / 3), yval);
-            Tensor ztensor = new Tensor(Shape.Vector(length / 3), zval);
-
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            ParameterField z = ztensor;
-            VariableField t_actual = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length / 3), xval);
+            ParameterField y = new Tensor(Shape.Vector(length / 3), yval);
+            ParameterField z = new Tensor(Shape.Vector(length / 3), zval);
+            VariableField t_actual = new Tensor(Shape.Vector(length), tval);
 
             Field t_expect = TrivectorCast(x, y, z);
-            Field err = t_expect - t_actual;
-            StoreField errnode = err.Save();
+            StoreField err = t_expect - t_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gy_actual = y.GradTensor.State;
+            float[] gy_actual = y.GradState;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
 
-            float[] gz_actual = z.GradTensor.State;
+            float[] gz_actual = z.GradState;
 
             AssertError.Tolerance(gz_expect, gz_actual, 1e-7f, 1e-5f, $"not equal gz");
         }

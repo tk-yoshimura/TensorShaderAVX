@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Indexer {
@@ -32,7 +31,7 @@ namespace TensorShader.Operators.Indexer {
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, outmap });
+            Execute(new Tensor[] { inmap, outmap });
         }
     }
 }

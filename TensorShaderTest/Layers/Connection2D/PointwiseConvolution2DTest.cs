@@ -11,7 +11,7 @@ namespace TensorShaderTest.Layers {
 
             VariableField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-            Layer layer = new PointwiseConvolution2D(inchannels, outchannels, use_bias:true, "conv");
+            Layer layer = new PointwiseConvolution2D(inchannels, outchannels, use_bias: true, "conv");
 
             Field y = layer.Forward(x);
 

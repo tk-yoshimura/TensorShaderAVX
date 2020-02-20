@@ -34,7 +34,7 @@ namespace TensorShader.Links.Quaternion {
 
         /// <summary>コンストラクタ</summary>
         public QuaternionCast(Field realfield, Field imagifield, Field imagjfield, Field imagkfield, Field outfield)
-            : base(new Field[] { realfield, imagifield, imagjfield, imagkfield }, outfield ) { }
+            : base(new Field[] { realfield, imagifield, imagjfield, imagkfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

@@ -48,29 +48,25 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
                   0
             };
 
-            Tensor xtensor = new Tensor(Shape.Map0D(channels, batch), xval);
-            Tensor ttensor = new Tensor(Shape.Vector(batch), tval);
+            VariableField x = new Tensor(Shape.Map0D(channels, batch), xval);
+            VariableField t = new Tensor(Shape.Vector(batch), tval);
 
-            VariableField x = xtensor;
-            VariableField t = ttensor;
+            StoreField mat = ConfusionMatrix(x, t);
+            StoreField exp = Sum(mat, Axis.ConfusionMatrix.Actual);
+            StoreField act = Sum(mat, Axis.ConfusionMatrix.Expect);
 
-            Field mat = ConfusionMatrix(x, t);
-            OutputNode matnode = mat.Value.Save();
-            OutputNode expnode = Sum(mat, axes:new int[]{ Axis.ConfusionMatrix.Actual }).Value.Save();
-            OutputNode actnode = Sum(mat, axes:new int[]{ Axis.ConfusionMatrix.Expect }).Value.Save();
-
-            Flow flow = Flow.Inference(matnode, expnode, actnode);
+            (Flow flow, _) = Flow.Inference(mat, exp, act);
 
             flow.Execute();
 
-            float[] mat_actual = matnode.Tensor.State;
+            float[] mat_actual = mat.State;
 
             Assert.AreEqual(channels * channels, mat_actual.Length);
-            Assert.AreEqual(2, matnode.Shape.Ndim);
+            Assert.AreEqual(2, mat.Shape.Ndim);
             Assert.AreEqual(batch, mat_actual.Sum());
             CollectionAssert.AreEqual(mat_expect, mat_actual);
-            CollectionAssert.AreEqual(new float[] { 5, 5, 6 }, expnode.Tensor.State);
-            CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, actnode.Tensor.State);
+            CollectionAssert.AreEqual(new float[] { 5, 5, 6 }, exp.State);
+            CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, act.State);
         }
 
         float[] mat_expect =

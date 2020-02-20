@@ -51,7 +51,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public ZeroPadding(Field infield, Field outfield, int pad_left, int pad_right, int pad_top, int pad_bottom)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
             this.PadTop = pad_top;

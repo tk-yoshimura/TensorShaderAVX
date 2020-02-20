@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection1D {
     /// <summary>トリミング</summary>
@@ -25,7 +24,7 @@ namespace TensorShader.Operators.Connection1D {
         public Trimming(int inwidth, int channels, int trim_left, int trim_right, int batch = 1) {
             int outwidth = inwidth - trim_left - trim_right;
 
-            if (trim_left < 0 || trim_right < 0)  {
+            if (trim_left < 0 || trim_right < 0) {
                 throw new ArgumentException($"{nameof(trim_left)}, {nameof(trim_right)}");
             }
 
@@ -48,10 +47,8 @@ namespace TensorShader.Operators.Connection1D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Trimming.Trimming1D((uint)Channels, (uint)outmap.Width, (uint)Batch, (uint)th, 
-                                                           (uint)TrimLeft, (uint)TrimRight, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Trimming.Trimming1D((uint)Channels, (uint)outmap.Width, (uint)Batch,
+                                                        (uint)TrimLeft, (uint)TrimRight, inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

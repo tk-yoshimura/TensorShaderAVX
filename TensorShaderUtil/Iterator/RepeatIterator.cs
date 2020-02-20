@@ -7,20 +7,21 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>コンストラクタ</summary>
         public RepeatIterator(int num_batches, int counts)
-            : base(num_batches, counts){
+            : base(num_batches, counts) {
             this.pos = 0;
         }
 
         /// <summary>次のインデクサ</summary>
         public override int[] Next() {
-            if (pos + NumBatches > Counts) {
-                Epoch++;
+            IncreaseIteration();
+
+            if (pos + NumBatches >= Counts) {
+                IncreaseEpoch();
             }
 
             int[] batch_indexes = (new int[NumBatches]).Select((_, idx) => (pos + idx) % Counts).ToArray();
 
             pos = (pos + NumBatches) % Counts;
-            Iteration++;
 
             return batch_indexes;
         }

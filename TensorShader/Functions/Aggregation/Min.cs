@@ -9,8 +9,8 @@ namespace TensorShader {
                 axes = (new int[x.Shape.Ndim]).Select((_, dim) => dim).ToArray();
             }
 
-            foreach(int axis in axes.OrderBy((val) => val)) {
-                if(x.Shape[axis] == 1)  continue;
+            foreach (int axis in axes.OrderBy((val) => val)) {
+                if (x.Shape[axis] == 1) continue;
 
                 Function function = new Functions.Aggregation.Min(axis);
 
@@ -20,7 +20,7 @@ namespace TensorShader {
             if (!keepdims) {
                 List<int> lengths = ((int[])x.Shape).ToList();
 
-                foreach(int axis in axes.OrderByDescending((val) => val)) {
+                foreach (int axis in axes.OrderByDescending((val) => val)) {
                     lengths.RemoveAt(axis);
                 }
 
@@ -38,8 +38,8 @@ namespace TensorShader {
                 axes = (new int[x.Shape.Ndim]).Select((_, dim) => dim).ToArray();
             }
 
-            foreach(int axis in axes.OrderBy((val) => val)) {
-                if(x.Shape[axis] == 1)  continue;
+            foreach (int axis in axes.OrderBy((val) => val)) {
+                if (x.Shape[axis] == 1) continue;
 
                 Function function = new Functions.Aggregation.Min(axis);
 
@@ -53,7 +53,7 @@ namespace TensorShader {
             if (!keepdims) {
                 List<int> lengths = ((int[])x.Shape).ToList();
 
-                foreach(int axis in axes.OrderByDescending((val) => val)) {
+                foreach (int axis in axes.OrderByDescending((val) => val)) {
                     lengths.RemoveAt(axis);
                 }
 
@@ -78,7 +78,7 @@ namespace TensorShader.Functions.Aggregation {
 
             Tensor intensor = intensors[0], outtensor = outtensors[0];
 
-            return (new Tensor[]{ intensor, outtensor }, new Operators.Aggregation.Min(intensor.Shape, Axis));
+            return (new Tensor[] { intensor, outtensor }, new Operators.Aggregation.Min(intensor.Shape, Axis));
         }
     }
 }

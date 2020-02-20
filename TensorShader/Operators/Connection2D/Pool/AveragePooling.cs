@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>平均値プーリング</summary>
@@ -36,9 +35,7 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Pool.AveragePool2D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, (uint)th, (uint)Stride, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Pool.AveragePool2D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, (uint)Stride, inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

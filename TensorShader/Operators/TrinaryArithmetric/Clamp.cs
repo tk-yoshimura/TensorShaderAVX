@@ -3,7 +3,7 @@ namespace TensorShader.Operators.TrinaryArithmetric {
     internal class Clamp : TrinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Clamp(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -16,10 +16,10 @@ namespace TensorShader.Operators.TrinaryArithmetric {
     }
 
     /// <summary>Clamp</summary>
-    internal class ClampConstant : TrinaryConstantArithmetric {
+    internal class ClampFactor : TrinaryBiFactorArithmetric {
         /// <summary>コンストラクタ</summary>
-        public ClampConstant(Shape shape)
-            : base(shape){ }
+        public ClampFactor(Shape shape)
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -27,7 +27,23 @@ namespace TensorShader.Operators.TrinaryArithmetric {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], inmap3 = tensors[2], outmap = tensors[3];
 
-            TensorShaderAvxBackend.Elementwise.ClampConstant((uint)Shape.Length, inmap2.Buffer[0], inmap3.Buffer[0], inmap1.Buffer, outmap.Buffer);
+            TensorShaderAvxBackend.Elementwise.ClampFactor((uint)Shape.Length, inmap2.Buffer, inmap3.Buffer, inmap1.Buffer, outmap.Buffer);
+        }
+    }
+
+    /// <summary>Clamp</summary>
+    internal class ClampConstant : TrinaryBiConstantArithmetric {
+        /// <summary>コンストラクタ</summary>
+        public ClampConstant(float cmin, float cmax, Shape shape)
+            : base(cmin, cmax, shape) { }
+
+        /// <summary>操作を実行</summary>
+        public override void Execute(params Tensor[] tensors) {
+            CheckArgumentShapes(tensors);
+
+            Tensor inmap = tensors[0], outmap = tensors[1];
+
+            TensorShaderAvxBackend.Elementwise.ClampConstant((uint)Shape.Length, Constant1, Constant2, inmap.Buffer, outmap.Buffer);
         }
     }
 }

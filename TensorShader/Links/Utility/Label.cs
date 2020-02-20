@@ -14,7 +14,7 @@ namespace TensorShader {
 
 namespace TensorShader.Links.Utility {
     /// <summary>ラベル</summary>
-    public class Label : Link{
+    public class Label : Link {
         private readonly string name;
 
         /// <summary>入力項</summary>

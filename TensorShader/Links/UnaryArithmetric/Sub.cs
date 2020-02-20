@@ -40,7 +40,8 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public LeftSub(Field infield, Field outfield, float c)
-            : base(infield, outfield ) {
+            : base(infield, outfield) {
+
             this.Constant = c;
         }
 
@@ -69,6 +70,7 @@ namespace TensorShader.Links.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public RightSub(Field infield, Field outfield, float c)
             : base(infield, outfield) {
+
             this.Constant = c;
         }
 

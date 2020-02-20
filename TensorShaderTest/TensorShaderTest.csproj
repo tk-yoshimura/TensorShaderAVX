@@ -49,20 +49,13 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="TensorShader, Version=4.0.7221.27161, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TensorShader\bin\x64\Debug\TensorShader.dll</HintPath>
-    </Reference>
-    <Reference Include="TensorShaderAvxBackend, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertError.cs" />
     <Compile Include="Functions\Aggregation\MeanTest.cs" />
     <Compile Include="Functions\BinaryArithmetric\Arctan2Test.cs" />
     <Compile Include="Functions\BinaryArithmetric\LimitAbsTest.cs" />
+    <Compile Include="Functions\BinaryArithmetric\CustomTest.cs" />
     <Compile Include="Functions\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexDecayTest.cs" />
     <Compile Include="Functions\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexNormalizeTest.cs" />
     <Compile Include="Functions\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexZReluTest.cs" />
@@ -96,6 +89,8 @@
     <Compile Include="Functions\RandomGeneration\BinaryRandomTest.cs" />
     <Compile Include="Functions\RandomGeneration\UniformRandomTest.cs" />
     <Compile Include="Functions\RandomGeneration\NormalRandomTest.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\ClampTest.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\CustomTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCrossTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorNormalizeTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorSquashTest.cs" />
@@ -105,6 +100,7 @@
     <Compile Include="Functions\Trivector\TrivectorCast\TrivectorYTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorCast\TrivectorXTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\CbrtTest.cs" />
+    <Compile Include="Functions\UnaryArithmetric\CustomTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\SoftPlusTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\EluTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\LeakyReluTest.cs" />
@@ -225,13 +221,19 @@
     <Compile Include="Links\Connection1D\Convolution\PointwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection1D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Links\Connection1D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Links\Connection1D\Pool\StridePoolingTest.cs" />
     <Compile Include="Links\Connection1D\Pool\AveragePoolingTest.cs" />
     <Compile Include="Links\Connection1D\Pool\MaxPoolingTest.cs" />
     <Compile Include="Links\Connection1D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Links\Connection1D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Links\Connection1D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Links\Connection1D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Links\Connection1D\Trim\TrimmingTest.cs" />
-    <Compile Include="Links\Connection1D\Zoom\BilinearZoomTest.cs" />
+    <Compile Include="Links\Connection1D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Links\Connection1D\Zoom\NeighborZoomTest.cs" />
+    <Compile Include="Links\Connection2D\Pool\StridePoolingTest.cs" />
+    <Compile Include="Links\Connection2D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Links\Connection2D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ConvolutionTest.cs" />
@@ -240,12 +242,15 @@
     <Compile Include="Links\Connection3D\Convolution\PointwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Links\Connection3D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Links\Connection3D\Pool\StridePoolingTest.cs" />
     <Compile Include="Links\Connection3D\Pool\AveragePoolingTest.cs" />
     <Compile Include="Links\Connection3D\Pool\MaxPoolingTest.cs" />
     <Compile Include="Links\Connection3D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Links\Connection3D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Links\Connection3D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Links\Connection3D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Links\Connection3D\Trim\TrimmingTest.cs" />
-    <Compile Include="Links\Connection3D\Zoom\BilinearZoomTest.cs" />
+    <Compile Include="Links\Connection3D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Links\Connection3D\Zoom\NeighborZoomTest.cs" />
     <Compile Include="Links\Connection2D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Links\Connection2D\Convolution\ChannelwiseDeconvolutionTest.cs" />
@@ -261,7 +266,7 @@
     <Compile Include="Links\Connection2D\Transform\ChannelToSpaceTest.cs" />
     <Compile Include="Links\Connection2D\Trim\TrimmingTest.cs" />
     <Compile Include="Links\Connection2D\Zoom\NeighborZoomTest.cs" />
-    <Compile Include="Links\Connection2D\Zoom\BilinearZoomTest.cs" />
+    <Compile Include="Links\Connection2D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Links\ConnectionDense\DenseTest.cs" />
     <Compile Include="Links\ConnectionDense\SoftmaxTest.cs" />
     <Compile Include="Links\FactorArithmetric\SignedPowTest.cs" />
@@ -308,6 +313,7 @@
     <Compile Include="Links\RandomGeneration\BinaryRandomTest.cs" />
     <Compile Include="Links\RandomGeneration\NormalRandomTest.cs" />
     <Compile Include="Links\RandomGeneration\UniformRandomTest.cs" />
+    <Compile Include="Links\TrinaryArithmetric\ClampTest.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCrossTest.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorNormalizeTest.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorSquashTest.cs" />
@@ -324,6 +330,7 @@
     <Compile Include="Links\UnaryArithmetric\AbsTest.cs" />
     <Compile Include="Links\UnaryArithmetric\ArctanTest.cs" />
     <Compile Include="Links\UnaryArithmetric\ArcsinTest.cs" />
+    <Compile Include="Links\UnaryArithmetric\ClampTest.cs" />
     <Compile Include="Links\UnaryArithmetric\LogCoshTest.cs" />
     <Compile Include="Links\UnaryArithmetric\CoshTest.cs" />
     <Compile Include="Links\UnaryArithmetric\ArccosTest.cs" />
@@ -378,6 +385,8 @@
     <Compile Include="Operators\ArrayManipulation\SortTest.cs" />
     <Compile Include="Operators\ArrayManipulation\SortWithKeyTest.cs" />
     <Compile Include="Operators\ArrayManipulation\WhereTest.cs" />
+    <Compile Include="Operators\Complex\ComplexArithmetric\ComplexBinaryArithmetric\ComplexBinaryArithmetricTest.cs" />
+    <Compile Include="Operators\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexUnaryArithmetricTest.cs" />
     <Compile Include="Operators\Complex\ComplexConvolution\ComplexKernelProductDenseTest.cs" />
     <Compile Include="Operators\Complex\ComplexConvolution\ComplexTransposeDenseTest.cs" />
     <Compile Include="Operators\Complex\ComplexConvolution\ComplexDenseTest.cs" />
@@ -412,14 +421,18 @@
     <Compile Include="Operators\Connection1D\Map1D.cs" />
     <Compile Include="Operators\Connection1D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Operators\Connection1D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Operators\Connection1D\Pooling\StridePoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\AveragePoolingTest.cs" />
+    <Compile Include="Operators\Connection1D\Pooling\StrideUnpoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\AverageUnpoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\MaxPoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\MaxUnpoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Operators\Connection1D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Operators\Connection1D\Trim\TrimmingTest.cs" />
-    <Compile Include="Operators\Connection1D\Zoom\BilinearZoomTest.cs" />
+    <Compile Include="Operators\Connection1D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Operators\Connection1D\Zoom\NeighborZoomTest.cs" />
     <Compile Include="Operators\Connection2D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Operators\Connection2D\Convolution\ChannelwiseDeconvolutionTest.cs" />
@@ -427,6 +440,10 @@
     <Compile Include="Operators\Connection2D\Convolution\PointwiseConvolutionTest.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseDeconvolutionTest.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseKernelProductTest.cs" />
+    <Compile Include="Operators\Connection2D\Pooling\StridePoolingTest.cs" />
+    <Compile Include="Operators\Connection2D\Pooling\StrideUnpoolingTest.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseDeconvolutionTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseKernelProductTest.cs" />
@@ -440,14 +457,18 @@
     <Compile Include="Operators\Connection3D\Map3D.cs" />
     <Compile Include="Operators\Connection3D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Operators\Connection3D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Operators\Connection3D\Pooling\StridePoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\AveragePoolingTest.cs" />
+    <Compile Include="Operators\Connection3D\Pooling\StrideUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\AverageUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\MaxPoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\MaxUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Operators\Connection3D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Operators\Connection3D\Trim\TrimmingTest.cs" />
-    <Compile Include="Operators\Connection3D\Zoom\BilinearZoomTest.cs" />
+    <Compile Include="Operators\Connection3D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Operators\Connection3D\Zoom\NeighborZoomTest.cs" />
     <Compile Include="Operators\ConnectionDense\KernelProductTest.cs" />
     <Compile Include="Operators\ConnectionDense\TransposeDenseTest.cs" />
@@ -457,9 +478,11 @@
     <Compile Include="Links\Evaluation\Classify\MatchesTest.cs" />
     <Compile Include="Links\Evaluation\Classify\ConfusionMatrixTest.cs" />
     <Compile Include="Links\Evaluation\Classify\AccuracyTest.cs" />
-    <Compile Include="Operators\Indexer\OneOutVectorTest.cs" />
+    <Compile Include="Operators\Indexer\OneHotVectorTest.cs" />
     <Compile Include="Operators\Indexer\ArgMinTest.cs" />
     <Compile Include="Operators\Indexer\ArgMaxTest.cs" />
+    <Compile Include="Operators\Quaternion\QuaternionArithmetric\QuaternionBinaryArithmetric\QuaternionBinaryArithmetricTest.cs" />
+    <Compile Include="Operators\Quaternion\QuaternionArithmetric\QuaternionUnaryArithmetric\QuaternionUnaryArithmetricTest.cs" />
     <Compile Include="Operators\Quaternion\QuaternionConvolution\Quaternion.cs" />
     <Compile Include="Operators\Quaternion\QuaternionConvolution\QuaternionDenseTest.cs" />
     <Compile Include="Operators\Quaternion\QuaternionConvolution\QuaternionConvolution1DTest.cs" />
@@ -483,6 +506,11 @@
     <Compile Include="Operators\Quaternion\QuaternionConvolution\QuaternionMap2D.cs" />
     <Compile Include="Operators\Quaternion\QuaternionCast\QuaternionCastTest.cs" />
     <Compile Include="Operators\RandomGeneration\BinaryRandomTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorBinaryArithmetricTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\TrivectorQuaternionQGradMulTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\TrivectorQuaternionVGradMulTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\TrivectorQuaternionMulTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorUnaryArithmetricTest.cs" />
     <Compile Include="Operators\Trivector\TrivectorConvolution\Trivector.cs" />
     <Compile Include="Operators\Trivector\TrivectorConvolution\TrivectorDenseTest.cs" />
     <Compile Include="Operators\Trivector\TrivectorConvolution\TrivectorConvolution1DTest.cs" />
@@ -502,6 +530,8 @@
     <Compile Include="Operators\Trivector\TrivectorConvolution\TrivectorMap3D.cs" />
     <Compile Include="Operators\Trivector\TrivectorCast\TrivectorCastTest.cs" />
     <Compile Include="TensorTest.cs" />
+    <Compile Include="TestCaseIterator.cs" />
+    <Compile Include="NdimArrayTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\AdaDeltaTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\AdaGradTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\AdamaxTest.cs" />
@@ -512,6 +542,7 @@
     <Compile Include="Updaters\OptimizeMethod\RMSpropGravesTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\RMSpropTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\SGDTest.cs" />
+    <Compile Include="Updaters\OptimizeMethod\KahanSumTest.cs" />
     <Compile Include="Updaters\RestrictGrad\GradRMSClippingTest.cs" />
     <Compile Include="Updaters\RestrictGrad\GradNormClippingTest.cs" />
     <Compile Include="Updaters\RestrictGrad\GradClippingTest.cs" />
@@ -562,13 +593,13 @@
     <Compile Include="Operators\Connection2D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Operators\Connection2D\Transform\ChannelToSpaceTest.cs" />
     <Compile Include="Operators\Connection2D\Trim\TrimmingTest.cs" />
-    <Compile Include="Operators\Connection2D\Zoom\BilinearZoomTest.cs" />
+    <Compile Include="Operators\Connection2D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Operators\Connection2D\Zoom\NeighborZoomTest.cs" />
     <Compile Include="Operators\Aggregation\MinTest.cs" />
     <Compile Include="Operators\Aggregation\MaxTest.cs" />
     <Compile Include="Operators\ArrayManipulation\ExtractChannelTest.cs" />
     <Compile Include="Operators\ArrayManipulation\InsertChannelTest.cs" />
-    <Compile Include="Operators\Aggregation\MeanTest.cs" />
+    <Compile Include="Operators\Aggregation\AverageTest.cs" />
     <Compile Include="Operators\Aggregation\SumTest.cs" />
     <Compile Include="Operators\RandomGeneration\NormalRandomTest.cs" />
     <Compile Include="Operators\RandomGeneration\UniformRandomTest.cs" />
@@ -580,15 +611,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Operators\Complex\ComplexArithmetric\ComplexBinaryArithmetric\" />
-    <Folder Include="Operators\Complex\ComplexArithmetric\ComplexUnaryArithmetric\" />
-    <Folder Include="Operators\Quaternion\QuaternionArithmetric\QuaternionBinaryArithmetric\" />
-    <Folder Include="Operators\Quaternion\QuaternionArithmetric\QuaternionUnaryArithmetric\" />
-    <Folder Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\" />
-    <Folder Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\" />
-    <Folder Include="Operators\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

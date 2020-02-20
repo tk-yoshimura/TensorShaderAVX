@@ -14,27 +14,60 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-2f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-2f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map0D(outchannels, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
 
             Field y_expect = TrivectorDense(x, w);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
-            float[] gw_actual = w.GradTensor.State;
+            float[] gx_actual = x.GradState;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-5f, $"not equal gw");
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-5f, $"not equal gx");
+        }
+
+        [TestMethod]
+        public void TheoreticalTest() {
+            int inchannels = 9, outchannels = 12, batch = 3;
+
+            float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-2f).ToArray();
+            float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-2f).ToArray();
+            float[] wval = (new float[outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-2f).Reverse().ToArray();
+
+            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
+
+            Field xx = TrivectorX(x), xy = TrivectorY(x), xz = TrivectorZ(x);
+            Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);
+            Field wrr = wr * wr, wii = wi * wi, wjj = wj * wj, wkk = wk * wk;
+            Field wri = wr * wi, wrj = wr * wj, wrk = wr * wk, wij = wi * wj, wik = wi * wk, wjk = wj * wk;
+
+            Field yx = Dense(xx, (wrr + wii - wjj - wkk)) + 2 * (Dense(xy, (wij - wrk)) + Dense(xz, (wik + wrj)));
+            Field yy = Dense(xy, (wrr - wii + wjj - wkk)) + 2 * (Dense(xz, (wjk - wri)) + Dense(xx, (wij + wrk)));
+            Field yz = Dense(xz, (wrr - wii - wjj + wkk)) + 2 * (Dense(xx, (wik - wrj)) + Dense(xy, (wjk + wri)));
+
+            Field y_expect = TrivectorCast(yx, yy, yz);
+
+            Field err = y_expect - y_actual;
+
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
+
+            flow.Execute();
+
+            float[] gx_actual = x.GradState;
+            float[] gw_actual = w.GradState;
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
+
+            AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
 
         float[] gx_expect = new float[] {

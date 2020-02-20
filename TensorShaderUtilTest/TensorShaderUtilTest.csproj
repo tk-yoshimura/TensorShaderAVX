@@ -48,23 +48,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TensorShader">
-      <HintPath>..\TensorShader\bin\x64\Debug\TensorShader.dll</HintPath>
-    </Reference>
-    <Reference Include="TensorShaderAvxBackend">
-      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
-    </Reference>
-    <Reference Include="TensorShaderUtil, Version=1.2.7199.25633, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TensorShaderUtil\bin\x64\Debug\TensorShaderUtil.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayIO\ArrayIOTest.cs" />
     <Compile Include="BatchGenerator\UnitaskBatchGeneratorTest.cs" />
     <Compile Include="BatchGenerator\MultitaskBatchGeneratorTest.cs" />
     <Compile Include="GraphVisualization\GraphTest.cs" />
     <Compile Include="Iterator\RepeatIteratorTest.cs" />
     <Compile Include="Iterator\ShuffleIteratorTest.cs" />
+    <Compile Include="NdimArrayUtil\NdimArrayUtilTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Crc32Test.cs" />
     <Compile Include="SnapshotSaver\ZippedBinaryShapshotSaverTest.cs" />

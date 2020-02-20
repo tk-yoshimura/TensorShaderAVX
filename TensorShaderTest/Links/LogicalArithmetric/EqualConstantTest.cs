@@ -18,10 +18,9 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
 
             VariableField f = new Tensor(Shape.Map1D(ch, length), x);
 
-            Field fout = Equal(f, 2);
-            StoreField output = fout.Save();
+            StoreField output = Equal(f, 2);
 
-            Flow flow = Flow.Inference(output);
+            (Flow flow, _) = Flow.Inference(output);
             flow.Execute();
 
             CollectionAssert.AreEqual(idxes.Select((idx) => x[idx] == 2 ? 1f : 0f).ToArray(), output.State);

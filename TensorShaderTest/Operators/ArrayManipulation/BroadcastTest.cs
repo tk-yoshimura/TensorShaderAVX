@@ -13,7 +13,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             Random rd = new Random(1234);
 
             List<Shape> shapes = new List<Shape> {
-                Shape.Scalar(),
+                Shape.Scalar,
                 Shape.Vector(1), Shape.Vector(2),
                 Shape.Map0D(1, 1), Shape.Map0D(2, 1), Shape.Map0D(1, 3), Shape.Map0D(2, 3),
                 Shape.Map1D(1, 1, 1), Shape.Map1D(2, 1, 1), Shape.Map1D(1, 3, 1), Shape.Map1D(2, 3, 1),
@@ -48,8 +48,8 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                 new Shape(ShapeType.Map, 1, 1, 5, 7, 9, 11), new Shape(ShapeType.Map, 2, 1, 5, 7, 9, 11), new Shape(ShapeType.Map, 1, 3, 5, 7, 9, 11), new Shape(ShapeType.Map, 2, 3, 5, 7, 9, 11),
             };
 
-            foreach(Shape inshape in shapes) {
-                foreach(Shape outshape in shapes) {
+            foreach (Shape inshape in shapes) {
+                foreach (Shape outshape in shapes) {
                     if (inshape.Ndim > outshape.Ndim) {
                         continue;
                     }
@@ -60,13 +60,13 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                         continue;
                     }
 
-                    if (is_creatable){
+                    if (is_creatable) {
                         Broadcast broadcast = null;
 
                         try {
                             broadcast = new Broadcast(inshape, outshape);
                         }
-                        catch (Exception e){
+                        catch (Exception e) {
                             Assert.Fail($"fail create instance {inshape}, {outshape} : {e.Message}");
                         }
 
@@ -79,7 +79,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                         float[] y = outtensor.State;
 
                         int[] il = (new int[5]).Select((_, idx) => outshape.Ndim > idx ? outshape[idx] : 1).ToArray();
-                        int[] jl = (new int[5]).Select((_, idx) =>  inshape.Ndim > idx ?  inshape[idx] : 1).ToArray();
+                        int[] jl = (new int[5]).Select((_, idx) => inshape.Ndim > idx ? inshape[idx] : 1).ToArray();
 
                         int i = 0;
 
@@ -110,8 +110,8 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
         [TestMethod]
         public void ReferenceTest() {
-            Shape inshape = new Shape(ShapeType.Map, 3, 5, 1, 1, 2 );
-            Shape outshape = new Shape(ShapeType.Map, 3, 5, 2, 3, 2 );
+            Shape inshape = new Shape(ShapeType.Map, 3, 5, 1, 1, 2);
+            Shape outshape = new Shape(ShapeType.Map, 3, 5, 2, 3, 2);
 
             float[] x = (new float[inshape.Length]).Select((_, idx) => (float)idx).ToArray();
 

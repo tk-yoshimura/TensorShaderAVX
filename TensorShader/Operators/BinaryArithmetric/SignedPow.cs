@@ -3,7 +3,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class SignedPow : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public SignedPow(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -19,7 +19,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class SignedPowRightConstant : BinaryRightConstantArithmetric {
         /// <summary>コンストラクタ</summary>
         public SignedPowRightConstant(float c, Shape shape)
-            : base(c, shape){ }
+            : base(c, shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

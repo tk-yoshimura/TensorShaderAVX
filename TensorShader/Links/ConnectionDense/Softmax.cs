@@ -26,7 +26,7 @@ namespace TensorShader.Links.ConnectionDense {
 
         /// <summary>コンストラクタ</summary>
         public Softmax(Field infield, Field outfield)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             if (infield.Shape.Type != ShapeType.Map || infield.Shape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(infield.Shape, ("Ndim", 2), ("Type", ShapeType.Map)));
             }
@@ -47,7 +47,7 @@ namespace TensorShader.Links.ConnectionDense {
 
             if (X.EnableBackprop) {
                 VariableNode gx = Y.Value * Y.Grad;
-                VariableNode gxsum = Sum(gx, new int[] { Axis.Map0D.Channels }, keepdims:true);
+                VariableNode gxsum = Sum(gx, new int[] { Axis.Map0D.Channels }, keepdims: true);
 
                 X.AddGrad(gx - Y.Value * Broadcast(gxsum, X.Shape));
             }

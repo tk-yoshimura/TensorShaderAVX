@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection1D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection1D {
     [TestClass]
@@ -71,25 +71,20 @@ namespace TensorShaderTest.Operators.Connection1D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, channels = 32, leftpad = 1, rightpad = 1;
+            int inwidth = 2048, channels = 1024, leftpad = 2, rightpad = 3, batch = 4;
             int outwidth = inwidth + leftpad + rightpad;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth));
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch));
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
 
-            EdgePadding ope = new EdgePadding(inwidth, channels, leftpad, rightpad);
+            EdgePadding ope = new EdgePadding(inwidth, channels, leftpad, rightpad, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/edgepadding_1d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

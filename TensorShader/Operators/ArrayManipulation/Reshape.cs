@@ -7,7 +7,7 @@ namespace TensorShader.Operators.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Reshape(Shape inshape, Shape outshape) {
             if (inshape.Length != outshape.Length) {
-                 throw new ArgumentException($"{nameof(inshape)}, {nameof(outshape)}");
+                throw new ArgumentException($"{nameof(inshape)}, {nameof(outshape)}");
             }
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{

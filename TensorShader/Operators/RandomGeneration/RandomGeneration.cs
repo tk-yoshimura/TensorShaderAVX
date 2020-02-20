@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TensorShader.Operators.RandomGeneration {
     /// <summary>乱数生成(XorShift96)</summary>
-    internal abstract class RandomGeneration : Operator{
+    internal abstract class RandomGeneration : Operator {
         /// <summary>形状</summary>
         public Shape Shape { private set; get; }
 

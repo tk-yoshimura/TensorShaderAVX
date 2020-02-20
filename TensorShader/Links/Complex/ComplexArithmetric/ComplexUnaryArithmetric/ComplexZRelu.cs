@@ -20,7 +20,7 @@ namespace TensorShader.Links.ComplexArithmetric {
     public class ComplexZRelu : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public ComplexZRelu(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

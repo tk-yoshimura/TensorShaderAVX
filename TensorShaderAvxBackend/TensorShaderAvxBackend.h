@@ -262,32 +262,32 @@ namespace TensorShaderAvxBackend {
         static Pool();
 
         public:
-        static void MaxPool1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void MaxPool2D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void MaxPool3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void MaxPool1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void MaxPool2D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void MaxPool3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
-        static void AveragePool1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void AveragePool2D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void AveragePool3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void AveragePool1D(unsigned int channels, unsigned int inwidth, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void AveragePool2D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void AveragePool3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
-        static void MaxUnpool1D(unsigned int channels, unsigned int outwidth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void MaxUnpool2D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void MaxUnpool3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void MaxUnpool1D(unsigned int channels, unsigned int outwidth, unsigned int batch, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void MaxUnpool2D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void MaxUnpool3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int stride, AvxArray<float>^ ingrad, AvxArray<float>^ inpool, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
-        static void AverageUnpool1D(unsigned int channels, unsigned int outwidth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void AverageUnpool2D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void AverageUnpool3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void AverageUnpool1D(unsigned int channels, unsigned int outwidth, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void AverageUnpool2D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void AverageUnpool3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int stride, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
     };
 
     public ref class Transform abstract sealed {
         static Transform();
 
         public:
-        static void ChannelToSpace2D(unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void SpaceToChannel2D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void ChannelToSpace2D(unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int batch, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void SpaceToChannel2D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int batch, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
-        static void ChannelToSpace3D(unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
-        static void SpaceToChannel3D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int th, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void ChannelToSpace3D(unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, unsigned int batch, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
+        static void SpaceToChannel3D(unsigned int inchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth, unsigned int batch, unsigned int scale, AvxArray<float>^ inmap, AvxArray<float>^ outmap);
     };
 
     public ref class Padding abstract sealed {
@@ -295,17 +295,17 @@ namespace TensorShaderAvxBackend {
 
         public:
         static void ZeroPadding1D(unsigned int channels, unsigned int inwidth, 
-                                  unsigned int batch, unsigned int th, 
+                                  unsigned int batch, 
                                   unsigned int pad_left, unsigned int pad_right, 
                                   AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void EdgePadding1D(unsigned int channels, unsigned int inwidth, 
-                                  unsigned int batch, unsigned int th, 
+                                  unsigned int batch, 
                                   unsigned int pad_left, unsigned int pad_right, 
                                   AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void ZeroPadding2D(unsigned int channels, unsigned int inwidth, unsigned int inheight, 
-                                  unsigned int batch, unsigned int th, 
+                                  unsigned int batch, 
                                   unsigned int pad_left, unsigned int pad_right, 
                                   unsigned int pad_top, unsigned int pad_bottom,
                                   AvxArray<float>^ inmap, AvxArray<float>^ outmap);
@@ -388,11 +388,11 @@ namespace TensorShaderAvxBackend {
 
         public:
         static void Dense(unsigned int inchannels, unsigned int outchannels, 
-                          unsigned int batch, unsigned int th, 
+                          unsigned int batch, 
                           AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void TransposeDense(unsigned int inchannels, unsigned int outchannels, 
-                                   unsigned int batch, unsigned int th, 
+                                   unsigned int batch, 
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels, 
@@ -400,83 +400,83 @@ namespace TensorShaderAvxBackend {
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride,
+                                  unsigned int batch, unsigned int kwidth, 
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride,
+                                    unsigned int batch, unsigned int kwidth, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
         
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, 
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int stride,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, 
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void ChannelwiseConvolution1D(unsigned int channels, unsigned int inwidth,
-                                             unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride,
+                                             unsigned int batch, unsigned int kwidth, 
                                              AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void ChannelwiseDeconvolution1D(unsigned int channels, unsigned int outwidth,
-                                               unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride,
+                                               unsigned int batch, unsigned int kwidth, 
                                                AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void ChannelwiseKernelProduct1D(unsigned int channels, unsigned int inwidth,
-                                               unsigned int batch, unsigned int kwidth, unsigned int stride,
+                                               unsigned int batch, unsigned int kwidth, 
                                                AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void ChannelwiseConvolution2D(unsigned int channels, unsigned int inwidth, unsigned int inheight,
-                                             unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride,
+                                             unsigned int batch, unsigned int kwidth, unsigned int kheight, 
                                              AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void ChannelwiseDeconvolution2D(unsigned int channels, unsigned int outwidth, unsigned int outheight,
-                                               unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride,
+                                               unsigned int batch, unsigned int kwidth, unsigned int kheight,
                                                AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void ChannelwiseKernelProduct2D(unsigned int channels, unsigned int inwidth, unsigned int inheight,
-                                               unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int stride,
+                                               unsigned int batch, unsigned int kwidth, unsigned int kheight, 
                                                AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void ChannelwiseConvolution3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                             unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
+                                             unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, 
                                              AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void ChannelwiseDeconvolution3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-                                               unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
+                                               unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth,
                                                AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void ChannelwiseKernelProduct3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                               unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride,
+                                               unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth,
                                                AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void PointwiseConvolution(unsigned int inchannels, unsigned int outchannels, unsigned int points,
-                                         unsigned int batch, unsigned int th, 
+                                         unsigned int batch, 
                                          AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void PointwiseDeconvolution(unsigned int inchannels, unsigned int outchannels, unsigned int points,
-                                           unsigned int batch, unsigned int th, 
+                                           unsigned int batch, 
                                            AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void PointwiseKernelProduct(unsigned int inchannels, unsigned int outchannels, unsigned int points,
@@ -518,11 +518,11 @@ namespace TensorShaderAvxBackend {
         static void PureImag(unsigned int length, AvxArray<float>^ src_imag, AvxArray<float>^ dst);
 
         static void Dense(unsigned int inchannels, unsigned int outchannels,
-                          unsigned int batch, unsigned int th, bool gradmode,
+                          unsigned int batch, bool gradmode,
                           AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void TransposeDense(unsigned int inchannels, unsigned int outchannels,
-                                   unsigned int batch, unsigned int th, bool gradmode,
+                                   unsigned int batch, bool gradmode,
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels,
@@ -530,39 +530,39 @@ namespace TensorShaderAvxBackend {
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
     };
 
@@ -594,11 +594,11 @@ namespace TensorShaderAvxBackend {
         static void PureZ(unsigned int length, AvxArray<float>^ src_z, AvxArray<float>^ dst);
 
         static void Dense(unsigned int inchannels, unsigned int outchannels,
-                          unsigned int batch, unsigned int th, bool gradmode,
+                          unsigned int batch, bool gradmode,
                           AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void TransposeDense(unsigned int inchannels, unsigned int outchannels,
-                                   unsigned int batch, unsigned int th, bool gradmode,
+                                   unsigned int batch, bool gradmode,
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels,
@@ -607,39 +607,39 @@ namespace TensorShaderAvxBackend {
 
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
     };
 
@@ -678,11 +678,11 @@ namespace TensorShaderAvxBackend {
         static void PureK(unsigned int length, AvxArray<float>^ src_k, AvxArray<float>^ dst);
 
         static void Dense(unsigned int inchannels, unsigned int outchannels,
-                          unsigned int batch, unsigned int th, bool gradmode,
+                          unsigned int batch, bool gradmode,
                           AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void TransposeDense(unsigned int inchannels, unsigned int outchannels,
-                                   unsigned int batch, unsigned int th, bool gradmode,
+                                   unsigned int batch, bool gradmode,
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels,
@@ -690,39 +690,39 @@ namespace TensorShaderAvxBackend {
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-                                    unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool transpose,
+                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
     };
 }

@@ -6,7 +6,7 @@ namespace TensorShader {
         }
 
         /// <summary>符号反転</summary>
-        public static VariableNode operator-(VariableNode x) {
+        public static VariableNode operator -(VariableNode x) {
             return Neg(x);
         }
     }
@@ -18,7 +18,7 @@ namespace TensorShader {
         }
 
         /// <summary>符号反転</summary>
-        public static Tensor operator-(Tensor x) {
+        public static Tensor operator -(Tensor x) {
             return Neg(x);
         }
     }

@@ -11,18 +11,19 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
         public void ExecuteTest() {
             Random rd = new Random(1234);
 
-            {
-                Shape shape = new Shape(ShapeType.Map, 17, 8, 2, 4, 1, 3, 67);
+            foreach (Shape shape in new Shape[]{
+                   new Shape(ShapeType.Map, 16, 19, 23, 8, 1, 5, 6),
+                   new Shape(ShapeType.Map, 17, 9, 2, 4, 1, 3, 67) }) {
 
                 for (int axis = 0; axis < shape.Ndim; axis++) {
                     int stride = 1, length = shape[axis];
-                    for(int i = 0; i < axis; i++) {
+                    for (int i = 0; i < axis; i++) {
                         stride *= shape[i];
                     }
 
                     float[] x = (new float[shape.Length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
 
-                    OverflowCheckedTensor inval  = new OverflowCheckedTensor(shape, x);
+                    OverflowCheckedTensor inval = new OverflowCheckedTensor(shape, x);
                     OverflowCheckedTensor outval = new OverflowCheckedTensor(shape);
 
                     Flip ope = new Flip(shape, axis);
@@ -58,7 +59,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
             OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
 
-            Flip ope = new Flip(shape, axis:3);
+            Flip ope = new Flip(shape, axis: 3);
 
             ope.Execute(x, y);
 

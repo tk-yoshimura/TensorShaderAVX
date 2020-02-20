@@ -3,7 +3,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
     internal class Equal : BinaryArithmetric.BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Equal(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

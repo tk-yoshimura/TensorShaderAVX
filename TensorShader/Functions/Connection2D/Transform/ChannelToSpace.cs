@@ -36,7 +36,8 @@ namespace TensorShader.Functions.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public ChannelToSpace(int scale)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Scale = scale;
         }
 
@@ -47,9 +48,9 @@ namespace TensorShader.Functions.Connection2D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map2D(
-                inshape.Channels / checked(Scale * Scale),
-                checked(inshape.Width * Scale),
-                checked(inshape.Height * Scale),
+                inshape.Channels / (Scale * Scale),
+                inshape.Width * Scale,
+                inshape.Height * Scale,
                 inshape.Batch);
 
             return new Shape[] { outshape };
@@ -62,7 +63,7 @@ namespace TensorShader.Functions.Connection2D {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 4), ("Type", ShapeType.Map)));
             }
 
-            if (inshapes[0].Channels % checked(Scale * Scale) != 0) {
+            if (inshapes[0].Channels % (Scale * Scale) != 0) {
                 throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, Scale * Scale));
             }
         }

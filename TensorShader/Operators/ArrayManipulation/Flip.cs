@@ -20,7 +20,7 @@ namespace TensorShader.Operators.ArrayManipulation {
             };
 
             int stride = 1;
-            for(int i = 0; i < axis; i++) {
+            for (int i = 0; i < axis; i++) {
                 stride *= shape[i];
             }
 

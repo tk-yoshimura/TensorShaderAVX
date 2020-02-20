@@ -33,7 +33,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>コンストラクタ</summary>
         public HuberLoss(Field xfield, Field tfield, Field outfield, float delta)
-            : base(new Field[]{ xfield, tfield }, outfield) {
+            : base(new Field[] { xfield, tfield }, outfield) {
             this.Delta = delta;
         }
 

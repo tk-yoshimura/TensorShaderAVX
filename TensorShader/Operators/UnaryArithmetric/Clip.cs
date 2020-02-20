@@ -5,7 +5,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public Clip(float cmin, float cmax, Shape shape)
-            : base(shape){
+            : base(shape) {
             this.cmin = cmin;
             this.cmax = cmax;
         }

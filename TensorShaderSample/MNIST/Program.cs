@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using TensorShader;
 using TensorShader.Initializers;
 using TensorShader.Updaters.OptimizeMethod;
@@ -10,7 +11,6 @@ using TensorShader.Updaters.WeightDecay;
 using TensorShaderUtil.Iterator;
 using TensorShaderUtil.SnapshotSaver;
 using static TensorShader.Field;
-using static TensorShader.VariableNode;
 
 namespace MNIST {
     class Program {
@@ -34,13 +34,24 @@ namespace MNIST {
             VariableField t = new Tensor(Shape.Vector(loader.NumBatches));
 
             Console.WriteLine("Build model...");
-            Field y = CNN.Forward(x, classes);
-            Field acc = Accuracy(y, t);
-            Field err = Sum(SoftmaxCrossEntropy(y, OneHotVector(t, classes)), axes:new int[] { Axis.Map0D.Channels });
-            StoreField accnode = acc.Save(), lossnode = Average(err).Save();
+            Field y = Model.CNN(x, classes);
+            StoreField acc = Accuracy(y, t);
+            Field loss = Sum(
+                    SoftmaxCrossEntropy(y, OneHotVector(t, classes)),
+                    Axis.Map0D.Channels
+                );
+            StoreField avg_loss = Average(loss);
+
+            Console.WriteLine("Set iterator event...");
+            train_iterator.IncreasedEpoch += (iter) => {
+                float train_acc = acc.State[0];
+                float train_loss = avg_loss.State[0];
+
+                Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
+            };
 
             Console.WriteLine("Build optimize flow...");
-            (Flow trainflow, Parameters parameters) = Flow.Optimize(err);
+            (Flow trainflow, Parameters parameters) = Flow.Optimize(loss);
 
             Console.WriteLine("Initialize params...");
             parameters
@@ -51,17 +62,17 @@ namespace MNIST {
                 .InitializeTensor((tensor) => new Zero(tensor));
 
             Console.WriteLine("Set params updater...");
-            parameters.AddUpdater((parameter) => new Nadam(parameter, alpha:0.01f));
-            parameters.AddUpdater((parameter) => new Ridge(parameter, decay:1e-4f));
+            parameters.AddUpdater((parameter) => new Nadam(parameter, alpha: 0.01f));
+            parameters.AddUpdater((parameter) => new Ridge(parameter, decay: 1e-4f));
 
             Console.WriteLine("Training...");
-            Train(train_iterator, loader, x, t, accnode, lossnode, trainflow, parameters);
+            Train(train_iterator, loader, x, t, trainflow, parameters);
 
             Console.WriteLine("Build inference flow...");
-            Flow testflow = Flow.Inference(accnode);
+            (Flow testflow, _) = Flow.Inference(acc);
 
             Console.WriteLine("Testing...");
-            Test(test_iterator, loader, x, t, testflow, accnode);
+            Test(test_iterator, loader, x, t, testflow, acc);
 
             Console.WriteLine("Saving snapshot...");
             Snapshot snapshot = parameters.Save();
@@ -76,28 +87,19 @@ namespace MNIST {
             Console.Read();
         }
 
-        static void Train(Iterator train_iterator, MnistLoader loader, VariableField x, VariableField t, StoreField accnode, StoreField lossnode, Flow trainflow, Parameters parameters) {
+        static void Train(Iterator train_iterator, MnistLoader loader, VariableField x, VariableField t, Flow trainflow, Parameters parameters) {
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            while (train_iterator.Epoch < 50) {
+            while (train_iterator.Epoch < 5) {
                 (float[] images, float[] labels) = loader.GetTrain(train_iterator.Next());
 
-                x.ValueTensor.State = images;
-                t.ValueTensor.State = labels;
+                x.State = images;
+                t.State = labels;
 
-                trainflow.Execute(enable_processing_time:true);
+                trainflow.Execute();
                 parameters.Update();
-
-                if (train_iterator.Iteration % 100 != 0) {
-                    continue;
-                }
-
-                float train_acc = accnode.State[0];
-                float train_loss = lossnode.State[0];
-
-                Console.WriteLine($"[{train_iterator.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
             }
 
             sw.Stop();
@@ -105,7 +107,7 @@ namespace MNIST {
             Console.WriteLine($"{sw.ElapsedMilliseconds} msec, {sw.ElapsedMilliseconds / train_iterator.Epoch} msec/epoch");
         }
 
-        static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField accnode) {
+        static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField acc) {
             List<float> test_acc_list = new List<float>();
 
             Stopwatch sw = new Stopwatch();
@@ -115,12 +117,12 @@ namespace MNIST {
             while (test_iterator.Epoch < 1) {
                 (float[] images, float[] labels) = loader.GetTest(test_iterator.Next());
 
-                x.ValueTensor.State = images;
-                t.ValueTensor.State = labels;
+                x.State = images;
+                t.State = labels;
 
                 testflow.Execute();
 
-                float test_acc = accnode.State[0];
+                float test_acc = acc.State[0];
 
                 test_acc_list.Add(test_acc);
             }

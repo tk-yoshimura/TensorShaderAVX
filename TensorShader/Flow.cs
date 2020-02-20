@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using TensorShaderAvxBackend;
 
@@ -19,10 +18,10 @@ namespace TensorShader {
         public int NodeCount => nodes.Count;
 
         /// <summary>変数構成ノード数</summary>
-        public int VariableNodeCount => nodes.Count((node)=>node is VariableNode);
+        public int VariableNodeCount => nodes.Count((node) => node is VariableNode);
 
         /// <summary>関数構成ノード数</summary>
-        public int FunctionNodeCount => nodes.Count((node)=>node is FunctionNode);
+        public int FunctionNodeCount => nodes.Count((node) => node is FunctionNode);
 
         /// <summary>保有テンソル数</summary>
         public int TensorCount => tensors.Values.Distinct().Count();
@@ -32,16 +31,14 @@ namespace TensorShader {
 
         /// <summary>保有バッファ総要素数</summary>
         public ulong BufferSize {
-            get { 
-                ulong size_sum = 0;
+            get {
+                ulong sum_size = 0;
 
-                checked { 
-                    foreach(ulong size in tensors.Select((tensor) => tensor.Value.Buffer).Distinct().Select((buffer) => buffer.Length)) {
-                        size_sum += size;
-                    }
+                foreach (ulong size in tensors.Select((tensor) => tensor.Value.Buffer).Distinct().Select((buffer) => buffer.Length)) {
+                    sum_size += size;
                 }
 
-                return size_sum;
+                return sum_size;
             }
         }
 
@@ -76,16 +73,16 @@ namespace TensorShader {
             AssignOperator();
 
             this.intensors = nodes.OfType<InputNode>()
-                                   .ToDictionary((node)=>node, (node)=>node.Tensor);
+                                   .ToDictionary((node) => node, (node) => node.Tensor);
 
             this.outtensors = nodes.OfType<OutputNode>()
-                                   .ToDictionary((node)=>node, (node)=>node.Tensor);
+                                   .ToDictionary((node) => node, (node) => node.Tensor);
         }
 
         /// <summary>入力ノードからフロー構築</summary>
         /// <param name="innodes">入力ノードリスト</param>
         public static Flow FromInputs(params InputNode[] innodes) {
-            if (innodes.Length < 1) {
+            if (innodes.Length < 1 || innodes.IsDuplicated()) {
                 throw new ArgumentException(nameof(innodes));
             }
 
@@ -97,7 +94,7 @@ namespace TensorShader {
         /// <summary>出力ノードからフロー構築</summary>
         /// <param name="outnodes">出力ノードリスト</param>
         public static Flow FromOutputs(params OutputNode[] outnodes) {
-            if (outnodes.Length < 1) {
+            if (outnodes.Length < 1 || outnodes.IsDuplicated()) {
                 throw new ArgumentException(nameof(outnodes));
             }
 
@@ -119,11 +116,7 @@ namespace TensorShader {
                 .Select((node) => node.Tensor)
                 .ToList();
 
-            if (input_tensors.Distinct().Count() != input_tensors.Count()) {
-                throw new ArgumentException("Node list including duplicate input tensor.");
-            }
-
-            Stack<Node> nodestack = new Stack<Node>(innodes.Reverse().Select((node)=>node as Node));
+            Stack<Node> nodestack = new Stack<Node>(innodes.Reverse().Select((node) => node as Node));
             Dictionary<Node, List<Node>> innodes_table = new Dictionary<Node, List<Node>>();
             List<OutputNode> shared_tensor_output_nodes = new List<OutputNode>();
 
@@ -164,7 +157,7 @@ namespace TensorShader {
                     // 始端入力ノードが受け取られる前に上書きされるのを防ぐ
                     if (outnode is OutputNode) {
                         Tensor outtensor = (outnode as OutputNode).Tensor;
-                        if (outtensor != null && input_tensors.Contains(outtensor)){
+                        if (outtensor != null && input_tensors.Contains(outtensor)) {
                             shared_tensor_output_nodes.Add(outnode as OutputNode);
                             continue;
                         }
@@ -183,7 +176,7 @@ namespace TensorShader {
             visited_nodes.AddRange(shared_tensor_output_nodes.OrderByDescending((node) => node.InNode is InputNode));
 
             // 関数ノードに到達不可な入力ノードがあるなら例外を送出
-            if (innodes_table.Select((item)=>item.Value.Count).Any((v) => v > 0)){
+            if (innodes_table.Select((item) => item.Value.Count).Any((v) => v > 0)) {
                 throw new ArgumentException("Node list including unreachable nodes.");
             }
 
@@ -198,8 +191,13 @@ namespace TensorShader {
                 .Where((node) => node.Tensor != null)
                 .Select((node) => node.Tensor);
 
-            if (output_tensors.Distinct().Count() != output_tensors.Count()) {
+            if (output_tensors.IsDuplicated()) {
                 throw new ArgumentException("Node list including duplicate output tensor.");
+            }
+
+            // テンソルが重複している入力ノードが出力ノードとテンソルを共有しているなら例外を送出
+            if (input_tensors.Duplicated().Intersect(output_tensors).Count() > 0) {
+                throw new ArgumentException("Input nodes with duplicate tensors share tensors with output nodes.");
             }
 
             return visited_nodes;
@@ -208,7 +206,7 @@ namespace TensorShader {
         /// <summary>出力ノードからバックトレース</summary>
         /// <param name="outnodes">出力ノード</param>
         internal static (List<Node> nodes, List<InputNode> innodes) BackTrace(params OutputNode[] outnodes) {
-            Stack<Node> nodestack = new Stack<Node>(outnodes.Reverse().Select((node)=>node as Node));
+            Stack<Node> nodestack = new Stack<Node>(outnodes.Reverse().Select((node) => node as Node));
             List<Node> visited_nodes = new List<Node>();
 
             while (nodestack.Count > 0) {
@@ -276,12 +274,12 @@ namespace TensorShader {
 
         /// <summary>テンソル対応付け</summary>
         protected internal static Dictionary<Node, Tensor> AssignTensor(Dictionary<VariableNode, (int begin, int end)> nodes_lifespan) {
-            
+
             var buffers_list = new List<(int begin, int end, int length)>();
             var bufferid_table = new Dictionary<VariableNode, int>();
             var tensor_table = new Dictionary<Node, Tensor>();
 
-            foreach(var node_lifespan in nodes_lifespan) {
+            foreach (var node_lifespan in nodes_lifespan) {
                 var node = node_lifespan.Key;
                 var lifespan = node_lifespan.Value;
 
@@ -292,8 +290,8 @@ namespace TensorShader {
                 }
 
                 //生存期間が重ならないバッファIDを検索
-                for(int id = 0; id < buffers_list.Count; id++) {
-                    
+                for (int id = 0; id < buffers_list.Count; id++) {
+
                     //生存期間が重ならないならばノードにバッファIDを割り当て
                     if (buffers_list[id].end < lifespan.begin) {
                         int new_length = Math.Max(node.Shape.Length, buffers_list[id].length);
@@ -306,7 +304,7 @@ namespace TensorShader {
                 }
 
                 //生存期間が重ならないバッファIDが存在しないならば新規バッファIDを生成
-                if (!bufferid_table.ContainsKey(node)) { 
+                if (!bufferid_table.ContainsKey(node)) {
                     bufferid_table.Add(node, buffers_list.Count);
                     buffers_list.Add((lifespan.begin, lifespan.end, node.Shape.Length));
                 }
@@ -315,7 +313,7 @@ namespace TensorShader {
             List<AvxArray<float>> buffers = buffers_list.Select((item) => (AvxArray<float>)(new float[item.length])).ToList();
 
             // テンソルテーブル確定
-            foreach (var item in bufferid_table){
+            foreach (var item in bufferid_table) {
                 VariableNode node = item.Key;
                 int buffer_id = item.Value;
 
@@ -333,7 +331,7 @@ namespace TensorShader {
 
         /// <summary>操作クラス対応付け</summary>
         protected internal void AssignOperator() {
-            foreach(var funcnode in nodes.OfType<FunctionNode>()) {
+            foreach (var funcnode in nodes.OfType<FunctionNode>()) {
                 Tensor[] intensors = funcnode.InNodes.Select((innode) => tensors[innode]).ToArray();
                 Tensor[] outtensors = funcnode.OutNodes.Select((innode) => tensors[innode]).ToArray();
 
@@ -341,46 +339,46 @@ namespace TensorShader {
             }
         }
 
-        /// <summary>計算フローを実行</summary>
-        /// <param name="enable_processing_time">各関数ノードの処理時間を計測出力する</param>
-        public void Execute(bool enable_processing_time = false) {
-            Stopwatch sw = enable_processing_time ? new Stopwatch() : null;
+        /// <summary>到達可能なリンクおよびフィールドを列挙</summary>
+        public static (List<Field> fields, List<Link> links) EnumerateReachableFields(bool forward, bool backward, params Field[] fields) {
+            List<Link> reachable_links = new List<Link>();
+            List<Field> reachable_fields = new List<Field>(fields.Distinct());
+            Stack<Field> stack = new Stack<Field>(fields);
 
-            foreach(var node in nodes) {
-                if (node is InputNode inputnode) {
-                    if (inputnode.Initializer != null) {
-                        inputnode.Initializer.Execute();
+            while (stack.Count > 0) {
+                Field field = stack.Pop();
+
+                //探索フィールドを入力とするリンクを探索
+                if (forward) {
+                    foreach (Link link in field.InLinks) {
+                        if (!reachable_links.Contains(link)) {
+                            reachable_links.Add(link);
+                        }
+
+                        if (link.OutField != null && !reachable_fields.Contains(link.OutField)) {
+                            stack.Push(link.OutField);
+                            reachable_fields.Add(link.OutField);
+                        }
                     }
                 }
-                else if (node is FunctionNode funcnode) {
-                    Tensor[] intensors = funcnode.InNodes.Select((innode) => tensors[innode]).ToArray();
-                    Tensor[] outtensors = funcnode.OutNodes.Select((innode) => tensors[innode]).ToArray();
+                //探索フィールドを出力とするリンクを探索
+                if (backward) {
+                    if (field.OutLink != null) {
+                        if (!reachable_links.Contains(field.OutLink)) {
+                            reachable_links.Add(field.OutLink);
+                        }
 
-                    if (enable_processing_time) {
-                        Trace.WriteLine(funcnode.Function.Name);
-                        Trace.WriteLine(" " + string.Join(", ", intensors.Select((tensor) => tensor.Shape.ToString())));
-                        Trace.WriteLine(" " + string.Join(", ", outtensors.Select((tensor) => tensor.Shape.ToString())));
-
-                        sw.Restart();
-                    }
-
-                    funcnode.Execute(intensors, outtensors);
-
-                    if (enable_processing_time) {
-                        sw.Stop();
-
-                        Trace.WriteLine($" {sw.ElapsedMilliseconds} msec");
-                    }
-                }
-                else if (node is OutputNode outputnode){
-                    VariableNode innode = outputnode.InNode;
-                    Tensor intensor = tensors[innode];
-
-                    if (intensor != outputnode.Tensor) {
-                        intensor.CopyTo(outputnode.Tensor);
+                        foreach (Field push_field in field.OutLink.InFields) {
+                            if (!reachable_fields.Contains(push_field)) {
+                                stack.Push(push_field);
+                                reachable_fields.Add(push_field);
+                            }
+                        }
                     }
                 }
             }
+
+            return (reachable_fields, reachable_links);
         }
 
         /// <summary>最適化計算グラフを構築</summary>
@@ -391,77 +389,44 @@ namespace TensorShader {
                 throw new ArgumentException(nameof(error_fields));
             }
 
-            if (error_fields.Distinct().Count() != error_fields.Length) {
-                throw new ArgumentNullException("Error fields are duplicated.");
+            if (error_fields.IsDuplicated()) {
+                throw new ArgumentException("Error fields are duplicated.");
+            }
+
+            foreach (Field error_field in error_fields) {
+                if (!error_field.IsTerminate) {
+                    if (EnumerateReachableFields(forward: true, backward: false, error_field).fields.Intersect(error_fields).Count() > 1) {
+                        throw new ArgumentException("Some error fields are included in the back propagation path from other error fields.");
+                    }
+                }
             }
 
             foreach (Field error_field in error_fields) {
                 error_field.AddGrad(error_field.Value);
             }
 
-            List<InputNode> input_nodes = new List<InputNode>();
-            List<ParameterField> parameters = new List<ParameterField>();
+            // 逆伝搬で到達可能なリンク・フィールドを探索、パラメータを列挙
+            (List<Field> backward_reachable_fields, List<Link> backward_reachable_links) =
+                EnumerateReachableFields(forward: false, backward: true, error_fields);
+            List<ParameterField> parameters = backward_reachable_fields.OfType<ParameterField>().ToList();
 
-            List<Link> reachable_links = new List<Link>();
-            List<Field> reachable_fields = new List<Field>(error_fields);
-
-            Stack<Field> reachable_stack = new Stack<Field>(error_fields);
-
-            // 逆伝搬で到達可能なリンク・フィールドを探索、および入力ノード、パラメータを列挙
-            while (reachable_stack.Count > 0) {
-                Field field = reachable_stack.Pop();
-
-                // 入力ノードであるなら入力ノードリストに追加
-                if (field.Value is InputNode) {
-                    if (!input_nodes.Contains(field.Value as InputNode)) {
-                        input_nodes.Add(field.Value as InputNode);
-                    }
-                }
-
-                // パラメータであるならパラメータリストに追加
-                if (field is ParameterField) {
-                    if (!parameters.Contains(field as ParameterField)) {
-                        parameters.Add(field as ParameterField);
-                    }
-                    continue;
-                }
-
-                // 始端フィールドかリンクが探索済みならばスキップ
-                if (field.OutLink == null || reachable_links.Contains(field.OutLink)) {
-                    continue;
-                }
-
-                // 到達可能リンクに追加
-                reachable_links.Add(field.OutLink);
-
-                // 到達可能リンクの入力フィールドを到達可能フィールドに追加
-                foreach (Field push_field in field.OutLink.InFields) {
-                    if (reachable_fields.Contains(push_field)) {
-                        continue;
-                    }
-
-                    reachable_fields.Add(push_field);
-                    reachable_stack.Push(push_field);
-                }
-            }
-
+            // 逆伝搬実行
             Stack<Field> backward_stack = new Stack<Field>(error_fields);
             Dictionary<Field, List<Link>> outlinks_table = new Dictionary<Field, List<Link>>();
 
-            // 逆伝搬実行
             while (backward_stack.Count > 0) {
                 Field field = backward_stack.Pop();
 
-                if (field.OutLink != null){
+                if (field.OutLink != null) {
                     field.OutLink.Backward();
 
                     // 探索フィールドを出力したリンクの順伝搬時の入力フィールドを検索
-                    foreach(Field push_field in field.OutLink.InFields) {
+                    foreach (Field push_field in field.OutLink.InFields) {
                         // 入力フィールドのリンクがすべて逆伝搬済みかチェック
                         if (!outlinks_table.ContainsKey(push_field)) {
                             outlinks_table.Add(
                                 push_field,
-                                push_field.InLinks.WhiteList(reachable_links).ToList()
+                                push_field.InLinks.WhiteList(backward_reachable_links).ToList()
                             );
                         }
 
@@ -477,34 +442,92 @@ namespace TensorShader {
                 }
             }
 
-            foreach(ParameterField parameter in parameters) {
+            // パラメータの勾配確定
+            foreach (ParameterField parameter in parameters) {
                 parameter.SaveGrad();
             }
 
-            Flow flow = FromInputs(input_nodes.ToArray());
+            // 到達可能なリンク・フィールドを探索、入力ノードを列挙
+            (List<Field> reachable_fields, _) =
+                EnumerateReachableFields(forward: true, backward: true, error_fields);
+
+            InputNode[] input_nodes = reachable_fields.Select((field) => field.Value)
+                                                      .OfType<InputNode>()
+                                                      .Distinct().ToArray();
+
+            Flow flow = FromInputs(input_nodes);
 
             return (flow, parameters);
         }
 
         /// <summary>推論計算グラフを構築</summary>
-        /// <returns>計算フロー</returns>
-        public static Flow Inference(params StoreField[] fields) {
-            Flow flow = FromOutputs(fields.Select((field) => field.OutputNode).ToArray());
+        /// <returns>計算フローと計算に必要となるパラメータ</returns>
+        public static (Flow flow, Parameters parameters) Inference(params StoreField[] store_fields) {
+            // ストアフィールドを出力したフィールドを列挙
+            Field[] infields = store_fields.Select((field) => field.InField).ToArray();
 
-            return flow;
+            // 逆伝搬で到達可能なリンク・フィールドを探索、パラメータを列挙
+            (List<Field> reachable_fields, _) =
+                EnumerateReachableFields(forward: false, backward: true, infields);
+            List<ParameterField> parameters = reachable_fields.OfType<ParameterField>().ToList();
+
+            // ストアフィールドの出力ノードを列挙
+            OutputNode[] output_nodes = store_fields.Select((field) => field.OutputNode).ToArray();
+
+            // 出力ノードから計算フローを構築
+            Flow flow = FromOutputs(output_nodes);
+
+            return (flow, parameters);
+        }
+
+        /// <summary>計算フローを実行</summary>
+        public void Execute() {
+            foreach (var node in nodes) {
+                if (node is InputNode inputnode) {
+                    if (inputnode.Initializer != null) {
+                        inputnode.Initializer.Execute();
+                    }
+                }
+                else if (node is FunctionNode funcnode) {
+                    Tensor[] intensors = funcnode.InNodes.Select((innode) => tensors[innode]).ToArray();
+                    Tensor[] outtensors = funcnode.OutNodes.Select((innode) => tensors[innode]).ToArray();
+
+                    funcnode.Execute(intensors, outtensors);
+                }
+                else if (node is OutputNode outputnode) {
+                    VariableNode innode = outputnode.InNode;
+                    Tensor intensor = tensors[innode];
+
+                    if (intensor != outputnode.Tensor) {
+                        intensor.CopyTo(outputnode.Tensor);
+                    }
+                }
+            }
         }
     }
 
     /// <summary>列挙型拡張</summary>
     internal static class EnumerableExtend {
-        /// <summary>WhiteList</summary>
-        /// <remarks>積集合を使うと逆伝搬の際に重複したリンク/フィールドが除去されてしまうため必要</remarks>
+        /// <summary>引数に含まれる要素を返す</summary>
+        /// <remarks>
+        /// 積集合を使うと逆伝搬の際に重複したリンク/フィールドが除去されてしまうため必要
+        /// </remarks>
         public static IEnumerable<TSource> WhiteList<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second) {
             foreach (var item in first) {
                 if (second.Contains(item)) {
                     yield return item;
                 }
             }
+        }
+
+        /// <summary>重複した要素を返す</summary>
+        public static IEnumerable<TSource> Duplicated<TSource>(this IEnumerable<TSource> source) {
+            return source.GroupBy((item) => item).Where((group) => group.Count() > 1).Select((group) => group.Key);
+        }
+
+        /// <summary>重複要素があるか判定</summary>
+        public static bool IsDuplicated<TSource>(this IEnumerable<TSource> source) {
+            return source.Distinct().Count() != source.Count();
         }
     }
 }

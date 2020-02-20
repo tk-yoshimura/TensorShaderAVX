@@ -36,7 +36,8 @@ namespace TensorShader.Functions.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public SpaceToChannel(int scale)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Scale = scale;
         }
 
@@ -47,10 +48,10 @@ namespace TensorShader.Functions.Connection3D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map3D(
-                checked(inshape.Channels * Scale * Scale * Scale),
-                inshape.Width  / Scale,
+                inshape.Channels * Scale * Scale * Scale,
+                inshape.Width / Scale,
                 inshape.Height / Scale,
-                inshape.Depth  / Scale,
+                inshape.Depth / Scale,
                 inshape.Batch);
 
             return new Shape[] { outshape };

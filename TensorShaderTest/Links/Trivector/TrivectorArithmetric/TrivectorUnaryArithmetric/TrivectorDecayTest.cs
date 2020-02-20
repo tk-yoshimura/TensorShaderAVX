@@ -13,11 +13,8 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] vval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            Tensor vtensor = new Tensor(Shape.Vector(length), vval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField v = vtensor;
-            VariableField t = ttensor;
+            ParameterField v = new Tensor(Shape.Vector(length), vval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field u = TrivectorDecay(v);
             Field err = u - t;
@@ -25,7 +22,7 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gv_actual = v.GradTensor.State;
+            float[] gv_actual = v.GradState;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
         }
@@ -37,11 +34,8 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] vval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            Tensor vtensor = new Tensor(Shape.Vector(length), vval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField v = vtensor;
-            VariableField t = ttensor;
+            ParameterField v = new Tensor(Shape.Vector(length), vval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field x = TrivectorX(v), y = TrivectorY(v), z = TrivectorZ(v);
             Field norm = x * x + y * y + z * z;
@@ -53,7 +47,7 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gv_actual = v.GradTensor.State;
+            float[] gv_actual = v.GradState;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
         }

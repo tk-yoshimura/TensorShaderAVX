@@ -3,7 +3,7 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>インデクサ</summary>
-        public VariableNode this [int index] {
+        public VariableNode this[int index] {
             get {
                 Function function = new Functions.ArrayManipulation.BatchIndexer(index);
 
@@ -23,7 +23,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public BatchIndexer(int index)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Index = index;
         }
 
@@ -55,7 +56,7 @@ namespace TensorShader.Functions.ArrayManipulation {
 
             Tensor intensor = intensors[0], outtensor = outtensors[0];
 
-            return (new Tensor[]{ intensor, outtensor },
+            return (new Tensor[] { intensor, outtensor },
                 new Operators.ArrayManipulation.BatchIndexer(intensor.Shape, Index));
         }
     }

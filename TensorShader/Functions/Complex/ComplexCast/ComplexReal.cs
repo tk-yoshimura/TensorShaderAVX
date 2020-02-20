@@ -31,7 +31,7 @@ namespace TensorShader.Functions.Complex {
     internal class ComplexReal : Function {
         /// <summary>コンストラクタ</summary>
         public ComplexReal()
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){ }
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) { }
 
         /// <summary>出力テンソル形状を返す</summary>
         public override Shape[] OutputShapes(params Shape[] inshapes) {

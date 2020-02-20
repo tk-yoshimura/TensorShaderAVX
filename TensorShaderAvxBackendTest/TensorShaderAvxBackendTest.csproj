@@ -50,9 +50,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TensorShaderAvxBackend, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
+    <Reference Include="TensorShaderAvxBackend">
+      <HintPath>..\TensorShaderAvxBackend\bin\x64\Debug\TensorShaderAvxBackend.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

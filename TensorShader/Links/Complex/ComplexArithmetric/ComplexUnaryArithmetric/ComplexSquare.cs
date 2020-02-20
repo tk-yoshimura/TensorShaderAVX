@@ -19,7 +19,7 @@ namespace TensorShader.Links.ComplexArithmetric {
     public class ComplexSquare : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public ComplexSquare(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

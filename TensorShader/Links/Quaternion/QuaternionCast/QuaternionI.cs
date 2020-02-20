@@ -19,7 +19,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
     public class QuaternionI : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public QuaternionI(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

@@ -22,7 +22,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 2; i++) {
+                for (int i = 0; i < y.Length / 2; i++) {
                     Complex z = new Complex(x1[i * 2], x1[i * 2 + 1]);
                     Complex c = Complex.Conjugate(z);
 

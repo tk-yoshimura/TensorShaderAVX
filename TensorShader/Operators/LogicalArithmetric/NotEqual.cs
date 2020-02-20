@@ -3,7 +3,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
     internal class NotEqual : BinaryArithmetric.BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public NotEqual(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

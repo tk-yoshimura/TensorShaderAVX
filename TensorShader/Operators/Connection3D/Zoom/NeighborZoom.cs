@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace TensorShader.Operators.Connection3D {
     /// <summary>最近傍補間</summary>
     /// <remarks>倍率2固定</remarks>
@@ -15,10 +12,8 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Zoom.NeighborZoom3D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, 
-                                                           (uint)Batch, (uint)th, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Zoom.NeighborZoom3D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
+                                                        (uint)Batch, inmap.Buffer, outmap.Buffer);
         }
     }
 }

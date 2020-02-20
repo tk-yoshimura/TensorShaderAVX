@@ -5,10 +5,10 @@ namespace TensorShaderTest.Operators.Connection3D {
     public class Filter3D {
         private readonly double[] val;
 
-        public int InChannels{ private set; get; }
-        public int OutChannels{ private set; get; }
-        public int KernelWidth{ private set; get; }
-        public int KernelHeight{ private set; get; }
+        public int InChannels { private set; get; }
+        public int OutChannels { private set; get; }
+        public int KernelWidth { private set; get; }
+        public int KernelHeight { private set; get; }
         public int KernelDepth { private set; get; }
         public int Length => InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth;
 
@@ -58,11 +58,11 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         public static bool operator ==(Filter3D filter1, Filter3D filter2) {
-            if (filter1.KernelWidth  != filter2.KernelWidth)   return false;
-            if (filter1.KernelHeight != filter2.KernelHeight)  return false;
-            if (filter1.KernelDepth  != filter2.KernelDepth)   return false;
-            if (filter1.InChannels  != filter2.InChannels)   return false;
-            if (filter1.OutChannels != filter2.OutChannels)  return false;
+            if (filter1.KernelWidth != filter2.KernelWidth) return false;
+            if (filter1.KernelHeight != filter2.KernelHeight) return false;
+            if (filter1.KernelDepth != filter2.KernelDepth) return false;
+            if (filter1.InChannels != filter2.InChannels) return false;
+            if (filter1.OutChannels != filter2.OutChannels) return false;
 
             return filter1.val.SequenceEqual(filter2.val);
         }
@@ -80,7 +80,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         public float[] ToArray() {
-            return val.Select((v)=>(float)v).ToArray();
+            return val.Select((v) => (float)v).ToArray();
         }
     }
 }

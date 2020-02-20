@@ -14,7 +14,7 @@ namespace TensorShader {
 
 namespace TensorShader.Links.Utility {
     /// <summary>逆伝搬をブロック</summary>
-    public class Unchain : Link{
+    public class Unchain : Link {
         /// <summary>入力項</summary>
         protected Field X => InFields[0];
 

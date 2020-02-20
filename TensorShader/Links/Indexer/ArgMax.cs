@@ -25,7 +25,7 @@ namespace TensorShader.Links.Indexer {
 
         /// <summary>コンストラクタ</summary>
         public ArgMax(Field infield, Field outfield)
-            : base(new Field[]{ infield }, outfield){ }
+            : base(new Field[] { infield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

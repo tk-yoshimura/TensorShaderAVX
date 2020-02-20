@@ -22,7 +22,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 3; i++) {
+                for (int i = 0; i < y.Length / 3; i++) {
                     Vector3 v = new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]);
 
                     Assert.AreEqual(v.Z, y[i], 1e-6f, $"not equal {i}");

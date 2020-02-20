@@ -11,12 +11,12 @@ namespace TensorShader {
         }
 
         /// <summary>加算</summary>
-        public static VariableNode operator+(VariableNode x, float c) {
+        public static VariableNode operator +(VariableNode x, float c) {
             return Add(x, c);
         }
 
         /// <summary>加算</summary>
-        public static VariableNode operator+(float c, VariableNode x) {
+        public static VariableNode operator +(float c, VariableNode x) {
             return Add(c, x);
         }
     }
@@ -33,12 +33,12 @@ namespace TensorShader {
         }
 
         /// <summary>加算</summary>
-        public static Tensor operator+(Tensor x, float c) {
+        public static Tensor operator +(Tensor x, float c) {
             return Add(x, c);
         }
 
         /// <summary>加算</summary>
-        public static Tensor operator+(float c, Tensor x) {
+        public static Tensor operator +(float c, Tensor x) {
             return Add(c, x);
         }
     }

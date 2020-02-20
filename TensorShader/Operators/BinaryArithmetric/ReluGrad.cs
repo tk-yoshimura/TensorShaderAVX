@@ -3,7 +3,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class ReluGrad : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public ReluGrad(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

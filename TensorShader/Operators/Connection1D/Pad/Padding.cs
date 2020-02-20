@@ -28,7 +28,7 @@ namespace TensorShader.Operators.Connection1D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(channels, inwidth, batch)),
-                (ArgumentType.Out, Shape.Map1D(channels, checked(inwidth + pad_left + pad_right), batch)),
+                (ArgumentType.Out, Shape.Map1D(channels, inwidth + pad_left + pad_right, batch)),
             };
 
             this.Channels = channels;

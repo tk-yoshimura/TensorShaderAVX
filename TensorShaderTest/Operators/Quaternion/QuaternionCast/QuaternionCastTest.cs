@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.QuaternionCast;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Quaternion {
     [TestClass]
@@ -66,18 +66,12 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionCast ope = new QuaternionCast(inshape);
 
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_cast.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3, v4, v5);
-            ope.Execute(v1, v2, v3, v4, v5);
-            ope.Execute(v1, v2, v3, v4, v5);
-            ope.Execute(v1, v2, v3, v4, v5);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

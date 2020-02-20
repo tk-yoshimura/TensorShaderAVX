@@ -19,7 +19,7 @@ namespace TensorShader.Links.LogicalArithmetric {
     public class Not : LogicalUnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Not(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

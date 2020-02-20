@@ -30,11 +30,11 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field Y => OutField;
 
         /// <summary>形状</summary>
-        protected Shape Shape{ private set; get; }
+        protected Shape Shape { private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public Where(Field condition, Field x1, Field x2, Field y)
-            : base(new Field[]{ condition, x1, x2 }, y ){
+            : base(new Field[] { condition, x1, x2 }, y) {
             this.Shape = condition.Shape;
         }
 

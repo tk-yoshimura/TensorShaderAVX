@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -20,8 +20,8 @@ namespace TensorShaderTest.Operators.Connection2D {
                         foreach (int rightpad in new int[] { 0, 1, 2 }) {
                             foreach (int toppad in new int[] { 0, 1, 2 }) {
                                 foreach (int bottompad in new int[] { 0, 1, 2 }) {
-                                    foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                                        foreach (int inheight in new int[] { 5, 7, 11 }) {
+                                    foreach (int inheight in new int[] { 5, 7, 11 }) {
+                                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
                                             int outwidth = inwidth + leftpad + rightpad, outheight = inheight + toppad + bottompad;
 
                                             float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -81,25 +81,20 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, channels = 32, leftpad = 1, rightpad = 1, toppad = 1, bottompad = 1;
+            int inwidth = 512, inheight = 512, channels = 32, leftpad = 1, rightpad = 1, toppad = 1, bottompad = 1, batch = 4;
             int outwidth = inwidth + leftpad + rightpad, outheight = inheight + toppad + bottompad;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
 
-            ZeroPadding ope = new ZeroPadding(inwidth, inheight, channels, leftpad, rightpad, toppad, bottompad);
+            ZeroPadding ope = new ZeroPadding(inwidth, inheight, channels, leftpad, rightpad, toppad, bottompad, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/zeropadding_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

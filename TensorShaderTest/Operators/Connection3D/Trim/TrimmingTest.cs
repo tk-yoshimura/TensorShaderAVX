@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection3D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
@@ -77,25 +77,20 @@ namespace TensorShaderTest.Operators.Connection3D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 64, inheight = 64, indepth = 64, channels = 32, lefttrim = 1, righttrim = 1, toptrim = 1, bottomtrim = 1, fronttrim = 1, reartrim = 1;
+            int inwidth = 64, inheight = 64, indepth = 64, channels = 32, lefttrim = 1, righttrim = 1, toptrim = 1, bottomtrim = 1, fronttrim = 1, reartrim = 1, batch = 4;
             int outwidth = inwidth - lefttrim - righttrim, outheight = inheight - toptrim - bottomtrim, outdepth = indepth - fronttrim - reartrim;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth));
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
 
-            Trimming ope = new Trimming(inwidth, inheight, indepth, channels, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim);
+            Trimming ope = new Trimming(inwidth, inheight, indepth, channels, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trimming_3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -18,8 +18,8 @@ namespace TensorShaderTest.Operators.Connection2D {
                         foreach (int righttrim in new int[] { 0, 1, 2 }) {
                             foreach (int toptrim in new int[] { 0, 1, 2 }) {
                                 foreach (int bottomtrim in new int[] { 0, 1, 2 }) {
-                                    foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                                        foreach (int inheight in new int[] { 5, 7, 11 }) {
+                                    foreach (int inheight in new int[] { 5, 7, 11 }) {
+                                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
                                             int outwidth = inwidth - lefttrim - righttrim, outheight = inheight - toptrim - bottomtrim;
 
                                             float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -78,25 +78,20 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, channels = 32, lefttrim = 1, righttrim = 1, toptrim = 1, bottomtrim = 1;
+            int inwidth = 512, inheight = 512, channels = 32, lefttrim = 1, righttrim = 1, toptrim = 1, bottomtrim = 1, batch = 4;
             int outwidth = inwidth - lefttrim - righttrim, outheight = inheight - toptrim - bottomtrim;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
 
-            Trimming ope = new Trimming(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim);
+            Trimming ope = new Trimming(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trimming_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Indexer {
@@ -11,7 +10,7 @@ namespace TensorShader.Operators.Indexer {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ArgMin(int channels, int batch = 1){
+        public ArgMin(int channels, int batch = 1) {
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map0D(channels, batch)),
                 (ArgumentType.Out, Shape.Vector(batch)),
@@ -32,7 +31,7 @@ namespace TensorShader.Operators.Indexer {
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, outmap });
+            Execute(new Tensor[] { inmap, outmap });
         }
     }
 }

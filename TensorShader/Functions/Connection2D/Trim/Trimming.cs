@@ -67,11 +67,12 @@ namespace TensorShader.Functions.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim)
-            : this(trim, trim, trim, trim){ }
+            : this(trim, trim, trim, trim) { }
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim_left, int trim_right, int trim_top, int trim_bottom)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.TrimLeft = trim_left;
             this.TrimRight = trim_right;
             this.TrimTop = trim_top;
@@ -85,8 +86,8 @@ namespace TensorShader.Functions.Connection2D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map2D(inshape.Channels,
-                                         checked(inshape.Width -TrimLeft - TrimRight),
-                                         checked(inshape.Height - TrimTop - TrimBottom),
+                                         inshape.Width - TrimLeft - TrimRight,
+                                         inshape.Height - TrimTop - TrimBottom,
                                          inshape.Batch);
 
             return new Shape[] { outshape };

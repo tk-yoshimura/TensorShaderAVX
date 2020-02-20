@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using TensorShaderAvxBackend;
 
 namespace TensorShader.Operators.ArrayManipulation {
@@ -30,7 +31,7 @@ namespace TensorShader.Operators.ArrayManipulation {
         public override void Execute(params Tensor[] tensors) {
             CheckArgumentShapes(tensors);
 
-            AvxArray<float>[] inmaps = tensors.Take(tensors.Length - 1).Select((tensor)=>tensor.Buffer).ToArray();
+            AvxArray<float>[] inmaps = tensors.Take(tensors.Length - 1).Select((tensor) => tensor.Buffer).ToArray();
             AvxArray<float> refmap = tensors.Last().Buffer;
 
             TensorShaderAvxBackend.Elementwise.Sum((uint)Shape.Length, inmaps, refmap);

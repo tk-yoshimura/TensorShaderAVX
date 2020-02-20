@@ -14,7 +14,7 @@ namespace TensorShader {
         }
 
         /// <summary>除算</summary>
-        public static VariableNode operator/(VariableNode x1, VariableNode x2) {
+        public static VariableNode operator /(VariableNode x1, VariableNode x2) {
             return Div(x1, x2);
         }
     }
@@ -34,7 +34,7 @@ namespace TensorShader {
         }
 
         /// <summary>除算</summary>
-        public static Tensor operator/(Tensor x1, Tensor x2) {
+        public static Tensor operator /(Tensor x1, Tensor x2) {
             return Div(x1, x2);
         }
     }

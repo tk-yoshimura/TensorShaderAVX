@@ -19,7 +19,7 @@ namespace TensorShader.Links.TrivectorArithmetric {
     public class TrivectorY : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public TrivectorY(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

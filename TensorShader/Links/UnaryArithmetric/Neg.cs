@@ -22,7 +22,7 @@ namespace TensorShader.Links.UnaryArithmetric {
     internal class Neg : UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Neg(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
@@ -31,7 +31,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if(Y.Grad == null) {
+            if (Y.Grad == null) {
                 return;
             }
 

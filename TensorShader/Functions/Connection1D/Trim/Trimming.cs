@@ -61,11 +61,12 @@ namespace TensorShader.Functions.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim)
-            : this(trim, trim){ }
+            : this(trim, trim) { }
 
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim_left, int trim_right)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.TrimLeft = trim_left;
             this.TrimRight = trim_right;
         }
@@ -77,7 +78,7 @@ namespace TensorShader.Functions.Connection1D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map1D(inshape.Channels,
-                                         checked(inshape.Width - TrimLeft - TrimRight),
+                                         inshape.Width - TrimLeft - TrimRight,
                                          inshape.Batch);
 
             return new Shape[] { outshape };

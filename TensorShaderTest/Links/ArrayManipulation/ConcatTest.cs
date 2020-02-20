@@ -19,35 +19,28 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             float[] yval = (new float[chsum * s1 * s2 * s3]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor x1tensor = new Tensor(new Shape(ShapeType.Map, ch1, s1, s2, s3), x1val);
-            Tensor x2tensor = new Tensor(new Shape(ShapeType.Map, ch2, s1, s2, s3), x2val);
-            Tensor x3tensor = new Tensor(new Shape(ShapeType.Map, ch3, s1, s2, s3), x3val);
-            Tensor x4tensor = new Tensor(new Shape(ShapeType.Map, ch4, s1, s2, s3), x4val);
+            ParameterField x1 = new Tensor(new Shape(ShapeType.Map, ch1, s1, s2, s3), x1val);
+            ParameterField x2 = new Tensor(new Shape(ShapeType.Map, ch2, s1, s2, s3), x2val);
+            VariableField x3 = new Tensor(new Shape(ShapeType.Map, ch3, s1, s2, s3), x3val);
+            ParameterField x4 = new Tensor(new Shape(ShapeType.Map, ch4, s1, s2, s3), x4val);
+            VariableField y_actual = new Tensor(new Shape(ShapeType.Map, chsum, s1, s2, s3), yval);
 
-            Tensor ytensor = new Tensor(new Shape(ShapeType.Map, chsum, s1, s2, s3), yval);
-
-            ParameterField x1 = x1tensor;
-            ParameterField x2 = x2tensor;
-            VariableField x3 = x3tensor;
-            ParameterField x4 = x4tensor;
-            VariableField y_actual = ytensor;
-
-            Field y_expect = Concat(axis:0, x1, x2, x3, x4);
+            Field y_expect = Concat(axis: 0, x1, x2, x3, x4);
             Field err = Abs(y_expect - y_actual);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx1_actual = x1.GradTensor.State;
+            float[] gx1_actual = x1.GradState;
 
             AssertError.Tolerance(gx1_expect, gx1_actual, 1e-7f, 1e-5f, $"not equal gx1");
 
-            float[] gx2_actual = x2.GradTensor.State;
+            float[] gx2_actual = x2.GradState;
 
             AssertError.Tolerance(gx2_expect, gx2_actual, 1e-7f, 1e-5f, $"not equal gx2");
 
-            float[] gx4_actual = x4.GradTensor.State;
+            float[] gx4_actual = x4.GradState;
 
             AssertError.Tolerance(gx4_expect, gx4_actual, 1e-7f, 1e-5f, $"not equal gx4");
         }
@@ -67,14 +60,14 @@ namespace TensorShaderTest.Links.ArrayManipulation {
                 new Shape(ShapeType.Map, 19, 21, 13, 14),
                 new Shape(ShapeType.Map, 13, 14, 19, 21, 24),
                 new Shape(ShapeType.Map, 24, 19, 14, 13, 21),
-                new Shape(ShapeType.Map, 19, 13, 21, 24, 14)} ) {
+                new Shape(ShapeType.Map, 19, 13, 21, 24, 14)}) {
                 for (int axis = 0; axis < outshape.Ndim; axis++) {
                     int length = outshape[axis];
 
-                    for(int n = 1; n <= 5; n++) {
+                    for (int n = 1; n <= 5; n++) {
                         int[] c = (new int[n]).Select((_) => 1).ToArray();
 
-                        for(int j = n; j < length; j++) {
+                        for (int j = n; j < length; j++) {
                             c[rd.Next(c.Length)]++;
                         }
 
@@ -82,7 +75,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
                         Shape[] inshapes = new Shape[n];
                         ParameterField[] xfields = new ParameterField[n];
 
-                        for(int i = 0; i < n; i++) {
+                        for (int i = 0; i < n; i++) {
                             int[] s = outshape;
                             s[axis] = c[i];
                             inshapes[i] = new Shape(ShapeType.Map, s);
@@ -98,7 +91,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
                         Field err = yfield - tfield;
 
-                        (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+                        (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
                         flow.Execute();
 

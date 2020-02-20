@@ -10,10 +10,10 @@ namespace TensorShader.Operators.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public ExtractChannel(Shape inshape, int channel_index, Shape outshape) {
-            if (inshape.Type != ShapeType.Map){
+            if (inshape.Type != ShapeType.Map) {
                 throw new ArgumentException(ExceptionMessage.Shape("Type", inshape));
             }
-            if (outshape.Type != ShapeType.Map){
+            if (outshape.Type != ShapeType.Map) {
                 throw new ArgumentException(ExceptionMessage.Shape("Type", outshape));
             }
 

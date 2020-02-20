@@ -15,20 +15,17 @@ namespace TensorShaderTest.Links.Connection2D {
             float[] xval = (new float[inchannels * inwidth * inheight * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
             float[] yval = (new float[outchannels * outwidth * outheight * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            VariableField y_actual = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
             Field y_expect = SpaceToChannel2D(x, scale);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

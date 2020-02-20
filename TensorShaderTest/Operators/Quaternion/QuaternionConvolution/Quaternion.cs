@@ -15,9 +15,9 @@ namespace TensorShaderTest.Operators.Quaternion {
             this.K = k;
         }
 
-        public double this[int index]{
+        public double this[int index] {
             get {
-                if (index == 0){
+                if (index == 0) {
                     return R;
                 }
                 else if (index == 1) {
@@ -33,11 +33,11 @@ namespace TensorShaderTest.Operators.Quaternion {
             }
         }
 
-        public static Quaternion operator+(Quaternion q1, Quaternion q2) {
+        public static Quaternion operator +(Quaternion q1, Quaternion q2) {
             return new Quaternion(q1.R + q2.R, q1.I + q2.I, q1.J + q2.J, q1.K + q2.K);
         }
 
-        public static Quaternion operator*(Quaternion q1, Quaternion q2) {
+        public static Quaternion operator *(Quaternion q1, Quaternion q2) {
             return new Quaternion(
                 q1.R * q2.R - q1.I * q2.I - q1.J * q2.J - q1.K * q2.K,
                 q1.R * q2.I + q1.I * q2.R + q1.J * q2.K - q1.K * q2.J,
@@ -53,9 +53,9 @@ namespace TensorShaderTest.Operators.Quaternion {
         public static Quaternion MulGrad(Quaternion q1, Quaternion q2) {
             return new Quaternion(
                   q1.R * q2.R + q1.I * q2.I + q1.J * q2.J + q1.K * q2.K,
-                - q1.R * q2.I + q1.I * q2.R + q1.J * q2.K - q1.K * q2.J,
-                - q1.R * q2.J - q1.I * q2.K + q1.J * q2.R + q1.K * q2.I,
-                - q1.R * q2.K + q1.I * q2.J - q1.J * q2.I + q1.K * q2.R
+                -q1.R * q2.I + q1.I * q2.R + q1.J * q2.K - q1.K * q2.J,
+                -q1.R * q2.J - q1.I * q2.K + q1.J * q2.R + q1.K * q2.I,
+                -q1.R * q2.K + q1.I * q2.J - q1.J * q2.I + q1.K * q2.R
             );
         }
     }

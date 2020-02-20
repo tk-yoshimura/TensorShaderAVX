@@ -1,16 +1,16 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.RandomGeneration;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.RandomGeneration {
     [TestClass]
     public class BinaryRandomTest {
         [TestMethod]
         public void ExecuteTest() {
-            int length = 65535 * 13;
+            int length = 65535 * 33;
 
             Shape shape = Shape.Vector(length);
 
@@ -29,7 +29,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
         [TestMethod]
         public void SpeedTest() {
-            int length = 65535 * 16;
+            int length = 65535 * 15;
 
             Shape shape = Shape.Vector(length);
 
@@ -37,18 +37,12 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             BinaryRandom ope = new BinaryRandom(shape, new Random(1234), 0.25f);
 
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/binary_random.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(v1);
-            ope.Execute(v1);
-            ope.Execute(v1);
-            ope.Execute(v1);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

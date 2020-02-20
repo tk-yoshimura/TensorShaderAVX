@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.ArrayManipulation {
     [TestClass]
@@ -11,7 +12,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
         public void ExecuteTest() {
             Random rd = new Random(1234);
 
-            for (int n = 1; n < 6; n++) {
+            for (int n = 1; n <= 8; n++) {
                 for (int i = 0; i < 32; i++) {
                     for (int length = i * 1024 - 2; length <= i * 1024 + 2; length++) {
                         if (length < 1) continue;
@@ -26,9 +27,15 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                             vs[j] = new OverflowCheckedTensor(shape, xs[j]);
                         }
 
+
+
                         Sum ope = new Sum(shape, n);
 
+                        Cuda.Profiler.Start();
+
                         ope.Execute(vs.Concat(new Tensor[] { u }).ToArray());
+
+                        Cuda.Profiler.Stop();
 
                         for (int j = 0; j < n; j++) {
                             CollectionAssert.AreEqual(xs[j], vs[j].State);
@@ -42,7 +49,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                                 sum += xs[k][j];
                             }
 
-                            Assert.AreEqual(sum, y[j], 1e-6f, $"length:{length}, idx:{j}");
+                            Assert.AreEqual(sum, y[j], 1e-5f, $"length:{length}, idx:{j}");
                         }
                     };
                 }

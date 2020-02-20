@@ -3,7 +3,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
     internal class IsNan : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public IsNan(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

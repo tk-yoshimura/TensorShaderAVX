@@ -21,24 +21,19 @@ namespace TensorShaderTest.Links.Loss {
                   0, 1, 0,
                   1, 0, 0 };
 
-            Tensor xtensor = new Tensor(Shape.Map0D(channels, batch), xval);
-            Tensor ttensor = new Tensor(Shape.Map0D(channels, batch), tval);
+            ParameterField x = new Tensor(Shape.Map0D(channels, batch), xval);
+            VariableField t = new Tensor(Shape.Map0D(channels, batch), tval);
 
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
-
-            Field loss = Sum(SoftmaxCrossEntropy(x, t), axes:new int[]{ Axis.Map0D.Channels });
-            OutputNode lossnode = loss.Value.Save();
-
-            (Flow flow, Parameters parameters) = Flow.Optimize(loss);
+            StoreField loss = Sum(SoftmaxCrossEntropy(x, t), Axis.Map0D.Channels);
+            (Flow flow, _) = Flow.Optimize(loss);
 
             flow.Execute();
 
-            float[] loss_actual = lossnode.Tensor.State;
+            float[] loss_actual = loss.State;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-6f, 1e-4f, $"not equal loss");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx");
         }

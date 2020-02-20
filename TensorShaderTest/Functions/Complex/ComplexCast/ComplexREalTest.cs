@@ -22,7 +22,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 2; i++) {
+                for (int i = 0; i < y.Length / 2; i++) {
                     Complex c = new Complex(x1[i * 2], x1[i * 2 + 1]);
 
                     Assert.AreEqual(c.Real, y[i], 1e-6f, $"not equal {i}");

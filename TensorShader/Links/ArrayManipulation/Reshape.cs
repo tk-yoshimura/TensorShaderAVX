@@ -24,14 +24,14 @@ namespace TensorShader.Links.ArrayManipulation {
         protected Field Y => OutField;
 
         /// <summary>入力形状</summary>
-        protected Shape InShape{ private set; get; }
+        protected Shape InShape { private set; get; }
 
         /// <summary>出力形状</summary>
         protected Shape OutShape { private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public Reshape(Field infield, Field outfield, Shape shape)
-            : base(new Field[]{ infield }, outfield){
+            : base(new Field[] { infield }, outfield) {
             this.InShape = infield.Shape;
             this.OutShape = shape;
         }

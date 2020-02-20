@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>チャネルごとのカーネル積</summary>
-    internal class ChannelwiseKernelProduct : Operator{
+    internal class ChannelwiseKernelProduct : Operator {
         /// <summary>チャネル</summary>
         public int Channels { private set; get; }
 
@@ -15,20 +14,13 @@ namespace TensorShader.Operators.Connection2D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelHeight { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseKernelProduct(int inwidth, int inheight, int channels, int kwidth, int kheight, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int outwidth = (inwidth - kwidth) / stride + 1;
-            int outheight = (inheight - kheight) / stride + 1;
+        public ChannelwiseKernelProduct(int inwidth, int inheight, int channels, int kwidth, int kheight, int batch = 1) {
+            int outwidth = inwidth - kwidth + 1;
+            int outheight = inheight - kheight + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(channels, inwidth, inheight, batch)),
@@ -39,7 +31,6 @@ namespace TensorShader.Operators.Connection2D {
             this.Channels = channels;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.Stride = stride;
             this.Batch = batch;
         }
 
@@ -50,15 +41,15 @@ namespace TensorShader.Operators.Connection2D {
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
             TensorShaderAvxBackend.Convolution.ChannelwiseKernelProduct2D((uint)Channels,
-                                                                          (uint)inmap1.Width, (uint)inmap1.Height,
-                                                                          (uint)Batch,
-                                                                          (uint)KernelWidth, (uint)KernelHeight, (uint)Stride,
-                                                                          inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
+                                                                           (uint)inmap1.Width, (uint)inmap1.Height,
+                                                                           (uint)Batch,
+                                                                           (uint)KernelWidth, (uint)KernelHeight,
+                                                                           inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap1, Tensor inmap2, Tensor outfilter) {
-            Execute(new Tensor[]{ inmap1, inmap2, outfilter });
+            Execute(new Tensor[] { inmap1, inmap2, outfilter });
         }
     }
 }

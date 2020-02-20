@@ -28,7 +28,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>コンストラクタ</summary>
         public AbsoluteError(Field xfield, Field tfield, Field outfield)
-            : base(new Field[]{ xfield, tfield }, outfield) { }
+            : base(new Field[] { xfield, tfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

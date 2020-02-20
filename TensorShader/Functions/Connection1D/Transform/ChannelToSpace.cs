@@ -36,7 +36,8 @@ namespace TensorShader.Functions.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public ChannelToSpace(int scale)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Scale = scale;
         }
 
@@ -48,7 +49,7 @@ namespace TensorShader.Functions.Connection1D {
 
             Shape outshape = Shape.Map1D(
                 inshape.Channels / Scale,
-                checked(inshape.Width * Scale),
+                inshape.Width * Scale,
                 inshape.Batch);
 
             return new Shape[] { outshape };

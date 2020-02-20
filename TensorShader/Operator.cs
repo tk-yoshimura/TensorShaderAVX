@@ -27,7 +27,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.ArgumentCount(nameof(tensors), tensors.Length, ArgumentCount));
             }
 
-            for(int i = 0; i < ArgumentCount; i++) {
+            for (int i = 0; i < ArgumentCount; i++) {
                 if (tensors[i].Shape != arguments[i].shape) {
                     throw new ArgumentException(ExceptionMessage.ShapeWithIndex(i, tensors[i].Shape, arguments[i].shape));
                 }

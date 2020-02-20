@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection3D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
@@ -16,9 +16,9 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }) {
-                    foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                        foreach (int inheight in new int[] { 5, 7, 11 }) {
-                            foreach (int indepth in new int[] { 5, 7, 11 }) {
+                    foreach (int indepth in new int[] { 1, 2, 5, 7, 11 }) {
+                        foreach (int inheight in new int[] { 1, 2, 5, 7, 11 }) {
+                            foreach (int inwidth in new int[] { 1, 2, 5, 7, 11 }) {
                                 int outwidth = inwidth * scale, outheight = inheight * scale, outdepth = indepth * scale;
 
                                 float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -62,17 +62,12 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             NeighborZoom ope = new NeighborZoom(inwidth, inheight, indepth, channels);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/neighborzoom_3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
         public static Map3D Reference(Map3D x, int scale) {

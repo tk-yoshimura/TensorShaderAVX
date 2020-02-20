@@ -3,7 +3,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
     internal class Log10 : UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Log10(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

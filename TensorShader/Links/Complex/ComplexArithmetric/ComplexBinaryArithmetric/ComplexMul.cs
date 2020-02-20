@@ -19,7 +19,7 @@ namespace TensorShader.Links.ComplexArithmetric {
     public class ComplexMul : BinaryArithmetric.BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public ComplexMul(Field infield1, Field infield2, Field outfield)
-            : base(infield1, infield2, outfield ) { }
+            : base(infield1, infield2, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

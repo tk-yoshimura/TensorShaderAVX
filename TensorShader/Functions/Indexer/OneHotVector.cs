@@ -35,7 +35,8 @@ namespace TensorShader.Functions.Indexer {
 
         /// <summary>コンストラクタ</summary>
         public OneHotVector(int channels)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Channels = channels;
         }
 
@@ -45,7 +46,7 @@ namespace TensorShader.Functions.Indexer {
 
             Shape inshape = inshapes[0];
 
-            return new Shape[] { new Shape(ShapeType.Map, (new int[]{ Channels }).Concat((int[])inshape).ToArray() ) };
+            return new Shape[] { new Shape(ShapeType.Map, (new int[] { Channels }).Concat((int[])inshape).ToArray()) };
         }
 
         public override void CheckInputShapes(params Shape[] inshapes) {

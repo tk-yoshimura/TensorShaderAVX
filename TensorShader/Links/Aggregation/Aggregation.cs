@@ -20,7 +20,7 @@ namespace TensorShader.Links.Aggregation {
 
         /// <summary>コンストラクタ</summary>
         public Aggregation(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
-            : base(new Field[] { infield }, outfield ) {
+            : base(new Field[] { infield }, outfield) {
             if (axes == null) {
                 axes = (new int[infield.Shape.Ndim]).Select((_, idx) => idx).ToArray();
             }
@@ -30,7 +30,7 @@ namespace TensorShader.Links.Aggregation {
 
             int[] s = infield.Shape;
 
-            foreach(int axis in axes) {
+            foreach (int axis in axes) {
                 s[axis] = 1;
             }
 

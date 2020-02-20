@@ -13,9 +13,9 @@ namespace TensorShaderTest.Operators.Trivector {
             this.Z = z;
         }
 
-        public double this[int index]{
+        public double this[int index] {
             get {
-                if (index == 0){
+                if (index == 0) {
                     return X;
                 }
                 else if (index == 1) {
@@ -28,11 +28,11 @@ namespace TensorShaderTest.Operators.Trivector {
             }
         }
 
-        public static Trivector operator+(Trivector v1, Trivector v2) {
+        public static Trivector operator +(Trivector v1, Trivector v2) {
             return new Trivector(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
-        public static Trivector operator*(Trivector v, Quaternion.Quaternion q) {
+        public static Trivector operator *(Trivector v, Quaternion.Quaternion q) {
             double x = v.X, y = v.Y, z = v.Z, r = q.R, i = q.I, j = q.J, k = q.K;
 
             return new Trivector(
@@ -68,8 +68,8 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorTest {
         [TestMethod]
         public void AddTest() {
-            Trivector v1 = new Trivector(2,   7, 31);
-            Trivector v2 = new Trivector(23, 17,  3);
+            Trivector v1 = new Trivector(2, 7, 31);
+            Trivector v2 = new Trivector(23, 17, 3);
 
             Trivector v_add = v1 + v2;
 
@@ -85,7 +85,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             Trivector u = v * q;
 
-            Assert.AreEqual( 112, u.X);
+            Assert.AreEqual(112, u.X);
             Assert.AreEqual(-838, u.Y);
             Assert.AreEqual(-404, u.Z);
         }
@@ -99,21 +99,21 @@ namespace TensorShaderTest.Operators.Trivector {
 
             Assert.AreEqual(-648, u.X);
             Assert.AreEqual(-438, u.Y);
-            Assert.AreEqual( 516, u.Z);
+            Assert.AreEqual(516, u.Z);
         }
 
         [TestMethod]
         public void MulQGradTest() {
-            Trivector v = new Trivector( 4, -3,  2);
-            Trivector u = new Trivector(-2,  5, -7);
+            Trivector v = new Trivector(4, -3, 2);
+            Trivector u = new Trivector(-2, 5, -7);
             Quaternion.Quaternion q = new Quaternion.Quaternion(5, -6, 7, -8);
 
             Quaternion.Quaternion p = Trivector.MulQGrad(v, u, q);
 
             Assert.AreEqual(-390, p.R);
-            Assert.AreEqual( 734, p.I);
+            Assert.AreEqual(734, p.I);
             Assert.AreEqual(-470, p.J);
-            Assert.AreEqual( 814, p.K);
+            Assert.AreEqual(814, p.K);
         }
     }
 }

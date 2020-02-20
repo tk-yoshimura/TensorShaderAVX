@@ -11,7 +11,7 @@ namespace TensorShaderTest.Layers {
 
             VariableField x = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
 
-            Layer layer = new PointwiseConvolution3D(inchannels, outchannels, use_bias:true, "conv");
+            Layer layer = new PointwiseConvolution3D(inchannels, outchannels, use_bias: true, "conv");
 
             Field y = layer.Forward(x);
 

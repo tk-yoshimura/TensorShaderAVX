@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -15,22 +15,22 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] gyval = (new float[inwidth * inheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                        foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                            foreach (int width in new int[] { 8, 9, 13, 17 }) {
+                                float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                float[] gyval = (new float[width * height * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                Map2D x = new Map2D(inchannels, inwidth, inheight, batch, xval);
-                                Map2D gy = new Map2D(outchannels, inwidth, inheight, batch, gyval);
+                                Map2D x = new Map2D(inchannels, width, height, batch, xval);
+                                Map2D gy = new Map2D(outchannels, width, height, batch, gyval);
 
                                 Filter2D gw = Reference(x, gy);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, inwidth, inheight, batch), gyval);
+                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch), xval);
+                                OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch), gyval);
 
                                 OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
 
-                                PointwiseKernelProduct ope = new PointwiseKernelProduct(inwidth, inheight, inchannels, outchannels, batch);
+                                PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, inchannels, outchannels, batch);
 
                                 ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
@@ -40,15 +40,55 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 CollectionAssert.AreEqual(xval, x_tensor.State);
                                 CollectionAssert.AreEqual(gyval, gy_tensor.State);
 
-                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight},{batch}");
+                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{batch}");
 
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{inwidth},{inheight},{batch}");
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{batch}");
 
                             }
                         }
                     }
                 }
             }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int width = 128, height = 196;
+
+            float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] gyval = (new float[width * height * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map2D x = new Map2D(inchannels, width, height, batch, xval);
+            Map2D gy = new Map2D(outchannels, width, height, batch, gyval);
+
+            Filter2D gw = Reference(x, gy);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch), xval);
+            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch), gyval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+
+            PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(gyval, gy_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{batch}");
 
             Console.WriteLine($"maxerr:{max_err}");
         }
@@ -64,17 +104,12 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             PointwiseKernelProduct ope = new PointwiseKernelProduct(inwidth, inheight, inchannels, outchannels);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
         public static Filter2D Reference(Map2D x, Map2D gy) {
@@ -84,53 +119,13 @@ namespace TensorShaderTest.Operators.Connection2D {
             Filter2D w = new Filter2D(inchannels, outchannels, 1, 1);
 
             for (int th = 0; th < batch; th++) {
-                for (int inch, outch = 0; outch < outchannels; outch++) {
-                    for (inch = 0; inch < inchannels; inch++) {
-                        double sum = 0;
-
-                        for (int ix, iy = 0; iy < inh; iy++) {
-                            for (ix = 0; ix < inw; ix++) {
-                                sum += x[inch, ix, iy, th] * gy[outch, ix, iy, th];
+                for (int ix, iy = 0; iy < inh; iy++) {
+                    for (ix = 0; ix < inw; ix++) {
+                        for (int inch, outch = 0; outch < outchannels; outch++) {
+                            for (inch = 0; inch < inchannels; inch++) {
+                                w[inch, outch, 0, 0] += x[inch, ix, iy, th] * gy[outch, ix, iy, th];
                             }
                         }
-
-                        w[inch, outch, 0, 0] += sum;
-                    }
-                }
-            }
-
-            return w;
-        }
-
-        public static Filter2D OptimizedReference(Map2D x, Map2D gy) {
-            int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
-            int inw = x.Width, inh = x.Height;
-
-            Filter2D w = new Filter2D(outchannels, inchannels, 1, 1);
-
-            for (int th = 0; th < batch; th++) {
-                for (int outch, inch = 0; inch < inchannels; inch++) {
-                    for (outch = 0; outch < outchannels; outch++) {
-                        int filter_idx = inch + inchannels * outch;
-                        int inmap_org = inch + th * inw * inh * inchannels;
-                        int outmap_idx = outch + th * inw * inh * outchannels;
-
-                        double sum = 0;
-
-                        for (int ix, iy = 0; iy < inh; iy++) {
-                            int inmap_idx = inmap_org;
-
-                            for (ix = 0; ix < inw; ix++) {
-                                sum += x[inmap_idx] * gy[outmap_idx];
-
-                                inmap_idx += inchannels;
-                                outmap_idx += outchannels;
-                            }
-
-                            inmap_org += inchannels * inw;
-                        }
-
-                        w[filter_idx] += sum;
                     }
                 }
             }
@@ -167,39 +162,6 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] gw_actual = gw.ToArray();
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] gyval = (new float[inwidth * inheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                                Map2D x = new Map2D(inchannels, inwidth, inheight, batch, xval);
-                                Map2D gy = new Map2D(outchannels, inwidth, inheight, batch, gyval);
-
-                                Filter2D gw = Reference(x, gy);
-                                Filter2D gw_optimized = OptimizedReference(x, gy);
-
-                                float[] gw_expect = gw.ToArray();
-                                float[] gw_actual = gw_optimized.ToArray();
-
-                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

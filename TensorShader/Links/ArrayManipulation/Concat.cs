@@ -31,6 +31,7 @@ namespace TensorShader.Links.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Concat(int axis, Field[] infields, Field outfield)
             : base(infields, outfield) {
+
             this.Axis = axis;
         }
 
@@ -41,7 +42,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null || !XS.Select((field)=>field.EnableBackprop).Any((b)=>b)) {
+            if (Y.Grad == null || !XS.Select((field) => field.EnableBackprop).Any((b) => b)) {
                 return;
             }
 

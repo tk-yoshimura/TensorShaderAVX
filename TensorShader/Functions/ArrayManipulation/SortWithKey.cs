@@ -35,7 +35,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public SortWithKey(int axis)
-            : base(inputs: 2, outputs: 2, allow_resubstitution : false){
+            : base(inputs: 2, outputs: 2, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 
@@ -66,7 +67,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             }
 
             return (
-                new Tensor[]{ intensor_key, intensor_value, outtensor_key, outtensor_value },
+                new Tensor[] { intensor_key, intensor_value, outtensor_key, outtensor_value },
                 new Operators.ArrayManipulation.SortWithKey(intensor_key.Shape, Axis)
                 );
         }

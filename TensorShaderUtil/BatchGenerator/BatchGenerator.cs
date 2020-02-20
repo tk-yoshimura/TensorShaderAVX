@@ -35,7 +35,7 @@ namespace TensorShaderUtil.BatchGenerator {
                 throw new ArgumentException(nameof(num_batches));
             }
 
-            long length = checked(data_shape.Length * num_batches);
+            long length = data_shape.Length * num_batches;
             this.Value = new float[length];
             this.DataShape = data_shape;
 
@@ -84,6 +84,6 @@ namespace TensorShaderUtil.BatchGenerator {
                 }
 
                 Buffer.BlockCopy(data, 0, generator.Value, i * data.Length * sizeof(float), data.Length * sizeof(float));
-        };
+            };
     }
 }

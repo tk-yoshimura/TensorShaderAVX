@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -13,13 +13,13 @@ namespace TensorShaderTest.Operators.Connection2D {
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
-                foreach(int channels in new int[]{ 1, 2, 3, 4, 5, 6, 7, 8 }) {
-                    foreach(int toppad in new int[]{ 0, 1, 2 }) {
-                        foreach(int bottompad in new int[]{ 0, 1, 2 }) {
-                            foreach(int leftpad in new int[]{ 0, 1, 2 }) {
-                                foreach(int rightpad in new int[]{ 0, 1, 2 }) {
-                                    foreach(int inwidth in new int[] { 5, 7, 11 }) {
-                                        foreach(int inheight in new int[] { 5, 7, 11 }) {
+                foreach (int channels in new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }) {
+                    foreach (int toppad in new int[] { 0, 1, 2 }) {
+                        foreach (int bottompad in new int[] { 0, 1, 2 }) {
+                            foreach (int leftpad in new int[] { 0, 1, 2 }) {
+                                foreach (int rightpad in new int[] { 0, 1, 2 }) {
+                                    foreach (int inheight in new int[] { 5, 7, 11 }) {
+                                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
                                             int outwidth = inwidth + leftpad + rightpad, outheight = inheight + toppad + bottompad;
 
                                             float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -62,11 +62,11 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             Map2D y = new Map2D(channels, outw, outh, batch);
 
-            for(int th = 0; th < batch; th++) {
-                for(int ox, oy = 0; oy < outh; oy++) {
+            for (int th = 0; th < batch; th++) {
+                for (int ox, oy = 0; oy < outh; oy++) {
                     int iy = Math.Min(inh - 1, Math.Max(0, oy - toppad));
 
-                    for(ox = 0; ox < outw; ox++) {
+                    for (ox = 0; ox < outw; ox++) {
                         int ix = Math.Min(inw - 1, Math.Max(0, ox - leftpad));
 
                         for (int ch = 0; ch < channels; ch++) {
@@ -81,25 +81,20 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, channels = 32, leftpad = 1, rightpad = 1, toppad = 1, bottompad = 1;
+            int inwidth = 512, inheight = 512, channels = 32, leftpad = 1, rightpad = 1, toppad = 1, bottompad = 1, batch = 4;
             int outwidth = inwidth + leftpad + rightpad, outheight = inheight + toppad + bottompad;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
 
-            EdgePadding ope = new EdgePadding(inwidth, inheight, channels, leftpad, rightpad, toppad, bottompad);
+            EdgePadding ope = new EdgePadding(inwidth, inheight, channels, leftpad, rightpad, toppad, bottompad, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/edgepadding_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

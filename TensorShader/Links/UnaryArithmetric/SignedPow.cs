@@ -22,7 +22,8 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public SignedPow(Field infield, Field outfield, float alpha)
-            : base(infield, outfield ) {
+            : base(infield, outfield) {
+
             this.Alpha = alpha;
         }
 

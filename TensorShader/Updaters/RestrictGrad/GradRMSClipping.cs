@@ -10,17 +10,17 @@ namespace TensorShader.Updaters.RestrictGrad {
         /// <summary>制限値</summary>
         public float Limit {
             get {
-                return limit.Tensor.State[0];
+                return limit.State[0];
             }
             set {
-                limit.Tensor.State = new float[] { value };
+                limit.State = new float[] { value };
             }
         }
 
         /// <summary>コンストラクタ</summary>
         public GradRMSClipping(ParameterField parameter, float limit)
             : base(parameter) {
-            this.limit = new InputNode(new Tensor(Shape.Scalar(), new float[] { limit }));
+            this.limit = new InputNode(new Tensor(Shape.Scalar, new float[] { limit }));
         }
 
         /// <summary>更新フロー</summary>

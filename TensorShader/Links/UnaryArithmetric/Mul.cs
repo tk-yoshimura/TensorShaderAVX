@@ -40,7 +40,8 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public Mul(Field infield, Field outfield, float c)
-            : base(infield, outfield ) {
+            : base(infield, outfield) {
+
             this.Constant = c;
         }
 

@@ -19,7 +19,7 @@ namespace TensorShader.Links.Evaluation.Classify {
     public class Matches : ClassifyEvaluation {
         /// <summary>コンストラクタ</summary>
         public Matches(Field xfield, Field tfield, Field yfield)
-            : base( xfield, tfield, yfield ) { }
+            : base(xfield, tfield, yfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
@@ -28,7 +28,7 @@ namespace TensorShader.Links.Evaluation.Classify {
             VariableNode x_onehot = OneHotVector(ArgMax(X.Value), channels);
             VariableNode t_onehot = OneHotVector(T.Value, channels);
 
-            Y.AssignValue(Sum(x_onehot * t_onehot, axes:new int[] { Axis.Map0D.Batch }));
+            Y.AssignValue(Sum(x_onehot * t_onehot, axes: new int[] { Axis.Map0D.Batch }));
         }
     }
 }

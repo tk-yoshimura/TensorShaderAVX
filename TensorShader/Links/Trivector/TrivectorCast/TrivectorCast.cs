@@ -31,7 +31,7 @@ namespace TensorShader.Links.Trivector {
 
         /// <summary>コンストラクタ</summary>
         public TrivectorCast(Field xfield, Field yfield, Field zfield, Field outfield)
-            : base(new Field[] { xfield, yfield, zfield }, outfield ) { }
+            : base(new Field[] { xfield, yfield, zfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

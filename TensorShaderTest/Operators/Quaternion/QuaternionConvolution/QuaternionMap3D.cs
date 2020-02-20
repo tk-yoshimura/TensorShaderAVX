@@ -5,11 +5,11 @@ namespace TensorShaderTest.Operators.Quaternion {
     public class QuaternionMap3D {
         private readonly Quaternion[] val;
 
-        public int Channels{ private set; get; }
-        public int Width{ private set; get; }
-        public int Height{ private set; get; }
-        public int Depth{ private set; get; }
-        public int Batch{ private set; get; }
+        public int Channels { private set; get; }
+        public int Width { private set; get; }
+        public int Height { private set; get; }
+        public int Depth { private set; get; }
+        public int Batch { private set; get; }
         public int Length => Channels * Width * Height * Depth * Batch;
 
         public QuaternionMap3D(int channels, int width, int height, int depth, int batch, Quaternion[] val = null) {
@@ -58,11 +58,11 @@ namespace TensorShaderTest.Operators.Quaternion {
         }
 
         public static bool operator ==(QuaternionMap3D map1, QuaternionMap3D map2) {
-            if (map1.Width    != map2.Width)     return false;
-            if (map1.Height   != map2.Height)    return false;
-            if (map1.Depth    != map2.Depth)     return false;
-            if (map1.Channels != map2.Channels)  return false;
-            if (map1.Batch    != map2.Batch)     return false;
+            if (map1.Width != map2.Width) return false;
+            if (map1.Height != map2.Height) return false;
+            if (map1.Depth != map2.Depth) return false;
+            if (map1.Channels != map2.Channels) return false;
+            if (map1.Batch != map2.Batch) return false;
 
             return map1.val.SequenceEqual(map2.val);
         }

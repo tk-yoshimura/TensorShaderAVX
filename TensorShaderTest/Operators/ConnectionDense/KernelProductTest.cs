@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ConnectionDense;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.ConnectionDense {
     [TestClass]
@@ -13,8 +13,8 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
-                foreach(int inchannels in new int[]{ 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach(int outchannels in new int[]{ 7, 13 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
                         float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                         float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
@@ -50,8 +50,47 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+
+            float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map0D x = new Map0D(inchannels, batch, xval);
+            Map0D y = new Map0D(outchannels, batch, yval);
+
+            Filter0D gw = Reference(x, y);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+
+            KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
-            int inchannels = 1024, outchannels = 512, batch = 4;
+            int inchannels = 1024, outchannels = 1024, batch = 4;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch));
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch));
@@ -60,33 +99,24 @@ namespace TensorShaderTest.Operators.ConnectionDense {
 
             KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_dense.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor);
-            ope.Execute(x_tensor, y_tensor, w_tensor);
-            ope.Execute(x_tensor, y_tensor, w_tensor);
-            ope.Execute(x_tensor, y_tensor, w_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
         public static Filter0D Reference(Map0D x, Map0D y) {
             int inchannels = x.Channels, outchannels = y.Channels, batch = x.Batch;
 
-            Filter0D w = new Filter0D(inchannels, outchannels, 1);
+            Filter0D w = new Filter0D(inchannels, outchannels);
 
-            for (int inch, outch = 0; outch < outchannels; outch++) {
-                for (inch = 0; inch < inchannels; inch++) {
-                    double sum = 0;
-
-                    for (int th = 0; th < batch; th++) {
-                        sum += x[inch, th] * y[outch, th];
+            for (int th = 0; th < batch; th++) {
+                for (int inch, outch = 0; outch < outchannels; outch++) {
+                    for (inch = 0; inch < inchannels; inch++) {
+                        w[inch, outch] += x[inch, th] * y[outch, th];
                     }
-
-                    w[inch, outch, 0] = sum;
                 }
             }
 

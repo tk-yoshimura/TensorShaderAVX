@@ -13,26 +13,21 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
 
             float[] x1val = (new float[length]).Select((_, idx) => (float)Math.Sin(idx)).ToArray();
             float[] x2val = (new float[length]).Select((_, idx) => (float)Math.Cos(idx)).ToArray();
-            float[] yval =  (new float[length]).Select((_, idx) => (float)idx / 24).ToArray();
+            float[] yval = (new float[length]).Select((_, idx) => (float)idx / 24).ToArray();
 
-            Tensor x1tensor = new Tensor(Shape.Vector(length), x1val);
-            Tensor x2tensor = new Tensor(Shape.Vector(length), x2val);
-
-            Tensor ytensor =  new Tensor(Shape.Vector(length), yval);
-
-            ParameterField x1 = x1tensor;
-            ParameterField x2 = x2tensor;
-            VariableField y_actual = ytensor;
+            ParameterField x1 = new Tensor(Shape.Vector(length), x1val);
+            ParameterField x2 = new Tensor(Shape.Vector(length), x2val);
+            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
             Field y_expect = Arctan2(x1, x2);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx1_actual = x1.GradTensor.State;
-            float[] gx2_actual = x2.GradTensor.State;
+            float[] gx1_actual = x1.GradState;
+            float[] gx2_actual = x2.GradState;
 
             AssertError.Tolerance(gx1_expect, gx1_actual, 1e-6f, 1e-4f, $"not equal gx1"); /*nonlinear tolerance*/
             AssertError.Tolerance(gx2_expect, gx2_actual, 1e-6f, 1e-4f, $"not equal gx2"); /*nonlinear tolerance*/

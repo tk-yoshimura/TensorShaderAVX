@@ -19,7 +19,7 @@ namespace TensorShader.Links.FactorArithmetric {
     public class Pow : FactorArithmetric {
         /// <summary>コンストラクタ</summary>
         public Pow(Field infield, Field factorfield, Field outfield)
-            : base(infield, factorfield, outfield ) { }
+            : base(infield, factorfield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

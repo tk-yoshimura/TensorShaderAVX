@@ -16,7 +16,7 @@ namespace TensorShader {
         public static Tensor Concat(int axis, params Tensor[] xs) {
             Function function = new Functions.ArrayManipulation.Concat(xs.Length, axis);
 
-            Tensor y = new Tensor(function.OutputShapes(xs.Select((tensor)=>tensor.Shape).ToArray())[0]);
+            Tensor y = new Tensor(function.OutputShapes(xs.Select((tensor) => tensor.Shape).ToArray())[0]);
 
             function.Execute(xs, new Tensor[] { y });
 
@@ -33,7 +33,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>結合</summary>
         public Concat(int inputs, int axis)
-            : base(inputs, outputs:1, allow_resubstitution : false) {
+            : base(inputs, outputs: 1, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 
@@ -82,7 +83,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             return (
                 intensors.Concat(outtensors).ToArray(),
                 new Operators.ArrayManipulation.Concat(
-                    intensors.Select((tensor)=>tensor.Shape).ToArray(),
+                    intensors.Select((tensor) => tensor.Shape).ToArray(),
                     outtensor.Shape,
                     Axis)
                 );

@@ -47,7 +47,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Broadcast(Shape inshape, Shape targetshape)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             if (inshape.Ndim > targetshape.Ndim) {
                 throw new ArgumentException(ExceptionMessage.Broadcast(inshape, targetshape));
             }
@@ -67,7 +68,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         public override Shape[] OutputShapes(params Shape[] inshapes) {
             CheckInputShapes(inshapes);
 
-            return new Shape[]{ OutShape };
+            return new Shape[] { OutShape };
         }
 
         public override void CheckInputShapes(params Shape[] inshapes) {
@@ -80,7 +81,7 @@ namespace TensorShader.Functions.ArrayManipulation {
 
             Tensor intensor = intensors[0], outtensor = outtensors[0];
 
-            return (new Tensor[]{ intensor, outtensor }, new Operators.ArrayManipulation.Broadcast(InShape, OutShape));
+            return (new Tensor[] { intensor, outtensor }, new Operators.ArrayManipulation.Broadcast(InShape, OutShape));
         }
     }
 }

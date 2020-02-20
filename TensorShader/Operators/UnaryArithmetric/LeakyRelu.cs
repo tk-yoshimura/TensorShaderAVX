@@ -5,7 +5,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public LeakyRelu(float slope, Shape shape)
-            : base(shape){
+            : base(shape) {
             this.slope = slope;
         }
 

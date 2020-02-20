@@ -45,7 +45,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public Trimming(Field infield, Field outfield, int trim_left, int trim_right)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             this.TrimLeft = trim_left;
             this.TrimRight = trim_right;
         }

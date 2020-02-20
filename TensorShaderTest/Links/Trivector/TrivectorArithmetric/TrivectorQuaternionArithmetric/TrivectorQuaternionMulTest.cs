@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] qval = (new float[length / 3 * 4]).Select((_, idx) => ((float)idx * 3 - length) * 0.01f).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2) * 0.01f).ToArray();
 
-            Tensor vtensor = new Tensor(Shape.Vector(length), vval);
-            Tensor qtensor = new Tensor(Shape.Vector(length / 3 * 4), qval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField v = vtensor;
-            ParameterField q = qtensor;
-            VariableField t = ttensor;
+            ParameterField v = new Tensor(Shape.Vector(length), vval);
+            ParameterField q = new Tensor(Shape.Vector(length / 3 * 4), qval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field vq = TrivectorQuaternionMul(v, q);
             Field err = vq - t;
@@ -28,8 +24,8 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gv_actual = v.GradTensor.State;
-            float[] gq_actual = q.GradTensor.State;
+            float[] gv_actual = v.GradState;
+            float[] gq_actual = q.GradState;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
 
@@ -44,13 +40,9 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] qval = (new float[length / 3 * 4]).Select((_, idx) => ((float)idx * 3 - length) * 0.01f).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2) * 0.01f).ToArray();
 
-            Tensor vtensor = new Tensor(Shape.Vector(length), vval);
-            Tensor qtensor = new Tensor(Shape.Vector(length / 3 * 4), qval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField v = vtensor;
-            ParameterField q = qtensor;
-            VariableField t = ttensor;
+            ParameterField v = new Tensor(Shape.Vector(length), vval);
+            ParameterField q = new Tensor(Shape.Vector(length / 3 * 4), qval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field x = TrivectorX(v), y = TrivectorY(v), z = TrivectorZ(v);
             Field r = QuaternionR(q), i = QuaternionI(q), j = QuaternionJ(q), k = QuaternionK(q);
@@ -64,11 +56,11 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gv_actual = v.GradTensor.State;
+            float[] gv_actual = v.GradState;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
 
-            float[] gq_actual = q.GradTensor.State;
+            float[] gq_actual = q.GradState;
 
             AssertError.Tolerance(gq_expect, gq_actual, 1e-7f, 1e-5f, $"not equal gq");
         }

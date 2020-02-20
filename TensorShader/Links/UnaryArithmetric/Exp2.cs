@@ -20,7 +20,7 @@ namespace TensorShader.Links.UnaryArithmetric {
     internal class Exp2 : UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Exp2(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

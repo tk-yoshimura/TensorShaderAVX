@@ -47,20 +47,16 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
                   0
             };
 
-            Tensor xtensor = new Tensor(Shape.Map0D(channels, batch), xval);
-            Tensor ttensor = new Tensor(Shape.Vector(batch), tval);
+            VariableField x = new Tensor(Shape.Map0D(channels, batch), xval);
+            VariableField t = new Tensor(Shape.Vector(batch), tval);
 
-            VariableField x = xtensor;
-            VariableField t = ttensor;
+            StoreField acc = Accuracy(x, t);
 
-            Field acc = Accuracy(x, t);
-            OutputNode accnode = acc.Value.Save();
-
-            Flow flow = Flow.Inference(accnode);
+            (Flow flow, _) = Flow.Inference(acc);
 
             flow.Execute();
 
-            float[] acc_actual = accnode.Tensor.State;
+            float[] acc_actual = acc.State;
 
             Assert.AreEqual(1, acc_actual.Length);
             Assert.AreEqual(4 / 16.0f, acc_actual[0]);

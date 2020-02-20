@@ -1,6 +1,6 @@
 namespace TensorShader.Links.FactorArithmetric {
     /// <summary>指数付きテンソル1項演算</summary>
-    public abstract class FactorArithmetric : Link{
+    public abstract class FactorArithmetric : Link {
         /// <summary>入力項</summary>
         protected Field X => InFields[0];
 

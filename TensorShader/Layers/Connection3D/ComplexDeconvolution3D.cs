@@ -10,9 +10,6 @@ namespace TensorShader.Layers {
         /// <summary>バイアス</summary>
         public ParameterField Bias { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>パディングモード</summary>
         public PaddingMode PaddingMode { private set; get; }
 
@@ -32,7 +29,7 @@ namespace TensorShader.Layers {
         public override int Depth => W.Shape.Depth;
 
         /// <summary>コンストラクタ</summary>
-        public ComplexDeconvolution3D(int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int stride, bool use_bias, PaddingMode pad_mode, string label)
+        public ComplexDeconvolution3D(int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
                 new Tensor(Shape.Kernel3D(outchannels, inchannels / 2, kwidth, kheight, kdepth)),
@@ -46,7 +43,6 @@ namespace TensorShader.Layers {
                     ParameterCategory.Bias)
                 : null;
 
-            this.Stride = stride;
             this.PaddingMode = pad_mode;
         }
 
@@ -61,16 +57,16 @@ namespace TensorShader.Layers {
 
         /// <summary>適用</summary>
         public Field Forward(Field x) {
-            Field y = ComplexDeconvolution3D(x, W, Stride);
+            Field y = ComplexDeconvolution3D(x, W);
 
             if (Bias != null) {
                 y += Bias;
             }
 
             if (PaddingMode != PaddingMode.None) {
-                int pad_x = W.Shape.Width  / 2;
+                int pad_x = W.Shape.Width / 2;
                 int pad_y = W.Shape.Height / 2;
-                int pad_z = W.Shape.Depth  / 2;
+                int pad_z = W.Shape.Depth / 2;
 
                 if (PaddingMode == PaddingMode.Zero) {
                     y = ZeroPadding3D(y, pad_x, pad_x, pad_y, pad_y, pad_z, pad_z);

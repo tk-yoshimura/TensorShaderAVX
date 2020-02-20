@@ -28,7 +28,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public SpaceToChannel(Field infield, Field outfield, int scale)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             this.Scale = scale;
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TensorShader {
     /// <summary>スナップショット</summary>
-    public class Snapshot{
+    public class Snapshot {
         private readonly Dictionary<string, (Shape shape, float[] state)> table;
 
         /// <summary>状態テーブル</summary>

@@ -28,7 +28,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public MaxPooling(Field infield, Field outfield, int stride)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             this.Stride = stride;
         }
 

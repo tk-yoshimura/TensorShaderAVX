@@ -10,17 +10,17 @@ namespace TensorShader.Updaters.WeightDecay {
         /// <summary>減衰率</summary>
         public float Decay {
             get {
-                return decay.Tensor.State[0];
+                return decay.State[0];
             }
             set {
-                decay.Tensor.State = new float[] { value };
+                decay.State = new float[] { value };
             }
         }
 
         /// <summary>コンストラクタ</summary>
         public Lasso(ParameterField parameter, float decay)
             : base(parameter) {
-            this.decay = new InputNode(new Tensor(Shape.Scalar(), new float[]{ decay }));
+            this.decay = new InputNode(new Tensor(Shape.Scalar, new float[] { decay }));
         }
 
         /// <summary>更新フロー</summary>

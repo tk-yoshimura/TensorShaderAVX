@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Aggregation;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Aggregation {
     [TestClass]
@@ -14,28 +14,29 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             int width = 4, height = 5;
 
-            foreach (int length in new int[]{ 1, 2, 3, 4, 5, 6, 13, 17, 19 }) {
-                foreach (int ch in new int[]{ 1, 2, 3, 4, 5, 6, 13, 17, 19 }) {
-                    foreach(int batch in new int[] { 1, 2, 3 }) {
+            foreach (int length in new int[] { 1, 2, 3, 4, 5, 6, 13, 16, 17, 19, 64, 2048 }) {
+                foreach (int ch in new int[] { 1, 2, 3, 4, 5, 6, 13, 16, 17, 19, 64 }) {
+                    foreach (int batch in new int[] { 1, 2, 3 }) {
                         float[] x = (new float[ch * width * height * length * batch]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
 
                         Shape shape = Shape.Map3D(ch, width, height, length, batch);
 
                         OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape, x);
 
-                        /*axis = 0*/{
+                        /*axis = 0*/
+                        {
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(1, width, height, length, batch));
 
-                            Max ope = new Max(shape, axis:0);
+                            Max ope = new Max(shape, axis: 0);
 
                             ope.Execute(v1, v2);
 
                             float[] y = v2.State;
 
-                            for(int th = 0; th < batch; th++) {
+                            for (int th = 0; th < batch; th++) {
                                 for (int k = 0; k < length; k++) {
-                                    for(int j = 0; j < height; j++) {
-                                        for(int i = 0; i < width; i++) {
+                                    for (int j = 0; j < height; j++) {
+                                        for (int i = 0; i < width; i++) {
                                             float vmax = float.MinValue;
 
                                             for (int f = 0; f < ch; f++) {
@@ -150,19 +151,19 @@ namespace TensorShaderTest.Operators.Aggregation {
                         {
                             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, height, length, 1));
 
-                            Max ope = new Max(shape, axis:4);
+                            Max ope = new Max(shape, axis: 4);
 
                             ope.Execute(v1, v2);
 
                             float[] y = v2.State;
 
                             for (int k = 0; k < length; k++) {
-                                for(int j = 0; j < height; j++) {
-                                    for(int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    for (int i = 0; i < width; i++) {
                                         for (int f = 0; f < ch; f++) {
                                             float vmax = float.MinValue;
 
-                                            for(int th = 0; th < batch; th++) {
+                                            for (int th = 0; th < batch; th++) {
                                                 int idx = f + ch * (i + width * (j + height * (k + length * th)));
 
                                                 vmax = Math.Max(x[idx], vmax);
@@ -184,27 +185,21 @@ namespace TensorShaderTest.Operators.Aggregation {
 
         [TestMethod]
         public void SpeedTest() {
-            int length = 65536, ch = 256;
+            int length = 8192, ch = 256;
 
             Shape shape = Shape.Map1D(ch, length);
 
             OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape);
             OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map1D(ch, 1));
 
-            Max ope = new Max(shape, axis:1);
+            Max ope = new Max(shape, axis: 1);
 
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/aggregate_max.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(v1, v2);
-            ope.Execute(v1, v2);
-            ope.Execute(v1, v2);
-            ope.Execute(v1, v2);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection3D {
     /// <summary>3次元畳み込み</summary>
@@ -23,21 +21,15 @@ namespace TensorShader.Operators.Connection3D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelDepth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public Convolution(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
+        public Convolution(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int batch = 1) {
 
-            int outwidth  = (inwidth - kwidth) / stride + 1;
-            int outheight = (inheight - kheight) / stride + 1;
-            int outdepth  = (indepth - kdepth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
+            int outheight = inheight - kheight + 1;
+            int outdepth = indepth - kdepth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch)),
@@ -47,10 +39,9 @@ namespace TensorShader.Operators.Connection3D {
 
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
-            this.KernelWidth  = kwidth;
+            this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.KernelDepth  = kdepth;
-            this.Stride = stride;
+            this.KernelDepth = kdepth;
             this.Batch = batch;
         }
 
@@ -60,17 +51,15 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Convolution.Convolution3D((uint)InChannels, (uint)OutChannels,
-                                                                 (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, (uint)Batch, (uint)th,
-                                                                 (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth, (uint)Stride,
-                                                                 inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Convolution.Convolution3D((uint)InChannels, (uint)OutChannels,
+                                                              (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, (uint)Batch,
+                                                              (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
+                                                              inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor infilter, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, infilter, outmap });
+            Execute(new Tensor[] { inmap, infilter, outmap });
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.ConnectionDense {
     /// <summary>転置全結合</summary>
@@ -32,14 +31,12 @@ namespace TensorShader.Operators.ConnectionDense {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Convolution.TransposeDense((uint)InChannels, (uint)OutChannels, (uint)Batch, (uint)th, inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Convolution.TransposeDense((uint)InChannels, (uint)OutChannels, (uint)Batch, inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor infilter, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, infilter, outmap });
+            Execute(new Tensor[] { inmap, infilter, outmap });
         }
     }
 }

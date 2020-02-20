@@ -4,19 +4,18 @@ using namespace System;
 
 void kernelproduct_1d(unsigned int inchannels, unsigned int outchannels,
                       unsigned inwidth, unsigned outwidth, unsigned kwidth,
-                      unsigned stride, unsigned batch, unsigned int outch,
+                      unsigned batch, 
                       float* inmap_ptr, float* outmap_ptr, float* kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);
     
-    for (unsigned int inch = 0; inch < inch_sep; inch += 8) {
-
-        for (unsigned int kx = 0; kx < kwidth; kx++) {
+    for (unsigned int kx = 0; kx < kwidth; kx++) {
+        for (unsigned int inch = 0; inch < inch_sep; inch += 8) {
             __m256d uv_hi = _mm256_setzero_pd(), uv_lo = _mm256_setzero_pd();
 
             for (unsigned int th = 0; th < batch; th++) {
-                for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix += stride) {
+                for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix++) {
 
                     __m256 u = _mm256_loadu_ps(inmap_ptr + inch + inchannels * (ix + inwidth * th));
                     __m256d v = _mm256_set1_pd(outmap_ptr[outch + outchannels * (ox + outwidth * th)]);
@@ -32,11 +31,9 @@ void kernelproduct_1d(unsigned int inchannels, unsigned int outchannels,
             _mm_storeu_ps(kernel_ptr + inch + inchannels * (outch + outchannels * kx), _mm256_cvtpd_ps(uv_lo));
             _mm_storeu_ps(kernel_ptr + inch + inchannels * (outch + outchannels * kx) + 4, _mm256_cvtpd_ps(uv_hi));
         }
-    }
 
-    if (inch_rem > 0) {
+        if (inch_rem > 0) {
 
-        for (unsigned int kx = 0; kx < kwidth; kx++) {
             __m256d uv_hi = _mm256_setzero_pd(), uv_lo = _mm256_setzero_pd();
 
             for (unsigned int th = 0; th < batch; th++) {
@@ -67,7 +64,7 @@ void kernelproduct_1d(unsigned int inchannels, unsigned int outchannels,
 }
 
 void TensorShaderAvxBackend::Convolution::KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                                          unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride,
+                                                          unsigned int batch, unsigned int outch, unsigned int kwidth,
                                                           AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
@@ -76,7 +73,7 @@ void TensorShaderAvxBackend::Convolution::KernelProduct1D(unsigned int inchannel
         throw gcnew System::ArgumentException();
     }
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outwidth = inwidth + 1 - kwidth;
 
     Util::CheckLength(inchannels * inwidth * batch, inmap);
     Util::CheckLength(outchannels * outwidth * batch, outmap);
@@ -88,6 +85,6 @@ void TensorShaderAvxBackend::Convolution::KernelProduct1D(unsigned int inchannel
 
     kernelproduct_1d(inchannels, outchannels, 
                      inwidth, outwidth, kwidth, 
-                     stride, batch, outch, 
+                     batch, 
                      inmap_ptr, outmap_ptr, kernel_ptr);
 }

@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection3D;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
@@ -51,6 +51,46 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int width = 128, height = 196, depth = 4;
+
+            float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map3D x = new Map3D(inchannels, width, height, depth, batch, xval);
+            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);
+
+            Map3D y = Reference(x, w);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch), xval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch));
+
+            PointwiseConvolution ope = new PointwiseConvolution(width, height, depth, inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            float[] y_expect = y.ToArray();
+            float[] y_actual = y_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int width = 64, height = 64, depth = 64, inchannels = 31, outchannels = 31;
 
@@ -61,17 +101,12 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             PointwiseConvolution ope = new PointwiseConvolution(width, height, depth, inchannels, outchannels);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
         public static Map3D Reference(Map3D x, Filter3D w) {
@@ -92,44 +127,6 @@ namespace TensorShaderTest.Operators.Connection3D {
                                 }
 
                                 y[outch, ox, oy, oz, th] = sum;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return y;
-        }
-
-        public static Map3D OptimizedReference(Map3D x, Filter3D w) {
-            int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
-            int inw = x.Width, inh = x.Height, ind = x.Depth;
-
-            Map3D y = new Map3D(outchannels, inw, inh, ind, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ix, iy, iz = 0; iz < ind; iz++) {
-                    for (iy = 0; iy < inh; iy++) {
-                        for (ix = 0; ix < inw; ix++) {
-                            int inmap_org = (ix + iy * inw + iz * inw * inh) * inchannels + th * inw * inh * ind * inchannels;
-                            int outmap_idx = (ix + iy * inw + iz * inw * inh) * outchannels + th * inw * inh * ind * outchannels;
-                            int kernel_idx = 0;
-
-                            for (int outch = 0; outch < outchannels; outch++) {
-                                double sum = y[outmap_idx];
-
-                                int inmap_idx = inmap_org;
-
-                                for (int inch = 0; inch < inchannels; inch++) {
-                                    sum += x[inmap_idx] * w[kernel_idx];
-
-                                    inmap_idx++;
-                                    kernel_idx++;
-                                }
-
-                                y[outmap_idx] = sum;
-
-                                outmap_idx++;
                             }
                         }
                     }
@@ -262,37 +259,6 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight},{indepth},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach ((int width, int height, int depth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
-                            float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                            Map3D x = new Map3D(inchannels, width, height, depth, batch, xval);
-                            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);
-
-                            Map3D y = Reference(x, w);
-                            Map3D y_optimized = OptimizedReference(x, w);
-
-                            float[] y_expect = y.ToArray();
-                            float[] y_actual = y_optimized.ToArray();
-
-                            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{depth},{batch}");
-
-                            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{depth},{batch}");
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection1D {
     /// <summary>1次元畳み込み</summary>
@@ -15,19 +13,13 @@ namespace TensorShader.Operators.Connection1D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public Convolution(int inwidth, int inchannels, int outchannels, int kwidth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
+        public Convolution(int inwidth, int inchannels, int outchannels, int kwidth, int batch = 1) {
 
-            int outwidth = (inwidth - kwidth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(inchannels, inwidth, batch)),
@@ -38,7 +30,6 @@ namespace TensorShader.Operators.Connection1D {
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
-            this.Stride = stride;
             this.Batch = batch;
         }
 
@@ -48,17 +39,15 @@ namespace TensorShader.Operators.Connection1D {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Convolution.Convolution1D((uint)InChannels, (uint)OutChannels,
-                                                           (uint)inmap.Width, (uint)Batch, (uint)th,
-                                                           (uint)KernelWidth, (uint)Stride,
-                                                           inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Convolution.Convolution1D((uint)InChannels, (uint)OutChannels,
+                                                              (uint)inmap.Width, (uint)Batch,
+                                                              (uint)KernelWidth,
+                                                              inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor infilter, Tensor outmap) {
-            Execute(new Tensor[]{ inmap, infilter, outmap });
+            Execute(new Tensor[] { inmap, infilter, outmap });
         }
     }
 }

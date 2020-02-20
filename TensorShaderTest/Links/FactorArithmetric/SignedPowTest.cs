@@ -14,22 +14,22 @@ namespace TensorShaderTest.Links.FactorArithmetric {
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 24 - 0.5f).ToArray();
 
             ParameterField x = new Tensor(Shape.Vector(length), xval);
-            ParameterField p = new Tensor(Shape.Scalar(), new float[] { 1.5f });
+            ParameterField p = new Tensor(Shape.Scalar, new float[] { 1.5f });
 
             VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
             Field y_expect = SignedPow(x, p);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gp_actual = p.GradTensor.State;
+            float[] gp_actual = p.GradState;
 
             AssertError.Tolerance(gp_expect, gp_actual, 1e-7f, 1e-5f, $"not equal gp");
         }

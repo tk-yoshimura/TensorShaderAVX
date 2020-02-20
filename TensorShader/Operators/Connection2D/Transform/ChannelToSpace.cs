@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>チャネル次元を空間方向に展開</summary>
@@ -25,7 +24,7 @@ namespace TensorShader.Operators.Connection2D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(inchannels, inwidth, inheight, batch)),
-                (ArgumentType.Out, Shape.Map2D(inchannels / checked(scale * scale), checked(inwidth * scale), checked(inheight * scale), batch)),
+                (ArgumentType.Out, Shape.Map2D(inchannels / (scale * scale), inwidth * scale, inheight * scale, batch)),
             };
 
             this.InChannels = inchannels;
@@ -41,9 +40,7 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Transform.ChannelToSpace2D((uint)OutChannels, (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, (uint)th, (uint)Scale, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Transform.ChannelToSpace2D((uint)OutChannels, (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, (uint)Scale, inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

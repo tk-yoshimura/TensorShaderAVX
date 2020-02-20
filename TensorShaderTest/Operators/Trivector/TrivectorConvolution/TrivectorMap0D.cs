@@ -5,8 +5,8 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorMap0D {
         private readonly Trivector[] val;
 
-        public int Channels{ private set; get; }
-        public int Batch{ private set; get; }
+        public int Channels { private set; get; }
+        public int Batch { private set; get; }
         public int Length => Channels * Batch;
 
         public TrivectorMap0D(int channels, int batch, Trivector[] val = null) {
@@ -52,8 +52,8 @@ namespace TensorShaderTest.Operators.Trivector {
         }
 
         public static bool operator ==(TrivectorMap0D map1, TrivectorMap0D map2) {
-            if (map1.Channels != map2.Channels)  return false;
-            if (map1.Batch    != map2.Batch)     return false;
+            if (map1.Channels != map2.Channels) return false;
+            if (map1.Batch != map2.Batch) return false;
 
             return map1.val.SequenceEqual(map2.val);
         }

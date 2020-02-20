@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection3D {
     /// <summary>拡大</summary>
-    internal abstract class Zoom : Operator{
+    internal abstract class Zoom : Operator {
         /// <summary>チャネル数</summary>
         public int Channels { private set; get; }
 
@@ -21,7 +21,7 @@ namespace TensorShader.Operators.Connection3D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(channels, inwidth, inheight, indepth, batch)),
-                (ArgumentType.Out, Shape.Map3D(channels, checked(inwidth * scale), checked(inheight * scale), checked(indepth * scale), batch)),
+                (ArgumentType.Out, Shape.Map3D(channels, inwidth * scale, inheight * scale, indepth * scale, batch)),
             };
 
             this.Channels = channels;

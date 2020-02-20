@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
+using TensorShaderAvxBackend;
 
 namespace TensorShaderTest {
     [TestClass]
@@ -365,27 +366,12 @@ namespace TensorShaderTest {
             }
         }
 
-        [TestMethod]
-        public void OverflowTest() {
-            int channels = 2, width = 6, batch = 4;
-
-            Tensor tensor = new OverflowCheckedTensor(Shape.Map1D(channels, width, batch));
-
-            Operator ope = new OverflowOperator(tensor.Shape);
-
-            ope.Execute(tensor);
-
-            Assert.ThrowsException<IndexOutOfRangeException>(
-                () => { float[] state = tensor.State; }
-            );
-        }
-
         internal class OverflowOperator : Operator {
             /// <summary>形状</summary>
             public Shape Shape { private set; get; }
 
             /// <summary>コンストラクタ</summary>
-            public OverflowOperator(Shape shape){
+            public OverflowOperator(Shape shape) {
                 this.arguments = new List<(ArgumentType type, Shape shape)>{
                     (ArgumentType.Out, shape),
                 };
@@ -399,7 +385,15 @@ namespace TensorShaderTest {
 
                 Tensor outmap = tensors[0];
 
-                outmap.Buffer[(ulong)outmap.Length] = 1;
+                string code = @"
+                __global__ void add(float *x, int length) {
+                    int i = blockDim.x * blockIdx.x + threadIdx.x;
+                    x[length] = 1;
+                }";
+
+                Kernel kernel = new Kernel(code, "add");
+
+                kernel.Execute((uint)outmap.Length, dynamic_shared_memory_bytes: 0, stream: null, outmap.Buffer, outmap.Length);
             }
 
             /// <summary>操作を実行</summary>

@@ -31,7 +31,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public ExtractChannel(int index, int channels, Field infield, Field outfield)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             this.Index = index;
             this.Channels = channels;
         }

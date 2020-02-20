@@ -22,7 +22,8 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public Pow(Field infield, Field outfield, float alpha)
-            : base(infield, outfield ) {
+            : base(infield, outfield) {
+
             this.Alpha = alpha;
         }
 
@@ -33,7 +34,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if(Y.Grad == null) {
+            if (Y.Grad == null) {
                 return;
             }
 

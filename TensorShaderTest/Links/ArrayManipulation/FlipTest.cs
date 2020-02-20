@@ -12,30 +12,24 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             int length = shape.Length;
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-
             float[] tval = (new float[length]).Select((_, idx) => (float)(idx * 2)).ToArray();
 
-            Tensor xtensor = new Tensor(shape, xval);
-            Tensor ttensor = new Tensor(shape, tval);
+            ParameterField x = new Tensor(shape, xval);
+            VariableField t = new Tensor(shape, tval);
 
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
-
-            Field y = Flip(x, axis: 3);
-
-            StoreField o = y.Save();
+            StoreField y = Flip(x, axis: 3);
 
             Field err = y - t;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] y_actual = o.State;
+            float[] y_actual = y.State;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal x");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

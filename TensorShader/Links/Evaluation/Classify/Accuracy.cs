@@ -19,7 +19,7 @@ namespace TensorShader.Links.Evaluation.Classify {
     public class Accuracy : ClassifyEvaluation {
         /// <summary>コンストラクタ</summary>
         public Accuracy(Field xfield, Field tfield, Field yfield)
-            : base( xfield, tfield, yfield ) {　}
+            : base(xfield, tfield, yfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

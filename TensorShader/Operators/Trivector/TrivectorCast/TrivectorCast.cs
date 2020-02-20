@@ -9,7 +9,7 @@ namespace TensorShader.Operators.TrivectorCast {
         public Shape Shape { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorCast(Shape inshape){
+        public TrivectorCast(Shape inshape) {
             if (!new ShapeType[] { ShapeType.Vector, ShapeType.Map, ShapeType.Kernel }.Contains(inshape.Type)) {
                 throw new ArgumentException(ExceptionMessage.Shape("Type", inshape));
             }

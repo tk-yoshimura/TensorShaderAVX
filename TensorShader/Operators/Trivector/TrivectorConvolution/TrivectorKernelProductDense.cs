@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.TrivectorConvolution {
     /// <summary>3次元ベクトルカーネル積</summary>
-    internal class TrivectorKernelProductDense : Operator{
+    internal class TrivectorKernelProductDense : Operator {
         /// <summary>入力チャネル</summary>
         public int InChannels { private set; get; }
 
@@ -45,14 +44,12 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], inmap3 = tensors[2], outfilter = tensors[3];
 
-            Parallel.For(0, OutChannels / 3, (outch) => {
-                TensorShaderAvxBackend.Trivector.KernelProductDense((uint)InChannels, (uint)OutChannels, (uint)Batch, (uint)outch * 3, Transpose, inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outfilter.Buffer);
-            });
+            TensorShaderAvxBackend.Trivector.KernelProductDense((uint)InChannels, (uint)OutChannels, (uint)Batch, Transpose, inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap1, Tensor inmap2, Tensor inmap3, Tensor outfilter) {
-            Execute(new Tensor[]{ inmap1, inmap2, inmap3, outfilter });
+            Execute(new Tensor[] { inmap1, inmap2, inmap3, outfilter });
         }
     }
 }

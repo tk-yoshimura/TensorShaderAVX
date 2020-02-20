@@ -17,7 +17,7 @@ namespace TensorShaderTest.Links.Loss {
                 { 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0,
                   0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            for(int i = 0; i < boxes * batches; i++) {
+            for (int i = 0; i < boxes * batches; i++) {
                 float p = ((i % 7 + 2) * 0.123f) % 1, q = ((i % 8 + 3) * 0.213f) % 1, r = ((i % 16 + 1) * 0.231f) % 1, s = ((i % 32 + 4) * 0.523f) % 1;
 
                 if (labelval[i] != 0) {
@@ -35,12 +35,8 @@ namespace TensorShaderTest.Links.Loss {
             ParameterField gt = new Tensor(Shape.Map1D(elems, boxes, batches), gtval);
             ParameterField label = new Tensor(Shape.Map0D(boxes, batches), labelval);
 
-            (Field locloss, Field confloss) = MultiBoxLoss(loc, gt, conf, label, hard_negative_mining_rate:2);
-
-            StoreField locloss_node = locloss.Save();
-            StoreField confloss_node = confloss.Save();
-
-            (Flow flow, Parameters Parameters) = Flow.Optimize(locloss, confloss);
+            (StoreField locloss, StoreField confloss) = MultiBoxLoss(loc, gt, conf, label, hard_negative_mining_rate: 2);
+            (Flow flow, _) = Flow.Optimize(locloss, confloss);
 
             flow.Execute();
 
@@ -49,19 +45,19 @@ namespace TensorShaderTest.Links.Loss {
             Assert.IsTrue(gt.Grad == null);
             Assert.IsTrue(label.Grad == null);
 
-            float[] locloss_actual = locloss_node.Tensor.State;
+            float[] locloss_actual = locloss.State;
 
             AssertError.Tolerance(locloss_expect, locloss_actual, 1e-6f, 1e-4f, $"not equal locloss");
 
-            float[] confloss_actual = confloss_node.Tensor.State;
+            float[] confloss_actual = confloss.State;
 
             AssertError.Tolerance(confloss_expect, confloss_actual, 1e-6f, 1e-4f, $"not equal confloss");
 
-            float[] gloc_actual = loc.GradTensor.State;
+            float[] gloc_actual = loc.GradState;
 
             AssertError.Tolerance(gloc_expect, gloc_actual, 1e-6f, 1e-4f, $"not equal gloc");
 
-            float[] gconf_actual = conf.GradTensor.State;
+            float[] gconf_actual = conf.GradState;
 
             AssertError.Tolerance(gconf_expect, gconf_actual, 1e-6f, 1e-4f, $"not equal gconf");
         }

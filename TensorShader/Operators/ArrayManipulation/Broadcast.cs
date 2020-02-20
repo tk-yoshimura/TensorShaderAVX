@@ -66,15 +66,15 @@ namespace TensorShader.Operators.ArrayManipulation {
                     break;
                 }
             }
-            for(; i < outshape.Length; i++) {
-                if(outshape[i] == 1) {
+            for (; i < outshape.Length; i++) {
+                if (outshape[i] == 1) {
                     outshape[i] = targetshape[i];
                 }
                 else {
                     break;
                 }
             }
-            if(i >= outshape.Length){
+            if (i >= outshape.Length) {
                 outshape = targetshape;
             }
 

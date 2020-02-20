@@ -1,16 +1,16 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.RandomGeneration;
+using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.RandomGeneration {
     [TestClass]
     public class UniformRandomTest {
         [TestMethod]
         public void ExecuteTest() {
-            int length = 65535 * 15;
+            int length = 65535 * 33;
 
             Shape shape = Shape.Vector(length);
 
@@ -46,16 +46,16 @@ namespace TensorShaderTest.Operators.RandomGeneration {
                     cnt[(int)Math.Floor(dy * 10 + 10)]++;
                 }
 
-                Assert.AreEqual(0.005, (double)cnt[ 0] / (length - 1), 5e-3);
-                Assert.AreEqual(0.015, (double)cnt[ 1] / (length - 1), 5e-3);
-                Assert.AreEqual(0.025, (double)cnt[ 2] / (length - 1), 5e-3);
-                Assert.AreEqual(0.035, (double)cnt[ 3] / (length - 1), 5e-3);
-                Assert.AreEqual(0.045, (double)cnt[ 4] / (length - 1), 5e-3);
-                Assert.AreEqual(0.055, (double)cnt[ 5] / (length - 1), 5e-3);
-                Assert.AreEqual(0.065, (double)cnt[ 6] / (length - 1), 5e-3);
-                Assert.AreEqual(0.075, (double)cnt[ 7] / (length - 1), 5e-3);
-                Assert.AreEqual(0.085, (double)cnt[ 8] / (length - 1), 5e-3);
-                Assert.AreEqual(0.095, (double)cnt[ 9] / (length - 1), 5e-3);
+                Assert.AreEqual(0.005, (double)cnt[0] / (length - 1), 5e-3);
+                Assert.AreEqual(0.015, (double)cnt[1] / (length - 1), 5e-3);
+                Assert.AreEqual(0.025, (double)cnt[2] / (length - 1), 5e-3);
+                Assert.AreEqual(0.035, (double)cnt[3] / (length - 1), 5e-3);
+                Assert.AreEqual(0.045, (double)cnt[4] / (length - 1), 5e-3);
+                Assert.AreEqual(0.055, (double)cnt[5] / (length - 1), 5e-3);
+                Assert.AreEqual(0.065, (double)cnt[6] / (length - 1), 5e-3);
+                Assert.AreEqual(0.075, (double)cnt[7] / (length - 1), 5e-3);
+                Assert.AreEqual(0.085, (double)cnt[8] / (length - 1), 5e-3);
+                Assert.AreEqual(0.095, (double)cnt[9] / (length - 1), 5e-3);
                 Assert.AreEqual(0.095, (double)cnt[10] / (length - 1), 5e-3);
                 Assert.AreEqual(0.085, (double)cnt[11] / (length - 1), 5e-3);
                 Assert.AreEqual(0.075, (double)cnt[12] / (length - 1), 5e-3);
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
             {
                 int[] cnt = new int[20];
 
-                int sft = 1024;
+                int sft = (int)TensorShaderAvxBackend.Shaders.Randomize.Randomize.RandomPerWarp;
 
                 for (int i = sft; i < length; i++) {
                     float dy = y[i - sft] - y[i];
@@ -79,16 +79,16 @@ namespace TensorShaderTest.Operators.RandomGeneration {
                     cnt[(int)Math.Floor(dy * 10 + 10)]++;
                 }
 
-                Assert.AreEqual(0.005, (double)cnt[ 0] / (length - sft), 5e-3);
-                Assert.AreEqual(0.015, (double)cnt[ 1] / (length - sft), 5e-3);
-                Assert.AreEqual(0.025, (double)cnt[ 2] / (length - sft), 5e-3);
-                Assert.AreEqual(0.035, (double)cnt[ 3] / (length - sft), 5e-3);
-                Assert.AreEqual(0.045, (double)cnt[ 4] / (length - sft), 5e-3);
-                Assert.AreEqual(0.055, (double)cnt[ 5] / (length - sft), 5e-3);
-                Assert.AreEqual(0.065, (double)cnt[ 6] / (length - sft), 5e-3);
-                Assert.AreEqual(0.075, (double)cnt[ 7] / (length - sft), 5e-3);
-                Assert.AreEqual(0.085, (double)cnt[ 8] / (length - sft), 5e-3);
-                Assert.AreEqual(0.095, (double)cnt[ 9] / (length - sft), 5e-3);
+                Assert.AreEqual(0.005, (double)cnt[0] / (length - sft), 5e-3);
+                Assert.AreEqual(0.015, (double)cnt[1] / (length - sft), 5e-3);
+                Assert.AreEqual(0.025, (double)cnt[2] / (length - sft), 5e-3);
+                Assert.AreEqual(0.035, (double)cnt[3] / (length - sft), 5e-3);
+                Assert.AreEqual(0.045, (double)cnt[4] / (length - sft), 5e-3);
+                Assert.AreEqual(0.055, (double)cnt[5] / (length - sft), 5e-3);
+                Assert.AreEqual(0.065, (double)cnt[6] / (length - sft), 5e-3);
+                Assert.AreEqual(0.075, (double)cnt[7] / (length - sft), 5e-3);
+                Assert.AreEqual(0.085, (double)cnt[8] / (length - sft), 5e-3);
+                Assert.AreEqual(0.095, (double)cnt[9] / (length - sft), 5e-3);
                 Assert.AreEqual(0.095, (double)cnt[10] / (length - sft), 5e-3);
                 Assert.AreEqual(0.085, (double)cnt[11] / (length - sft), 5e-3);
                 Assert.AreEqual(0.075, (double)cnt[12] / (length - sft), 5e-3);
@@ -112,18 +112,12 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             UniformRandom ope = new UniformRandom(shape, new Random(1234));
 
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/uniform_random.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(v1);
-            ope.Execute(v1);
-            ope.Execute(v1);
-            ope.Execute(v1);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
     }
 }

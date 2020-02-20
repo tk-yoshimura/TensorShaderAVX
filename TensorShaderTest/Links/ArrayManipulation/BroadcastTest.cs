@@ -13,20 +13,17 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             float[] xval = (new float[s0 * s2 * s3 * s5]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[s0 * s1 * s2 * s3 * s4 * s5 * s6 * s7]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            Tensor xtensor = new Tensor(new Shape(ShapeType.Map, s0,  1, s2, s3,  1, s5), xval);
-            Tensor ytensor = new Tensor(new Shape(ShapeType.Map, s0, s1, s2, s3, s4, s5, s6, s7), yval);
+            ParameterField x = new Tensor(new Shape(ShapeType.Map, s0, 1, s2, s3, 1, s5), xval);
+            VariableField y_actual = new Tensor(new Shape(ShapeType.Map, s0, s1, s2, s3, s4, s5, s6, s7), yval);
 
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
-
-            Field y_expect = Broadcast(x, ytensor.Shape);
+            Field y_expect = Broadcast(x, y_actual.Shape);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

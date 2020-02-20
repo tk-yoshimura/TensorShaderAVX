@@ -11,7 +11,7 @@ namespace TensorShaderTest.Layers {
 
             VariableField x = new Tensor(Shape.Map0D(inchannels, batch));
 
-            Layer layer = new TrivectorDense(inchannels, outchannels, use_bias:true, "fc");
+            Layer layer = new TrivectorDense(inchannels, outchannels, use_bias: true, "fc");
 
             Field y = layer.Forward(x);
 

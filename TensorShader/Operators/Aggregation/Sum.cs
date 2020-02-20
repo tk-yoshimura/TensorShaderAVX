@@ -3,7 +3,7 @@ namespace TensorShader.Operators.Aggregation {
     internal class Sum : Aggregation {
         /// <summary>コンストラクタ</summary>
         public Sum(Shape shape, int axis)
-            : base(shape, axis){ }
+            : base(shape, axis) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

@@ -34,7 +34,7 @@ namespace TensorShader {
         /// <summary>このフィールドを出力したレイヤー</summary>
         public Link OutLink { set; get; }
 
-       /// <summary>始端ノードか否か</summary>
+        /// <summary>始端ノードか否か</summary>
         public bool IsInitiate => OutLink == null;
 
         /// <summary>終端ノードか否か</summary>
@@ -93,15 +93,15 @@ namespace TensorShader {
                 if (untreated_grads.Count == 1) {
                     grad = untreated_grads.First();
                 }
-                else{
+                else {
                     grad = VariableNode.Sum(untreated_grads.ToArray());
                 }
             }
-            else{
+            else {
                 if (untreated_grads.Count == 1) {
                     grad += untreated_grads.First();
                 }
-                else{
+                else {
                     grad += VariableNode.Sum(untreated_grads.ToArray());
                 }
             }
@@ -123,7 +123,7 @@ namespace TensorShader {
         /// <param name="tensor">テンソル</param>
         /// <param name="name">ノード名</param>
         public StoreField Save(Tensor tensor = null, string name = "") {
-            return Value.Save(tensor, name);
+            return new StoreField(this, tensor, name);
         }
 
         /// <summary>文字列化</summary>
@@ -133,18 +133,14 @@ namespace TensorShader {
     }
 
     /// <summary>変数フィールド</summary>
-    public class VariableField : Field{
+    public class VariableField : Field {
         /// <summary>フィールド名</summary>
         public override string Name => string.IsNullOrEmpty((Value as InputNode).Name) ? base.Name : (Value as InputNode).Name;
 
         /// <summary>コンストラクタ</summary>
-        public VariableField(VariableNode node) {
+        public VariableField(InputNode node) {
             if (node == null) {
                 throw new ArgumentNullException(nameof(node));
-            }
-
-            if (node is OutputNode) {
-                throw new ArgumentException("Node is terminated.");
             }
 
             this.Value = node;
@@ -156,13 +152,23 @@ namespace TensorShader {
             : this(new InputNode(tensor.Shape, tensor, name)) { }
 
         /// <summary>変数フィールドへキャスト</summary>
-        public static implicit operator VariableField(VariableNode node) {
+        public static implicit operator VariableField(InputNode node) {
             return new VariableField(node);
         }
 
         /// <summary>変数フィールドへキャスト</summary>
         public static implicit operator VariableField(Tensor tensor) {
             return new InputNode(tensor);
+        }
+
+        /// <summary>テンソルの状態</summary>
+        public float[] State {
+            set {
+                ValueTensor.State = value;
+            }
+            get {
+                return ValueTensor.State;
+            }
         }
     }
 
@@ -181,9 +187,9 @@ namespace TensorShader {
     }
 
     /// <summary>パラメータフィールド</summary>
-    public class ParameterField : Field{
+    public class ParameterField : Field {
         /// <summary>更新則</summary>
-        public List<Updater> Updaters{ private set; get; }
+        public List<Updater> Updaters { private set; get; }
 
         /// <summary>カテゴリ</summary>
         public ParameterCategory Category { private set; get; }
@@ -209,14 +215,14 @@ namespace TensorShader {
 
         /// <summary>更新</summary>
         public void Update() {
-            foreach(Updater updater in Updaters) {
+            foreach (Updater updater in Updaters) {
                 updater.Execute();
             }
         }
 
         /// <summary>更新則を追加</summary>
         public void AddUpdater(Updater updater) {
-            if (Grad == null){
+            if (Grad == null) {
                 if (Name == string.Empty) {
                     throw new InvalidOperationException($"Parameter field for which grad can't be defined.");
                 }
@@ -246,6 +252,26 @@ namespace TensorShader {
         public void SaveGrad() {
             ConfirmGrad();
         }
+
+        /// <summary>テンソルの状態</summary>
+        public float[] State {
+            set {
+                ValueTensor.State = value;
+            }
+            get {
+                return ValueTensor.State;
+            }
+        }
+
+        /// <summary>テンソルの勾配</summary>
+        public float[] GradState {
+            set {
+                GradTensor.State = value;
+            }
+            get {
+                return GradTensor.State;
+            }
+        }
     }
 
     /// <summary>ストアフィールド</summary>
@@ -265,14 +291,23 @@ namespace TensorShader {
         /// <summary>出力ノード</summary>
         internal OutputNode OutputNode { get; }
 
+        /// <summary>出力ノード</summary>
+        internal Field InField { get; }
+
         /// <summary>コンストラクタ</summary>
-        public StoreField(OutputNode output_node) {
-            this.OutputNode = output_node;
+        internal StoreField(Field field, Tensor tensor = null, string name = "") {
+            this.OutputNode = field.Value.Save(tensor, name);
+            this.InField = field;
         }
 
-        /// <summary>出力ノードからのキャスト</summary>
-        public static implicit operator StoreField(OutputNode output_node) {
-            return new StoreField(output_node);
+        /// <summary>フィールドからのキャスト</summary>
+        public static implicit operator StoreField(Field field) {
+            return new StoreField(field);
+        }
+
+        /// <summary>フィールドへキャスト</summary>
+        public static implicit operator Field(StoreField field) {
+            return field.InField;
         }
 
         /// <summary>文字列化</summary>

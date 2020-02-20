@@ -11,25 +11,19 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             int length = 24;
 
             float[] xval = (new float[length]).Select((_, idx) => (float)idx - 12).ToArray();
-            float[] yval =  (new float[length]).Select((_, idx) => (float)idx / 24).ToArray();
+            float[] yval = (new float[length]).Select((_, idx) => (float)idx / 24).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-
-            Tensor ytensor =  new Tensor(Shape.Vector(length), yval);
-
-            VariableField x = xtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
             Field y_expect = Step(x);
-            Field err = y_expect - y_actual;
+            StoreField err = y_expect - y_actual;
 
-            OutputNode errnode = err.Value.Save();
-
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] err_actual = errnode.Tensor.State;
+            float[] err_actual = err.State;
 
             AssertError.Tolerance(err_expect, err_actual, 1e-7f, 1e-5f, $"not equal err");
         }
@@ -47,7 +41,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             -0.37500000e+00f,
             -0.41666667e+00f,
             -0.45833333e+00f,
-            -5.00000000e-01f,
+            5.00000000e-01f,
             4.58333333e-01f,
             4.16666667e-01f,
             3.75000000e-01f,

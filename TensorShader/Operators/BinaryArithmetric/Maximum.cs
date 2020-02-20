@@ -3,7 +3,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class Maximum : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Maximum(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -19,7 +19,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class MaximumConstant : BinaryRightConstantArithmetric {
         /// <summary>コンストラクタ</summary>
         public MaximumConstant(float c, Shape shape)
-            : base(c, shape){ }
+            : base(c, shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

@@ -13,21 +13,17 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 2 + 1).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-
-            Tensor ytensor = new Tensor(Shape.Vector(length), yval);
-
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
             Field y_expect = ComplexNormalize(x);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
@@ -39,12 +35,8 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 2 + 1).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-
-            Tensor ytensor = new Tensor(Shape.Vector(length), yval);
-
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field norm = Sqrt(Square(x_real) + Square(x_imag));
@@ -52,11 +44,11 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             Field y_expect = ComplexCast(x_real / norm, x_imag / norm);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

@@ -25,6 +25,7 @@
     <WarningsAsErrors>
     </WarningsAsErrors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -36,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -87,6 +89,7 @@
     <Compile Include="Functions\BinaryArithmetric\LimitAbs.cs" />
     <Compile Include="Functions\BinaryArithmetric\LeakyReluGrad.cs" />
     <Compile Include="Functions\BinaryArithmetric\Arctan2.cs" />
+    <Compile Include="Functions\BinaryArithmetric\Custom.cs" />
     <Compile Include="Functions\BinaryArithmetric\ReluGrad.cs" />
     <Compile Include="Functions\Complex\ComplexBinaryArithmetric\ComplexNormalizeGrad.cs" />
     <Compile Include="Functions\Complex\ComplexBinaryArithmetric\ComplexSquareGrad.cs" />
@@ -128,6 +131,14 @@
     <Compile Include="Functions\Connection1D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Functions\Connection1D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Functions\Connection1D\Convolution\PointwiseKernelProduct.cs" />
+    <Compile Include="Functions\Connection1D\Pool\StridePooling.cs" />
+    <Compile Include="Functions\Connection1D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Functions\Connection1D\Transform\ColumnToImage.cs" />
+    <Compile Include="Functions\Connection1D\Transform\ImageToColumn.cs" />
+    <Compile Include="Functions\Connection2D\Pool\StridePooling.cs" />
+    <Compile Include="Functions\Connection2D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Functions\Connection2D\Transform\ColumnToImage.cs" />
+    <Compile Include="Functions\Connection2D\Transform\ImageToColumn.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseKernelProduct.cs" />
@@ -140,14 +151,18 @@
     <Compile Include="Functions\Connection3D\Pad\EdgePadding.cs" />
     <Compile Include="Functions\Connection3D\Pad\Padding.cs" />
     <Compile Include="Functions\Connection3D\Pad\ZeroPadding.cs" />
+    <Compile Include="Functions\Connection3D\Pool\StridePooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\AveragePooling.cs" />
+    <Compile Include="Functions\Connection3D\Pool\StrideUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\AverageUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\MaxUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Functions\Connection3D\Transform\ColumnToImage.cs" />
+    <Compile Include="Functions\Connection3D\Transform\ImageToColumn.cs" />
     <Compile Include="Functions\Connection3D\Transform\SpaceToChannel.cs" />
     <Compile Include="Functions\Connection3D\Trim\Trimming.cs" />
-    <Compile Include="Functions\Connection3D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Functions\Connection3D\Zoom\LinearZoom.cs" />
     <Compile Include="Functions\Connection3D\Zoom\NeighborZoom.cs" />
     <Compile Include="Functions\Connection1D\Convolution\Convolution.cs" />
     <Compile Include="Functions\Connection1D\Convolution\Deconvolution.cs" />
@@ -162,7 +177,7 @@
     <Compile Include="Functions\Connection1D\Transform\ChannelToSpace.cs" />
     <Compile Include="Functions\Connection1D\Transform\SpaceToChannel.cs" />
     <Compile Include="Functions\Connection1D\Trim\Trimming.cs" />
-    <Compile Include="Functions\Connection1D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Functions\Connection1D\Zoom\LinearZoom.cs" />
     <Compile Include="Functions\Connection1D\Zoom\NeighborZoom.cs" />
     <Compile Include="Functions\Connection2D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Functions\Connection2D\Convolution\ChannelwiseDeconvolution.cs" />
@@ -180,7 +195,7 @@
     <Compile Include="Functions\Connection2D\Pool\MaxPooling.cs" />
     <Compile Include="Functions\Connection2D\Pool\AverageUnpooling.cs" />
     <Compile Include="Functions\Connection2D\Pool\AveragePooling.cs" />
-    <Compile Include="Functions\Connection2D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Functions\Connection2D\Zoom\LinearZoom.cs" />
     <Compile Include="Functions\Connection2D\Zoom\NeighborZoom.cs" />
     <Compile Include="Functions\Connection2D\Transform\SpaceToChannel.cs" />
     <Compile Include="Functions\Connection2D\Transform\ChannelToSpace.cs" />
@@ -252,6 +267,9 @@
     <Compile Include="Functions\RandomGeneration\UniformRandom.cs" />
     <Compile Include="Functions\Quaternion\QuaternionUnaryArithmetric\QuaternionSquash.cs" />
     <Compile Include="Functions\Quaternion\QuaternionUnaryArithmetric\QuaternionDecay.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\Custom.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\TrinaryBiConstantArithmetric.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\TrinaryUniConstantArithmetric.cs" />
     <Compile Include="Functions\TrinaryArithmetric\TrinaryArithmetric.cs" />
     <Compile Include="Functions\TrinaryArithmetric\Clamp.cs" />
     <Compile Include="Functions\Trivector\TrivectorBinaryArithmetric\TrivectorNormalizeGrad.cs" />
@@ -287,6 +305,7 @@
     <Compile Include="Functions\Trivector\TrivectorCast\TrivectorCast.cs" />
     <Compile Include="Functions\UnaryArithmetric\Arccos.cs" />
     <Compile Include="Functions\UnaryArithmetric\Clip.cs" />
+    <Compile Include="Functions\UnaryArithmetric\Custom.cs" />
     <Compile Include="Functions\UnaryArithmetric\UnaryArithmetric.cs" />
     <Compile Include="Functions\UnaryArithmetric\LogCosh.cs" />
     <Compile Include="Functions\UnaryArithmetric\Cosh.cs" />
@@ -392,7 +411,7 @@
     <Compile Include="Layers\PaddingType.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="Links\Aggregation\Aggregation.cs" />
-    <Compile Include="Links\Aggregation\SquareMean.cs" />
+    <Compile Include="Links\Aggregation\SquareAverage.cs" />
     <Compile Include="Links\Aggregation\Min.cs" />
     <Compile Include="Links\Aggregation\Max.cs" />
     <Compile Include="Links\Aggregation\MeanVariance.cs" />
@@ -441,6 +460,12 @@
     <Compile Include="Links\Connection1D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Links\Connection1D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Links\Connection1D\Convolution\PointwiseDeconvolution.cs" />
+    <Compile Include="Links\Connection1D\Pool\StridePooling.cs" />
+    <Compile Include="Links\Connection1D\Transform\ColumnToImage.cs" />
+    <Compile Include="Links\Connection1D\Transform\ImageToColumn.cs" />
+    <Compile Include="Links\Connection2D\Pool\StridePooling.cs" />
+    <Compile Include="Links\Connection2D\Transform\ColumnToImage.cs" />
+    <Compile Include="Links\Connection2D\Transform\ImageToColumn.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Links\Connection3D\Convolution\Convolution.cs" />
@@ -449,12 +474,15 @@
     <Compile Include="Links\Connection3D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Links\Connection3D\Pad\EdgePadding.cs" />
     <Compile Include="Links\Connection3D\Pad\ZeroPadding.cs" />
+    <Compile Include="Links\Connection3D\Pool\StridePooling.cs" />
     <Compile Include="Links\Connection3D\Pool\AveragePooling.cs" />
     <Compile Include="Links\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Links\Connection3D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Links\Connection3D\Transform\ColumnToImage.cs" />
+    <Compile Include="Links\Connection3D\Transform\ImageToColumn.cs" />
     <Compile Include="Links\Connection3D\Transform\SpaceToChannel.cs" />
     <Compile Include="Links\Connection3D\Trim\Trimming.cs" />
-    <Compile Include="Links\Connection3D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Links\Connection3D\Zoom\LinearZoom.cs" />
     <Compile Include="Links\Connection3D\Zoom\NeighborZoom.cs" />
     <Compile Include="Links\Connection1D\Convolution\Convolution.cs" />
     <Compile Include="Links\Connection1D\Convolution\Deconvolution.cs" />
@@ -465,7 +493,7 @@
     <Compile Include="Links\Connection1D\Transform\ChannelToSpace.cs" />
     <Compile Include="Links\Connection1D\Transform\SpaceToChannel.cs" />
     <Compile Include="Links\Connection1D\Trim\Trimming.cs" />
-    <Compile Include="Links\Connection1D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Links\Connection1D\Zoom\LinearZoom.cs" />
     <Compile Include="Links\Connection1D\Zoom\NeighborZoom.cs" />
     <Compile Include="Links\Connection2D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Links\Connection2D\Convolution\ChannelwiseDeconvolution.cs" />
@@ -480,7 +508,7 @@
     <Compile Include="Links\Connection2D\Transform\SpaceToChannel.cs" />
     <Compile Include="Links\Connection2D\Transform\ChannelToSpace.cs" />
     <Compile Include="Links\Connection2D\Trim\Trimming.cs" />
-    <Compile Include="Links\Connection2D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Links\Connection2D\Zoom\LinearZoom.cs" />
     <Compile Include="Links\Connection2D\Zoom\NeighborZoom.cs" />
     <Compile Include="Links\ConnectionDense\Softmax.cs" />
     <Compile Include="Links\Evaluation\Classify\ClassifyEvaluation.cs" />
@@ -541,6 +569,8 @@
     <Compile Include="Links\RandomGeneration\BinaryRandom.cs" />
     <Compile Include="Links\RandomGeneration\NormalRandom.cs" />
     <Compile Include="Links\RandomGeneration\UniformRandom.cs" />
+    <Compile Include="Links\TrinaryArithmetric\Clamp.cs" />
+    <Compile Include="Links\TrinaryArithmetric\TrinaryArithmetric.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCross.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorNormalize.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorSquash.cs" />
@@ -558,6 +588,7 @@
     <Compile Include="Links\Trivector\TrivectorCast\TrivectorX.cs" />
     <Compile Include="Links\Trivector\TrivectorCast\TrivectorCast.cs" />
     <Compile Include="Links\UnaryArithmetric\Arccos.cs" />
+    <Compile Include="Links\UnaryArithmetric\Clamp.cs" />
     <Compile Include="Links\UnaryArithmetric\LogCosh.cs" />
     <Compile Include="Links\UnaryArithmetric\Cosh.cs" />
     <Compile Include="Links\UnaryArithmetric\Exp2.cs" />
@@ -604,6 +635,7 @@
     <Compile Include="Links\Utility\Label.cs" />
     <Compile Include="Links\UnaryArithmetric\Abs.cs" />
     <Compile Include="Links\UnaryArithmetric\UnaryArithmetric.cs" />
+    <Compile Include="NdimArray.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="Operators\ArrayManipulation\BatchIndexer.cs" />
@@ -616,6 +648,7 @@
     <Compile Include="Operators\ArrayManipulation\Sort.cs" />
     <Compile Include="Operators\ArrayManipulation\SortWithKey.cs" />
     <Compile Include="Operators\ArrayManipulation\Where.cs" />
+    <Compile Include="Operators\BinaryArithmetric\Custom.cs" />
     <Compile Include="Operators\BinaryArithmetric\BinaryRightConstantArithmetric.cs" />
     <Compile Include="Operators\BinaryArithmetric\BinaryLeftConstantArithmetric.cs" />
     <Compile Include="Operators\BinaryArithmetric\BinaryRightVectorArithmetric.cs" />
@@ -679,14 +712,18 @@
     <Compile Include="Operators\Connection1D\Pad\EdgePadding.cs" />
     <Compile Include="Operators\Connection1D\Pad\Padding.cs" />
     <Compile Include="Operators\Connection1D\Pad\ZeroPadding.cs" />
+    <Compile Include="Operators\Connection1D\Pool\StridePooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\AveragePooling.cs" />
+    <Compile Include="Operators\Connection1D\Pool\StrideUnpooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\AverageUnpooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\MaxPooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\MaxUnpooling.cs" />
     <Compile Include="Operators\Connection1D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ColumnToImage.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ImageToColumn.cs" />
     <Compile Include="Operators\Connection1D\Transform\SpaceToChannel.cs" />
     <Compile Include="Operators\Connection1D\Trim\Trimming.cs" />
-    <Compile Include="Operators\Connection1D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Operators\Connection1D\Zoom\LinearZoom.cs" />
     <Compile Include="Operators\Connection1D\Zoom\NeighborZoom.cs" />
     <Compile Include="Operators\Connection1D\Zoom\Zoom.cs" />
     <Compile Include="Operators\Connection2D\Convolution\ChannelwiseConvolution.cs" />
@@ -695,6 +732,10 @@
     <Compile Include="Operators\Connection2D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseKernelProduct.cs" />
+    <Compile Include="Operators\Connection2D\Pool\StridePooling.cs" />
+    <Compile Include="Operators\Connection2D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ColumnToImage.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ImageToColumn.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseKernelProduct.cs" />
@@ -707,14 +748,18 @@
     <Compile Include="Operators\Connection3D\Pad\EdgePadding.cs" />
     <Compile Include="Operators\Connection3D\Pad\Padding.cs" />
     <Compile Include="Operators\Connection3D\Pad\ZeroPadding.cs" />
+    <Compile Include="Operators\Connection3D\Pool\StridePooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\AveragePooling.cs" />
+    <Compile Include="Operators\Connection3D\Pool\StrideUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\AverageUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\MaxUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ColumnToImage.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ImageToColumn.cs" />
     <Compile Include="Operators\Connection3D\Transform\SpaceToChannel.cs" />
     <Compile Include="Operators\Connection3D\Trim\Trimming.cs" />
-    <Compile Include="Operators\Connection3D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Operators\Connection3D\Zoom\LinearZoom.cs" />
     <Compile Include="Operators\Connection3D\Zoom\NeighborZoom.cs" />
     <Compile Include="Operators\Connection3D\Zoom\Zoom.cs" />
     <Compile Include="Operators\FactorArithmetric\SignedPow.cs" />
@@ -809,12 +854,16 @@
     <Compile Include="Operators\RandomGeneration\RandomGeneration.cs" />
     <Compile Include="Operators\RandomGeneration\BinaryRandom.cs" />
     <Compile Include="Operators\RandomGeneration\UniformRandom.cs" />
-    <Compile Include="Operators\Connection2D\Zoom\BilinearZoom.cs" />
+    <Compile Include="Operators\Connection2D\Zoom\LinearZoom.cs" />
     <Compile Include="Operators\Connection2D\Zoom\NeighborZoom.cs" />
     <Compile Include="Operators\Connection2D\Zoom\Zoom.cs" />
     <Compile Include="Operators\TrinaryArithmetric\Clamp.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\Custom.cs" />
     <Compile Include="Operators\TrinaryArithmetric\TrinaryArithmetric.cs" />
-    <Compile Include="Operators\TrinaryArithmetric\TrinaryConstantArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryBiConstantArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryUniConstantArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryUniFactorArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryBiFactorArithmetric.cs" />
     <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorBinaryArithmetric.cs" />
     <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorDecayGrad.cs" />
     <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCross.cs" />
@@ -880,6 +929,7 @@
     <Compile Include="Operators\UnaryArithmetric\Arcsin.cs" />
     <Compile Include="Operators\UnaryArithmetric\SignedSqrt.cs" />
     <Compile Include="Operators\UnaryArithmetric\Rsqrt.cs" />
+    <Compile Include="Operators\UnaryArithmetric\Custom.cs" />
     <Compile Include="Operators\UnaryArithmetric\Step.cs" />
     <Compile Include="Operators\UnaryArithmetric\Square.cs" />
     <Compile Include="Operators\UnaryArithmetric\Sqrt.cs" />
@@ -923,4 +973,13 @@
     <Folder Include="Links\Evaluation\Detection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" (
+  exit
+)
+
+md "$(SolutionDir)dll\$(ConfigurationName)" &gt; NUL 2&gt;&amp;1
+copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y
+copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

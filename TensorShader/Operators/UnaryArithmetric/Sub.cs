@@ -6,7 +6,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public Sub(float c, Shape shape)
-            : base(shape){
+            : base(shape) {
             this.Constant = c;
         }
 

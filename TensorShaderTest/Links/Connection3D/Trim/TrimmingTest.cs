@@ -10,27 +10,24 @@ namespace TensorShaderTest.Links.Connection3D {
         public void ReferenceTest() {
             int trim_left = 2, trim_right = 1, trim_top = 3, trim_bottom = 5, trim_front = 4, trim_rear = 2;
             int channels = 5, inwidth = 9, inheight = 12, indepth = 11, batch = 2;
-            int outwidth  = inwidth  - trim_left  - trim_right;
-            int outheight = inheight - trim_top   - trim_bottom;
-            int outdepth  = indepth  - trim_front - trim_rear;
+            int outwidth = inwidth - trim_left - trim_right;
+            int outheight = inheight - trim_top - trim_bottom;
+            int outdepth = indepth - trim_front - trim_rear;
 
             float[] xval = (new float[channels * inwidth * inheight * indepth * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[channels * outwidth * outheight * outdepth * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), yval);
-
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+            VariableField y_actual = new Tensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), yval);
 
             Field y_expect = Trimming3D(x, trim_left, trim_right, trim_top, trim_bottom, trim_front, trim_rear);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

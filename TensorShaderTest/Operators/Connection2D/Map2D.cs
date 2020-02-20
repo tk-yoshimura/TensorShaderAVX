@@ -5,10 +5,10 @@ namespace TensorShaderTest.Operators.Connection2D {
     public class Map2D {
         private readonly double[] val;
 
-        public int Channels{ private set; get; }
-        public int Width{ private set; get; }
-        public int Height{ private set; get; }
-        public int Batch{ private set; get; }
+        public int Channels { private set; get; }
+        public int Width { private set; get; }
+        public int Height { private set; get; }
+        public int Batch { private set; get; }
         public int Length => Channels * Width * Height * Batch;
 
         public Map2D(int channels, int width, int height, int batch, float[] val = null) {
@@ -56,10 +56,10 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         public static bool operator ==(Map2D map1, Map2D map2) {
-            if (map1.Width    != map2.Width)     return false;
-            if (map1.Height   != map2.Height)    return false;
-            if (map1.Channels != map2.Channels)  return false;
-            if (map1.Batch    != map2.Batch)     return false;
+            if (map1.Width != map2.Width) return false;
+            if (map1.Height != map2.Height) return false;
+            if (map1.Channels != map2.Channels) return false;
+            if (map1.Batch != map2.Batch) return false;
 
             return map1.val.SequenceEqual(map2.val);
         }
@@ -77,7 +77,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         public float[] ToArray() {
-            return val.Select((v)=>(float)v).ToArray();
+            return val.Select((v) => (float)v).ToArray();
         }
     }
 }

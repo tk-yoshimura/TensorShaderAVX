@@ -12,12 +12,12 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public BinaryLeftVectorArithmetric(Shape vectorshape, Shape mapshape) {
-            if(vectorshape.Ndim >= mapshape.Ndim) {
+            if (vectorshape.Ndim >= mapshape.Ndim) {
                 throw new ArgumentException(ExceptionMessage.Vectorize(vectorshape, mapshape));
             }
 
-            for(int i = 0; i < vectorshape.Ndim; i++) {
-                if(vectorshape[i] != mapshape[i]) {
+            for (int i = 0; i < vectorshape.Ndim; i++) {
+                if (vectorshape[i] != mapshape[i]) {
                     throw new ArgumentException(ExceptionMessage.Vectorize(vectorshape, mapshape));
                 }
             }

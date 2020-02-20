@@ -31,7 +31,7 @@ namespace TensorShader.Functions.Trivector {
     internal class TrivectorCast : Function {
         /// <summary>コンストラクタ</summary>
         public TrivectorCast()
-            : base(inputs: 3, outputs: 1, allow_resubstitution : false){ }
+            : base(inputs: 3, outputs: 1, allow_resubstitution: false) { }
 
         /// <summary>出力テンソル形状を返す</summary>
         public override Shape[] OutputShapes(params Shape[] inshapes) {
@@ -48,7 +48,7 @@ namespace TensorShader.Functions.Trivector {
         public override void CheckInputShapes(params Shape[] inshapes) {
             base.CheckInputShapes(inshapes);
 
-            if (inshapes[0].Ndim <= 0){
+            if (inshapes[0].Ndim <= 0) {
                 throw new ArgumentException(ExceptionMessage.Shape("Ndim", inshapes[0]));
             }
 

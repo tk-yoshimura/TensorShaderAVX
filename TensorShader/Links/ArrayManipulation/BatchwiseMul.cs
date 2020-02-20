@@ -29,7 +29,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public BatchwiseMul(Field infield, Field vecfield, Field outfield)
-            : base(new Field[]{ infield, vecfield }, outfield ){ }
+            : base(new Field[] { infield, vecfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

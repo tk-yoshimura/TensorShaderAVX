@@ -3,7 +3,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class Sub : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Sub(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -19,7 +19,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class SubLeftVector : BinaryLeftVectorArithmetric {
         /// <summary>コンストラクタ</summary>
         public SubLeftVector(Shape vectorshape, Shape mapshape)
-            : base(vectorshape, mapshape){ }
+            : base(vectorshape, mapshape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -35,7 +35,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class SubRightVector : BinaryRightVectorArithmetric {
         /// <summary>コンストラクタ</summary>
         public SubRightVector(Shape vectorshape, Shape mapshape)
-            : base(vectorshape, mapshape){ }
+            : base(vectorshape, mapshape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -51,7 +51,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class SubLeftConstant : BinaryLeftConstantArithmetric {
         /// <summary>コンストラクタ</summary>
         public SubLeftConstant(float c, Shape shape)
-            : base(c, shape){ }
+            : base(c, shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {
@@ -67,7 +67,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
     internal class SubRightConstant : BinaryRightConstantArithmetric {
         /// <summary>コンストラクタ</summary>
         public SubRightConstant(float c, Shape shape)
-            : base(c, shape){ }
+            : base(c, shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

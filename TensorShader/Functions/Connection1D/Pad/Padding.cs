@@ -11,11 +11,12 @@ namespace TensorShader.Functions.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public Padding(int pad)
-            : this(pad, pad){ }
+            : this(pad, pad) { }
 
         /// <summary>コンストラクタ</summary>
         public Padding(int pad_left, int pad_right)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
         }
@@ -27,7 +28,7 @@ namespace TensorShader.Functions.Connection1D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map1D(inshape.Channels,
-                                         checked(inshape.Width + PadLeft + PadRight),
+                                         inshape.Width + PadLeft + PadRight,
                                          inshape.Batch);
 
             return new Shape[] { outshape };

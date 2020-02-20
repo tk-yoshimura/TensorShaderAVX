@@ -6,7 +6,7 @@ namespace TensorShader.Operators.Aggregation {
         protected readonly uint Stride, AxisLength, Slides;
 
         /// <summary>コンストラクタ</summary>
-        protected Aggregation(Shape shape, int axis){
+        protected Aggregation(Shape shape, int axis) {
             int[] new_shape = shape;
             new_shape[axis] = 1;
 
@@ -18,11 +18,11 @@ namespace TensorShader.Operators.Aggregation {
             AxisLength = (uint)shape[axis];
             Stride = Slides = 1;
 
-            for(int i = 0; i < axis; i++) {
+            for (int i = 0; i < axis; i++) {
                 Stride *= (uint)shape[i];
             }
 
-            for(int i = axis + 1; i < shape.Ndim; i++) {
+            for (int i = axis + 1; i < shape.Ndim; i++) {
                 Slides *= (uint)shape[i];
             }
         }

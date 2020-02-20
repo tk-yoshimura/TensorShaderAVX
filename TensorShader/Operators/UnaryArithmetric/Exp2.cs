@@ -3,7 +3,7 @@ namespace TensorShader.Operators.UnaryArithmetric {
     internal class Exp2 : UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Exp2(Shape shape)
-            : base(shape){ }
+            : base(shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

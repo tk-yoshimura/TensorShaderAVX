@@ -28,7 +28,7 @@ namespace TensorShader.Links.Complex {
 
         /// <summary>コンストラクタ</summary>
         public ComplexCast(Field realfield, Field imagfield, Field outfield)
-            : base(new Field[] { realfield, imagfield }, outfield ) { }
+            : base(new Field[] { realfield, imagfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

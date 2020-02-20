@@ -25,7 +25,8 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public Clip(Field infield, Field outfield, float cmin, float cmax)
-            : base(infield, outfield ) {
+            : base(infield, outfield) {
+
             this.ConstantMin = cmin;
             this.ConstantMax = cmax;
         }

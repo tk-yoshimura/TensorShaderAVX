@@ -4,10 +4,10 @@ using TensorShader;
 
 namespace TensorShaderTest {
     [TestClass]
-    public class ShapeTest{
+    public class ShapeTest {
         [TestMethod]
-        public void ScalarTest(){
-            Shape shape = Shape.Scalar();
+        public void ScalarTest() {
+            Shape shape = Shape.Scalar;
 
             Assert.AreEqual(ShapeType.Scalar, shape.Type, "mismatch type");
             Assert.AreEqual(0, shape.Ndim, "mismatch ndim");
@@ -23,11 +23,11 @@ namespace TensorShaderTest {
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
             Assert.AreEqual("()", shape.ToString(), "mismatch string");
 
-            Assert.IsTrue(shape == Shape.Scalar(), "notequal shape");
+            Assert.IsTrue(shape == Shape.Scalar, "notequal shape");
         }
 
         [TestMethod]
-        public void VectorTest(){
+        public void VectorTest() {
             Shape shape = Shape.Vector(7);
 
             Assert.AreEqual(ShapeType.Vector, shape.Type, "mismatch type");
@@ -49,7 +49,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Map0DTest(){
+        public void Map0DTest() {
             Shape shape = Shape.Map0D(7, 2);
 
             Assert.AreEqual(ShapeType.Map, shape.Type, "mismatch type");
@@ -72,7 +72,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Map1DTest(){
+        public void Map1DTest() {
             Shape shape = Shape.Map1D(7, 3, 4);
 
             Assert.AreEqual(ShapeType.Map, shape.Type, "mismatch type");
@@ -95,7 +95,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Map2DTest(){
+        public void Map2DTest() {
             Shape shape = Shape.Map2D(7, 3, 4, 2);
 
             Assert.AreEqual(ShapeType.Map, shape.Type, "mismatch type");
@@ -118,7 +118,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Map3DTest(){
+        public void Map3DTest() {
             Shape shape = Shape.Map3D(7, 3, 4, 5, 4);
 
             Assert.AreEqual(ShapeType.Map, shape.Type, "mismatch type");
@@ -141,7 +141,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Kernel0DTest(){
+        public void Kernel0DTest() {
             Shape shape = Shape.Kernel0D(5, 7);
 
             Assert.AreEqual(ShapeType.Kernel, shape.Type, "mismatch type");
@@ -163,7 +163,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Kernel1DTest(){
+        public void Kernel1DTest() {
             Shape shape = Shape.Kernel1D(5, 7, 3);
 
             Assert.AreEqual(ShapeType.Kernel, shape.Type, "mismatch type");
@@ -185,7 +185,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Kernel2DTest(){
+        public void Kernel2DTest() {
             Shape shape = Shape.Kernel2D(5, 7, 3, 5);
 
             Assert.AreEqual(ShapeType.Kernel, shape.Type, "mismatch type");
@@ -207,7 +207,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void Kernel3DTest(){
+        public void Kernel3DTest() {
             Shape shape = Shape.Kernel3D(5, 7, 3, 5, 7);
 
             Assert.AreEqual(ShapeType.Kernel, shape.Type, "mismatch type");
@@ -229,17 +229,17 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void CompareTest(){
+        public void CompareTest() {
             Shape[] shapelist1 = {
                 null,
-                Shape.Scalar(), Shape.Vector(5),
+                Shape.Scalar, Shape.Vector(5),
                 Shape.Map1D(3, 5), Shape.Map2D(3, 3, 5), Shape.Map3D(3, 3, 3, 5),
                 Shape.Kernel0D(3, 5), Shape.Kernel1D(3, 3, 5), Shape.Kernel2D(3, 3, 5, 5), Shape.Kernel3D(3, 3, 5, 7, 5),
             };
 
             Shape[] shapelist2 = {
                 null,
-                Shape.Scalar(), Shape.Vector(5),
+                Shape.Scalar, Shape.Vector(5),
                 Shape.Map1D(3, 5), Shape.Map2D(3, 3, 5), Shape.Map3D(3, 3, 3, 5),
                 Shape.Kernel0D(3, 5), Shape.Kernel1D(3, 3, 5), Shape.Kernel2D(3, 3, 5, 5), Shape.Kernel3D(3, 3, 5, 7, 5),
             };
@@ -259,7 +259,7 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void BadCreateTest(){
+        public void BadCreateTest() {
             Assert.ThrowsException<ArgumentException>(
                 () => { Shape shape = new Shape(ShapeType.Map, new int[] { 2, 4, -1, 3 }); },
                 "non positive"

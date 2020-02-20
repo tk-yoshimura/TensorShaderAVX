@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>トリミング</summary>
@@ -32,7 +31,7 @@ namespace TensorShader.Operators.Connection2D {
             int outwidth = inwidth - trim_left - trim_right;
             int outheight = inheight - trim_top - trim_bottom;
 
-            if(trim_left < 0 || trim_right < 0 || trim_top < 0 || trim_bottom < 0)  {
+            if (trim_left < 0 || trim_right < 0 || trim_top < 0 || trim_bottom < 0) {
                 throw new ArgumentException($"{nameof(trim_left)}, {nameof(trim_right)}, {nameof(trim_top)}, {nameof(trim_bottom)}");
             }
 
@@ -57,11 +56,9 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Trimming.Trimming2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, (uint)th, 
-                                                           (uint)TrimLeft, (uint)TrimRight, (uint)TrimTop, (uint)TrimBottom,
-                                                           inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Trimming.Trimming2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch,
+                                                        (uint)TrimLeft, (uint)TrimRight, (uint)TrimTop, (uint)TrimBottom,
+                                                        inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

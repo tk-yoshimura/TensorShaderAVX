@@ -31,7 +31,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>コンストラクタ</summary>
         public SoftmaxCrossEntropy(Field xfield, Field tfield, Field outfield)
-            : base(new Field[]{ xfield, tfield }, outfield) {
+            : base(new Field[] { xfield, tfield }, outfield) {
             if (xfield.Shape.Type != ShapeType.Map || xfield.Shape.Ndim < 2 || xfield.Shape != tfield.Shape) {
                 throw new ArgumentException($"{nameof(xfield)}, {nameof(tfield)}");
             }
@@ -40,7 +40,7 @@ namespace TensorShader.Links.Loss {
         /// <summary>順伝搬</summary>
         public override void Forward() {
             VariableNode x_exp = Exp(X.Value);
-            VariableNode x_exp_sum = Sum(x_exp, new int[]{ Axis.Map0D.Channels }, keepdims:true);
+            VariableNode x_exp_sum = Sum(x_exp, new int[] { Axis.Map0D.Channels }, keepdims: true);
             x_softmax = x_exp / Broadcast(x_exp_sum, X.Shape);
 
             Y.AssignValue(-T.Value * Log(x_softmax + 1e-5f));

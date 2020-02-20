@@ -48,7 +48,7 @@ namespace TensorShader {
     }
 
     /// <summary>変数ノード</summary>
-    public abstract partial class VariableNode : Node{
+    public abstract partial class VariableNode : Node {
         /// <summary>変数形状</summary>
         public Shape Shape { private set; get; }
 
@@ -56,7 +56,8 @@ namespace TensorShader {
         /// <param name="shape">変数形状</param>
         /// <param name="innodes">入力ノード</param>
         protected VariableNode(Shape shape, params Node[] innodes)
-            : base(innodes){
+            : base(innodes) {
+
             this.Shape = shape;
         }
 
@@ -65,7 +66,7 @@ namespace TensorShader {
         /// <param name="innodes">入力入力ノード</param>
         /// <remarks>出力ノードを生成し変数形状を確定するのみでテンソル演算は行わない</remarks>
         internal static VariableNode[] Apply(Function function, params VariableNode[] innodes) {
-            var inshapes = innodes.Select((node)=>node.Shape).ToArray();
+            var inshapes = innodes.Select((node) => node.Shape).ToArray();
             var outshapes = function.OutputShapes(inshapes);
 
             var outnodes = outshapes.Select((shape) => new TemporaryNode(shape)).ToArray();
@@ -215,7 +216,7 @@ namespace TensorShader {
     }
 
     /// <summary>関数ノード</summary>
-    internal class FunctionNode : Node{
+    internal class FunctionNode : Node {
         /// <summary>関数</summary>
         public Function Function { private set; get; }
 
@@ -224,7 +225,7 @@ namespace TensorShader {
         /// <param name="innodes">入力ノード</param>
         /// <param name="outnodes">出力ノード</param>
         public FunctionNode(Function function, VariableNode[] innodes, VariableNode[] outnodes)
-            : base(innodes, outnodes){
+            : base(innodes, outnodes) {
             if (function.Inputs != innodes.Length || function.Outputs != outnodes.Length) {
                 throw new ArgumentException(nameof(function));
             }

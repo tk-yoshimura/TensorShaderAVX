@@ -32,7 +32,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Reshape(Shape outshape)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : true){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: true) {
+
             this.OutShape = outshape;
         }
 
@@ -40,7 +41,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         public override Shape[] OutputShapes(params Shape[] inshapes) {
             CheckInputShapes(inshapes);
 
-            return new Shape[]{ OutShape };
+            return new Shape[] { OutShape };
         }
 
         public override void CheckInputShapes(params Shape[] inshapes) {
@@ -59,7 +60,7 @@ namespace TensorShader.Functions.ArrayManipulation {
 
             Tensor intensor = intensors[0], outtensor = outtensors[0];
 
-            return (new Tensor[]{ intensor, outtensor }, new Operators.ArrayManipulation.Reshape(intensor.Shape, outtensor.Shape));
+            return (new Tensor[] { intensor, outtensor }, new Operators.ArrayManipulation.Reshape(intensor.Shape, outtensor.Shape));
         }
     }
 }

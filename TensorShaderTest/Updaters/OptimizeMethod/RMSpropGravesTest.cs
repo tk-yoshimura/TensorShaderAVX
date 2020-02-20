@@ -12,29 +12,26 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
         public void ReferenceTest() {
             const int loops = 10;
 
-            Tensor x_tensor = new Tensor(Shape.Scalar(), new float[] { 0.7f });
-            Tensor y_tensor = new Tensor(Shape.Scalar(), new float[] { 0.8f });
-
-            ParameterField x = x_tensor, y = y_tensor;
+            ParameterField x = new Tensor(Shape.Scalar, new float[] { 0.7f });
+            ParameterField y = new Tensor(Shape.Scalar, new float[] { 0.8f });
 
             Field f = Square(x) + Square(y);
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
-            Field loss = f / 20 + g;
-            StoreField lossnode = loss.Save();
+            StoreField loss = f / 20 + g;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
-            parameters.AddUpdater((parameter) => new RMSpropGraves(parameter, lambda:0.01f, rho:0.9f));
+            parameters.AddUpdater((parameter) => new RMSpropGraves(parameter, lambda: 0.01f, rho: 0.9f));
 
             List<float> losses = new List<float>(), xs = new List<float>(), ys = new List<float>();
 
-            for(int i = 0; i < loops; i++) {
+            for (int i = 0; i < loops; i++) {
                 flow.Execute();
                 parameters.Update();
 
-                losses.Add(lossnode.State[0]);
-                xs.Add(x_tensor.State[0]);
-                ys.Add(y_tensor.State[0]);
+                losses.Add(loss.State[0]);
+                xs.Add(x.State[0]);
+                ys.Add(y.State[0]);
             }
 
             float[] losses_expect = {
@@ -52,7 +49,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 6.385518e-01f,  6.150461e-01f,  5.917734e-01f,  5.686740e-01f,  5.457199e-01f,
             };
 
-            for(int i = 0; i < loops; i++) {
+            for (int i = 0; i < loops; i++) {
                 Assert.AreEqual(losses_expect[i], losses[i], Math.Abs(losses_expect[i]) * 1e-2f);
                 Assert.AreEqual(xs_expect[i], xs[i], Math.Abs(xs[i]) * 1e-2f);
                 Assert.AreEqual(ys_expect[i], ys[i], Math.Abs(ys[i]) * 1e-2f);
@@ -63,16 +60,13 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
         public void InitializeTest() {
             const int loops = 10;
 
-            Tensor x_tensor = new Tensor(Shape.Scalar(), new float[] { 0.7f });
-            Tensor y_tensor = new Tensor(Shape.Scalar(), new float[] { 0.8f });
-
-            ParameterField x = x_tensor, y = y_tensor;
+            ParameterField x = new Tensor(Shape.Scalar, new float[] { 0.7f });
+            ParameterField y = new Tensor(Shape.Scalar, new float[] { 0.8f });
 
             Field f = Square(x) + Square(y);
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
-            Field loss = f / 20 + g;
-            StoreField lossnode = loss.Save();
+            StoreField loss = f / 20 + g;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new RMSpropGraves(parameter, lambda: 0.1f, rho: 0.9f));
@@ -85,13 +79,13 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_first.Add(lossnode.State[0]);
-                xs_first.Add(x_tensor.State[0]);
-                ys_first.Add(y_tensor.State[0]);
+                losses_first.Add(loss.State[0]);
+                xs_first.Add(x.State[0]);
+                ys_first.Add(y.State[0]);
             }
 
-            x_tensor.State = new float[] { 0.7f };
-            y_tensor.State = new float[] { 0.8f };
+            x.State = new float[] { 0.7f };
+            y.State = new float[] { 0.8f };
 
             parameters.InitializeUpdater();
 
@@ -101,9 +95,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_second.Add(lossnode.State[0]);
-                xs_second.Add(x_tensor.State[0]);
-                ys_second.Add(y_tensor.State[0]);
+                losses_second.Add(loss.State[0]);
+                xs_second.Add(x.State[0]);
+                ys_second.Add(y.State[0]);
             }
 
             CollectionAssert.AreEqual(losses_first, losses_second);
@@ -118,9 +112,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_third.Add(lossnode.State[0]);
-                xs_third.Add(x_tensor.State[0]);
-                ys_third.Add(y_tensor.State[0]);
+                losses_third.Add(loss.State[0]);
+                xs_third.Add(x.State[0]);
+                ys_third.Add(y.State[0]);
             }
 
             CollectionAssert.AreEqual(losses_first, losses_third);

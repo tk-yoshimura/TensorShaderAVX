@@ -40,7 +40,7 @@ namespace TensorShader.Operators.Connection3D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(channels, inwidth, inheight, indepth, batch)),
-                (ArgumentType.Out, Shape.Map3D(channels, checked(inwidth + pad_left + pad_right), checked(inheight + pad_top + pad_bottom), checked(indepth + pad_front + pad_rear), batch)),
+                (ArgumentType.Out, Shape.Map3D(channels, inwidth + pad_left + pad_right, inheight + pad_top + pad_bottom, indepth + pad_front + pad_rear, batch)),
             };
 
             this.Channels = channels;

@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 
+using TensorShaderAvxBackend;
+
 namespace TensorShader {
     /// <summary>形状タイプ</summary>
     public enum ShapeType {
@@ -16,6 +18,8 @@ namespace TensorShader {
         Map,
         /// <summary>行列</summary>
         Matrix,
+        /// <summary>Column変換後行列</summary>
+        Column,
     }
 
     /// <summary>形状クラス</summary>
@@ -33,6 +37,7 @@ namespace TensorShader {
             get {
                 if (shape.Length > 2 && Type == ShapeType.Map) return shape[1];
                 if (shape.Length > 2 && Type == ShapeType.Kernel) return shape[2];
+                if (shape.Length > 3 && Type == ShapeType.Column) return shape[2];
                 return 0;
             }
         }
@@ -42,6 +47,7 @@ namespace TensorShader {
             get {
                 if (shape.Length > 3 && Type == ShapeType.Map) return shape[2];
                 if (shape.Length > 3 && Type == ShapeType.Kernel) return shape[3];
+                if (shape.Length > 4 && Type == ShapeType.Column) return shape[3];
                 return 0;
             }
         }
@@ -51,6 +57,7 @@ namespace TensorShader {
             get {
                 if (shape.Length > 4 && Type == ShapeType.Map) return shape[3];
                 if (shape.Length > 4 && Type == ShapeType.Kernel) return shape[4];
+                if (shape.Length > 5 && Type == ShapeType.Column) return shape[4];
                 return 0;
             }
         }
@@ -59,7 +66,8 @@ namespace TensorShader {
         public int Channels {
             get {
                 if (shape.Length > 0 && (Type == ShapeType.Map || Type == ShapeType.Vector)) return shape[0];
-                if (shape.Length > 1 && (Type == ShapeType.Kernel))  return shape[0] * shape[1];
+                if (shape.Length > 1 && (Type == ShapeType.Kernel)) return shape[0] * shape[1];
+                if (shape.Length > 1 && (Type == ShapeType.Column)) return shape[1];
                 return 0;
             }
         }
@@ -107,12 +115,11 @@ namespace TensorShader {
                         throw new ArgumentException(ExceptionMessage.Shape(shape));
                     }
 
-                    length = checked(length * s);
+                    length *= s;
                 }
-                int _ = checked(length * 4);
 
-                if (length > 0x10000000) {
-                    throw new OutOfMemoryException();
+                if ((uint)length > AvxArray<float>.MaxLength) {
+                    throw new OverflowException();
                 }
             }
             catch (OverflowException) {
@@ -137,7 +144,7 @@ namespace TensorShader {
             this.Type = type;
             this.Length = length;
 
-            this.Batch = (type == ShapeType.Map) ? shape.Last() : 1;
+            this.Batch = (type == ShapeType.Map || type == ShapeType.Column) ? shape.Last() : 1;
             this.MapSize = (type == ShapeType.Map) ? length / (shape[0] * this.Batch)
                          : (type == ShapeType.Kernel) ? length / (shape[0] * shape[1])
                          : 1;
@@ -145,37 +152,35 @@ namespace TensorShader {
         }
 
         /// <summary>スカラー</summary>
-        public static Shape Scalar() {
-            return new Shape(ShapeType.Scalar);
-        }
-
+        public static Shape Scalar => new Shape(ShapeType.Scalar);
+        
         /// <summary>ベクター</summary>
         public static Shape Vector(int channels) {
-            return new Shape(ShapeType.Vector, channels );
+            return new Shape(ShapeType.Vector, channels);
         }
 
         /// <summary>0次元マップ</summary>
         public static Shape Map0D(int channels, int batch = 1) {
-            return new Shape(ShapeType.Map, channels, batch );
+            return new Shape(ShapeType.Map, channels, batch);
         }
 
         /// <summary>1次元マップ</summary>
         public static Shape Map1D(int channels, int width, int batch = 1) {
-            return new Shape(ShapeType.Map, channels, width, batch );
+            return new Shape(ShapeType.Map, channels, width, batch);
         }
 
         /// <summary>2次元マップ</summary>
         public static Shape Map2D(int channels, int width, int height, int batch = 1) {
-            return new Shape(ShapeType.Map, channels, width, height, batch );
+            return new Shape(ShapeType.Map, channels, width, height, batch);
         }
 
         /// <summary>3次元マップ</summary>
         public static Shape Map3D(int channels, int width, int height, int depth, int batch = 1) {
-            return new Shape(ShapeType.Map, channels, width, height, depth, batch );
+            return new Shape(ShapeType.Map, channels, width, height, depth, batch);
         }
         /// <summary>0次元フィルタ</summary>
         public static Shape Kernel0D(int inchannels, int outchannels) {
-            return new Shape(ShapeType.Kernel, inchannels, outchannels );
+            return new Shape(ShapeType.Kernel, inchannels, outchannels);
         }
 
         /// <summary>1次元フィルタ</summary>
@@ -184,7 +189,7 @@ namespace TensorShader {
                 throw new ArgumentException(nameof(width));
             }
 
-            return new Shape(ShapeType.Kernel, inchannels, outchannels, width );
+            return new Shape(ShapeType.Kernel, inchannels, outchannels, width);
         }
 
         /// <summary>2次元フィルタ</summary>
@@ -193,7 +198,7 @@ namespace TensorShader {
                 throw new ArgumentException($"{nameof(width)}, {nameof(height)}");
             }
 
-            return new Shape(ShapeType.Kernel,  inchannels, outchannels, width, height );
+            return new Shape(ShapeType.Kernel, inchannels, outchannels, width, height);
         }
 
         /// <summary>3次元フィルタ</summary>
@@ -202,13 +207,13 @@ namespace TensorShader {
                 throw new ArgumentException($"{nameof(width)}, {nameof(height)}, {nameof(depth)}");
             }
 
-            return new Shape(ShapeType.Kernel, inchannels, outchannels, width, height, depth );
+            return new Shape(ShapeType.Kernel, inchannels, outchannels, width, height, depth);
         }
 
         /// <summary>形状クラス比較</summary>
         public static bool operator ==(Shape s1, Shape s2) {
-            if (s1 is null && s2 is null)  return true;
-            if (s1 is null || s2 is null)  return false;
+            if (s1 is null && s2 is null) return true;
+            if (s1 is null || s2 is null) return false;
 
             return s1.Equals(s2);
         }
@@ -219,7 +224,7 @@ namespace TensorShader {
         }
 
         /// <summary>int配列へ変換</summary>
-        public static implicit operator int[] (Shape shape) {
+        public static implicit operator int[](Shape shape) {
             return (int[])shape.shape.Clone();
         }
 
@@ -234,7 +239,7 @@ namespace TensorShader {
 
             Shape obj_shape = (Shape)obj;
 
-            if (Type != obj_shape.Type)  return false;
+            if (Type != obj_shape.Type) return false;
 
             return shape.SequenceEqual(obj_shape.shape);
         }

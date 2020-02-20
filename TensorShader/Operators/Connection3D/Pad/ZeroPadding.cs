@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace TensorShader.Operators.Connection3D {
     /// <summary>ゼロパディング</summary>
     internal class ZeroPadding : Padding {
@@ -17,10 +15,8 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Padding.ZeroPadding3D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, (uint)Batch, (uint)th, 
-                                                             (uint)PadLeft, (uint)PadRight, (uint)PadTop, (uint)PadBottom, (uint)PadFront, (uint)PadRear, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Padding.ZeroPadding3D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth, (uint)Batch,
+                                                          (uint)PadLeft, (uint)PadRight, (uint)PadTop, (uint)PadBottom, (uint)PadFront, (uint)PadRear, inmap.Buffer, outmap.Buffer);
         }
     }
 }

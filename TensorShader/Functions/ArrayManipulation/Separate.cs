@@ -38,7 +38,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Separate(int axis, int[] lengths)
-            : base(inputs:1, outputs:lengths.Length, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: lengths.Length, allow_resubstitution: false) {
+
             this.lengths = (int[])lengths.Clone();
             this.Axis = axis;
         }
@@ -53,10 +54,10 @@ namespace TensorShader.Functions.ArrayManipulation {
 
             Shape[] outshapes =
                 lengths.Select((length) => {
-                        int[] outshape = (int[])s.Clone();
-                        outshape[Axis] = length;
-                        return new Shape(inshape.Type, outshape);
-                    }).ToArray();
+                    int[] outshape = (int[])s.Clone();
+                    outshape[Axis] = length;
+                    return new Shape(inshape.Type, outshape);
+                }).ToArray();
 
             return outshapes;
         }
@@ -79,7 +80,7 @@ namespace TensorShader.Functions.ArrayManipulation {
                 intensors.Concat(outtensors).ToArray(),
                 new Operators.ArrayManipulation.Separate(
                     intensor.Shape,
-                    outtensors.Select((tensor)=>tensor.Shape).ToArray(),
+                    outtensors.Select((tensor) => tensor.Shape).ToArray(),
                     Axis)
                 );
         }

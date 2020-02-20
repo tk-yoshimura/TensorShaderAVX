@@ -5,7 +5,7 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public EluGrad(float slope, Shape shape)
-            : base(shape){
+            : base(shape) {
             this.Slope = slope;
         }
 

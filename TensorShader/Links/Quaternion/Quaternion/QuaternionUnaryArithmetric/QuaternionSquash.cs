@@ -19,7 +19,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
     public class QuaternionSquash : UnaryArithmetric.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public QuaternionSquash(Field infield, Field outfield)
-            : base(infield, outfield ) { }
+            : base(infield, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
@@ -33,7 +33,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(NanAsZero(QuaternionSquashGrad(Y.Grad,　X.Value)));
+                X.AddGrad(NanAsZero(QuaternionSquashGrad(Y.Grad, X.Value)));
             }
         }
     }

@@ -33,7 +33,8 @@ namespace TensorShader.Functions.TrivectorArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public TrivectorUnaryArithmetric(Operators.TrivectorUnaryArithmetric.TrivectorUnaryArithmetric arithmetric)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : true){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: true) {
+
             this.arithmetric = arithmetric;
         }
 
@@ -53,7 +54,7 @@ namespace TensorShader.Functions.TrivectorArithmetric {
                 throw new ArgumentException(ExceptionMessage.Shape("Ndim", inshapes[0]));
             }
 
-            if (inshapes[0].Channels % 3!= 0) {
+            if (inshapes[0].Channels % 3 != 0) {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 3));
             }
 

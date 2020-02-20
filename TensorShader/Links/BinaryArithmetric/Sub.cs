@@ -11,7 +11,7 @@ namespace TensorShader {
         }
 
         /// <summary>減算</summary>
-        public static Field operator-(Field x1, Field x2) {
+        public static Field operator -(Field x1, Field x2) {
             return Sub(x1, x2);
         }
     }
@@ -22,7 +22,7 @@ namespace TensorShader.Links.BinaryArithmetric {
     internal class Sub : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Sub(Field infield1, Field infield2, Field outfield)
-            : base(infield1, infield2, outfield ) { }
+            : base(infield1, infield2, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

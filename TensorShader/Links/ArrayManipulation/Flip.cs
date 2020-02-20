@@ -29,7 +29,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Flip(Field x, Field y, int axis)
-            : base(new Field[]{ x }, y ){
+            : base(new Field[] { x }, y) {
             this.Axis = axis;
         }
 

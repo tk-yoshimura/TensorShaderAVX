@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
+
 using TensorShaderAvxBackend;
 
 namespace TensorShader {
     /// <summary>テンソルクラス</summary>
-    public partial class Tensor : ICloneable{
+    public partial class Tensor : ICloneable {
         /// <summary>形状</summary>
-        public Shape Shape{ protected set; get; }
+        public Shape Shape { protected set; get; }
 
         /// <summary>保有バッファ</summary>
         internal AvxArray<float> Buffer { private protected set; get; }
@@ -44,12 +45,12 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
-        public Tensor(Shape shape, float[] value = null){
+        public Tensor(Shape shape, float[] value = null) {
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));
             }
             if (value != null && value.Length < shape.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
+                throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
             }
 
             this.Buffer = value ?? (new float[shape.Length]);
@@ -59,15 +60,15 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
         /// <param name="array">バッファ</param>
-        protected Tensor(Shape shape, AvxArray<float> array){
+        protected Tensor(Shape shape, AvxArray<float> array) {
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));
             }
-            if (array == null) { 
+            if (array == null) {
                 throw new ArgumentNullException(nameof(array));
             }
-            if (checked((int)array.Length) < shape.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument("value.Length", (int)array.Length, shape.Length));
+            if ((int)array.Length < shape.Length) {
+                throw new ArgumentException(ExceptionMessage.Argument($"{array}.Length", (int)array.Length, shape.Length));
             }
 
             this.Buffer = array;
@@ -75,7 +76,7 @@ namespace TensorShader {
         }
 
         /// <summary>状態</summary>
-        public virtual float[] State{
+        public virtual float[] State {
             get {
                 float[] state = new float[Length];
                 Buffer.Read(state, (ulong)Length);
@@ -84,7 +85,7 @@ namespace TensorShader {
             }
             set {
                 if (value.Length != Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, Length));
+                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, Length));
                 }
 
                 Buffer.Write(value, (ulong)Length);
@@ -146,7 +147,7 @@ namespace TensorShader {
 
         /// <summary>コピー</summary>
         public virtual Tensor Copy() {
-            if(this is OverflowCheckedTensor) {
+            if (this is OverflowCheckedTensor) {
                 OverflowCheckedTensor tensor = new OverflowCheckedTensor(Shape);
                 CopyTo(tensor);
 
@@ -162,7 +163,7 @@ namespace TensorShader {
 
         /// <summary>インデクサ</summary>
         /// <param name="index">バッチ次元のインデクス</param>
-        public virtual Tensor this[int index]{
+        public virtual Tensor this[int index] {
             set {
                 if (index < 0 || index >= Batch) {
                     throw new ArgumentOutOfRangeException(nameof(index));
@@ -211,13 +212,13 @@ namespace TensorShader {
 
     /// <summary>バッファ共有テンソル</summary>
     internal class TemporaryTensor : Tensor {
-        public TemporaryTensor(Shape shape, AvxArray<float> array) : 
-            base(shape, array){ }
+        public TemporaryTensor(Shape shape, AvxArray<float> array)
+            : base(shape, array) { }
     }
 
     /// <summary>領域外アクセスチェック有効テンソル</summary>
     /// <remarks>デバック用</remarks>
-    internal class OverflowCheckedTensor : Tensor{
+    internal class OverflowCheckedTensor : Tensor {
         private static Random random = new Random();
 
         private const int canary_length = 32;
@@ -227,13 +228,13 @@ namespace TensorShader {
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
         public OverflowCheckedTensor(Shape shape, float[] value = null)
-            : base(shape, new float[shape.Length + canary_length]){
+            : base(shape, new float[shape.Length + canary_length]) {
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));
             }
-            if(value != null) {
-                if(value.Length != shape.Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
+            if (value != null) {
+                if (value.Length != shape.Length) {
+                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
                 }
 
                 Buffer.Write(value, (ulong)shape.Length);
@@ -267,7 +268,7 @@ namespace TensorShader {
 
             set {
                 if (value.Length != Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, Length));
+                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, Length));
                 }
 
                 Buffer.Write(value, (ulong)Length);
@@ -281,10 +282,10 @@ namespace TensorShader {
 
         /// <summary>領域外アクセスチェック</summary>
         public void CheckOverflow() {
-            float[] canary_read = Buffer.Value.Skip(Shape.Length).ToArray();
-            
-            for(int i = 0; i < canary_length; i++) {
-                if (canary_read[i] != canary[i]) {
+            float[] value = Buffer.Value;
+
+            for (int i = 0; i < canary_length; i++) {
+                if (value[Shape.Length + i] != canary[i]) {
                     throw new IndexOutOfRangeException("Detected out of buffer access.");
                 }
             }

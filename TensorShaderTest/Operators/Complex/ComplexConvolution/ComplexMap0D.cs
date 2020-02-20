@@ -5,8 +5,8 @@ namespace TensorShaderTest.Operators.Complex {
     public class ComplexMap0D {
         private readonly System.Numerics.Complex[] val;
 
-        public int Channels{ private set; get; }
-        public int Batch{ private set; get; }
+        public int Channels { private set; get; }
+        public int Batch { private set; get; }
         public int Length => Channels * Batch;
 
         public ComplexMap0D(int channels, int batch, System.Numerics.Complex[] val = null) {
@@ -52,8 +52,8 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         public static bool operator ==(ComplexMap0D map1, ComplexMap0D map2) {
-            if (map1.Channels != map2.Channels)  return false;
-            if (map1.Batch    != map2.Batch)     return false;
+            if (map1.Channels != map2.Channels) return false;
+            if (map1.Batch != map2.Batch) return false;
 
             return map1.val.SequenceEqual(map2.val);
         }

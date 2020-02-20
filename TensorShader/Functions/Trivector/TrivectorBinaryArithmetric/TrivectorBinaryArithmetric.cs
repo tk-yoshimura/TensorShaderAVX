@@ -33,7 +33,8 @@ namespace TensorShader.Functions.TrivectorArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public TrivectorBinaryArithmetric(Operators.TrivectorBinaryArithmetric.TrivectorBinaryArithmetric arithmetric)
-            : base(inputs: 2, outputs: 1, allow_resubstitution : true){
+            : base(inputs: 2, outputs: 1, allow_resubstitution: true) {
+
             this.arithmetric = arithmetric;
         }
 
@@ -43,7 +44,7 @@ namespace TensorShader.Functions.TrivectorArithmetric {
         public override Shape[] OutputShapes(params Shape[] inshapes) {
             CheckInputShapes(inshapes);
 
-            return new Shape[]{ inshapes[0] };
+            return new Shape[] { inshapes[0] };
         }
 
         public override void CheckInputShapes(params Shape[] inshapes) {

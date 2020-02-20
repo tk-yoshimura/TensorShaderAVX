@@ -6,10 +6,10 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>テンソル総和</summary>
         public static Field Sum(params Field[] xs) {
-            if(xs.Length == 1) {
+            if (xs.Length == 1) {
                 return xs[0];
             }
-            else if(xs.Length == 2) {
+            else if (xs.Length == 2) {
                 return xs[0] + xs[1];
             }
 

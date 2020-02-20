@@ -34,7 +34,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public ArgSort(Field x, Field index, Field y, int axis)
-            : base(new Field[]{ x, index }, y){
+            : base(new Field[] { x, index }, y) {
             this.Axis = axis;
         }
 

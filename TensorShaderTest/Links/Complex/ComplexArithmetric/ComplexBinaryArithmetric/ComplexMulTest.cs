@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 3 - length).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length), yval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            ParameterField y = new Tensor(Shape.Vector(length), yval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field xy = ComplexMul(x, y);
             Field err = xy - t;
@@ -28,11 +24,11 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gy_actual = y.GradTensor.State;
+            float[] gy_actual = y.GradState;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
         }
@@ -45,13 +41,9 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 3 - length).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length), yval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            ParameterField y = new Tensor(Shape.Vector(length), yval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field y_real = ComplexReal(y), y_imag = ComplexImag(y);
@@ -62,11 +54,11 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gy_actual = y.GradTensor.State;
+            float[] gy_actual = y.GradState;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
         }

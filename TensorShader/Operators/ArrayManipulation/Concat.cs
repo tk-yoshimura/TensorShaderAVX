@@ -9,7 +9,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Concat(Shape[] inshapes, Shape outshape, int axis) {
-            if(!CheckShape(inshapes, outshape, axis)){
+            if (!CheckShape(inshapes, outshape, axis)) {
                 throw new ArgumentException(ExceptionMessage.Concat(axis, inshapes, outshape));
             }
 
@@ -19,9 +19,9 @@ namespace TensorShader.Operators.ArrayManipulation {
             this.in_strides = new uint[inshapes.Length];
             this.out_stride = 0;
 
-            for(int i = 0; i < inshapes.Length; i++) {
+            for (int i = 0; i < inshapes.Length; i++) {
                 in_strides[i] = 1;
-                for(int j = 0; j <= axis; j++) {
+                for (int j = 0; j <= axis; j++) {
                     in_strides[i] *= (uint)inshapes[i][j];
                 }
 
@@ -37,7 +37,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
             uint index = 0, slides = (uint)outtensor.Length / out_stride;
 
-            for(int i = 0; i < tensors.Length - 1; i++) {
+            for (int i = 0; i < tensors.Length - 1; i++) {
                 Tensor intensor = tensors[i];
 
                 TensorShaderAvxBackend.ArrayManipulation.PatternCopy(in_strides[i], 0, out_stride, index, in_strides[i],
@@ -55,14 +55,14 @@ namespace TensorShader.Operators.ArrayManipulation {
             int ndim = outshape.Ndim;
             int length = 0;
 
-            foreach(Shape inshape in inshapes) {
+            foreach (Shape inshape in inshapes) {
                 if (inshape.Ndim != ndim) {
                     return false;
                 }
 
                 length += inshape[axis];
 
-                for(int i = 0; i < ndim; i++) {
+                for (int i = 0; i < ndim; i++) {
                     if (i == axis) {
                         continue;
                     }

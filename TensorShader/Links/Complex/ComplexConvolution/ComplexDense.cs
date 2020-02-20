@@ -28,7 +28,7 @@ namespace TensorShader.Links.ComplexConvolution {
 
         /// <summary>コンストラクタ</summary>
         public ComplexDense(Field infield, Field kernelfield, Field outfield)
-            : base(new Field[]{ infield, kernelfield }, outfield) { }
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

@@ -3,7 +3,7 @@ namespace TensorShader.Operators.LogicalArithmetric {
     internal class LessThanOrEqualLeftConstant : BinaryArithmetric.BinaryLeftConstantArithmetric {
         /// <summary>コンストラクタ</summary>
         public LessThanOrEqualLeftConstant(float c, Shape shape)
-            : base(c, shape){ }
+            : base(c, shape) { }
 
         /// <summary>操作を実行</summary>
         public override void Execute(params Tensor[] tensors) {

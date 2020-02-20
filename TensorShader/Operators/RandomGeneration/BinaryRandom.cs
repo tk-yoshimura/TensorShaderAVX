@@ -2,7 +2,7 @@ using System;
 
 namespace TensorShader.Operators.RandomGeneration {
     /// <summary>ベルヌーイ分布に従う2値</summary>
-    internal class BinaryRandom : RandomGeneration{
+    internal class BinaryRandom : RandomGeneration {
         /// <summary>1となる確率</summary>
         public float Prob { private set; get; }
 

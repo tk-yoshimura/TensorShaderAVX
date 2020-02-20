@@ -33,7 +33,8 @@ namespace TensorShader.Functions.ComplexArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public ComplexUnaryArithmetric(Operators.ComplexUnaryArithmetric.ComplexUnaryArithmetric arithmetric)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : true){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: true) {
+
             this.arithmetric = arithmetric;
         }
 

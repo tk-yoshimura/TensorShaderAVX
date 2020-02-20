@@ -4,7 +4,7 @@ using System.Linq;
 namespace TensorShader {
     /// <summary>例外メッセージの生成</summary>
     public static class ExceptionMessage {
-        private enum Lang{ Default, JP }
+        private enum Lang { Default, JP }
 
         private static readonly Lang lang;
 
@@ -132,7 +132,7 @@ namespace TensorShader {
 
         /// <summary>テンソルの複数要素</summary>
         public static string TensorElements(Shape actual, params (string name, object obj)[] expected) {
-            string str = string.Join(", ", expected.Select((item) => $"{item.name}={item.obj}") );
+            string str = string.Join(", ", expected.Select((item) => $"{item.name}={item.obj}"));
 
             switch (lang) {
                 case Lang.JP:
@@ -144,7 +144,7 @@ namespace TensorShader {
 
         /// <summary>テンソルの複数要素</summary>
         public static string TensorElementsWithIndex(int index, Shape actual, params (string name, object obj)[] expected) {
-            string str = string.Join(", ", expected.Select((item) => $"{item.name}={item.obj}") );
+            string str = string.Join(", ", expected.Select((item) => $"{item.name}={item.obj}"));
 
             switch (lang) {
                 case Lang.JP:
@@ -201,6 +201,36 @@ namespace TensorShader {
                     return $"与えられた形状{inshape}は軸{axis}で{string.Join(", ", outshapes.Select((shape) => shape.ToString()))}に分離することができません。";
                 default:
                     return $"Invalid separate operation. {inshape} axis:{axis} -> {string.Join(", ", outshapes.Select((shape) => shape.ToString()))}";
+            }
+        }
+
+        /// <summary>空配列への操作</summary>
+        public static string EmptyList() {
+            switch (lang) {
+                case Lang.JP:
+                    return "空配列に操作を試みました。";
+                default:
+                    return "Attempted operation on an empty array.";
+            }
+        }
+
+        /// <summary>不正なパラメータキー</summary>
+        public static string InvalidParamKey() {
+            switch (lang) {
+                case Lang.JP:
+                    return "パラメータ名は\"クラス名\".\"プロパティ名\"を指定してください。";
+                default:
+                    return "The name argument must be specified by \"class name\".\"property name\".";
+            }
+        }
+
+        /// <summary>複数の異なるパラメータ値が含まれる</summary>
+        public static string ContainsSeveralDifferentValues(string name) {
+            switch (lang) {
+                case Lang.JP:
+                    return $"指定したパラメータキー {name} には複数の異なる値が含まれます。";
+                default:
+                    return $"Contains several different values : {name}.";
             }
         }
     }

@@ -1,8 +1,8 @@
 using System;
 using System.IO.Compression;
 using System.IO;
-using TensorShader;
 using TensorShaderUtil.BatchGenerator;
+using TensorShader;
 
 namespace MNIST {
     public class MnistLabelsLoader : UnitaskBatchGenerator {
@@ -11,7 +11,7 @@ namespace MNIST {
         public int Count { private set; get; }
 
         public MnistLabelsLoader(string filepath, int num_batches, int count)
-            : base(Shape.Scalar(), num_batches) {
+            : base(Shape.Scalar, num_batches) {
             byte[] filedata = null;
 
             using (var stream = new FileStream(filepath, FileMode.Open)) {
@@ -36,7 +36,7 @@ namespace MNIST {
 
             float label = filedata[index + 8];
 
-            return  new float[] { label };
+            return new float[] { label };
         }
     }
 }

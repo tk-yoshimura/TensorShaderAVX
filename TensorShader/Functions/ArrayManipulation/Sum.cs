@@ -5,10 +5,10 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>テンソル総和</summary>
         public static VariableNode Sum(params VariableNode[] xs) {
-            if(xs.Length == 1) {
+            if (xs.Length == 1) {
                 return xs[0];
             }
-            else if(xs.Length == 2) {
+            else if (xs.Length == 2) {
                 return xs[0] + xs[1];
             }
 
@@ -21,16 +21,16 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>テンソル総和</summary>
         public static Tensor Sum(params Tensor[] xs) {
-            if(xs.Length == 1) {
+            if (xs.Length == 1) {
                 return xs[0];
             }
-            else if(xs.Length == 2) {
+            else if (xs.Length == 2) {
                 return xs[0] + xs[1];
             }
 
             Function function = new Functions.ArrayManipulation.Sum(xs.Length);
 
-            Tensor y = new Tensor(function.OutputShapes(xs.Select((tensor)=>tensor.Shape).ToArray())[0]);
+            Tensor y = new Tensor(function.OutputShapes(xs.Select((tensor) => tensor.Shape).ToArray())[0]);
 
             function.Execute(xs, new Tensor[] { y });
 
@@ -44,7 +44,7 @@ namespace TensorShader.Functions.ArrayManipulation {
     internal class Sum : Function {
         /// <summary>テンソル総和</summary>
         public Sum(int inputs)
-            : base(inputs, outputs:1, allow_resubstitution : false) { }
+            : base(inputs, outputs: 1, allow_resubstitution: false) { }
 
         /// <summary>出力テンソル形状を返す</summary>
         public override Shape[] OutputShapes(params Shape[] inshapes) {
@@ -56,9 +56,9 @@ namespace TensorShader.Functions.ArrayManipulation {
         public override void CheckInputShapes(params Shape[] inshapes) {
             base.CheckInputShapes(inshapes);
 
-            for(int i = 1; i < inshapes.Length; i++) {
+            for (int i = 1; i < inshapes.Length; i++) {
                 if (inshapes[i] != inshapes[0]) {
-                    throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index:i, inshapes[i], inshapes[0]));
+                    throw new ArgumentException(ExceptionMessage.ShapeWithIndex(index: i, inshapes[i], inshapes[0]));
                 }
             }
         }

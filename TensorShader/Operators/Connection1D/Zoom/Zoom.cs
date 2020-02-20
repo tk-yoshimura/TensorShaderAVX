@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection1D {
     /// <summary>拡大</summary>
-    internal abstract class Zoom : Operator{
+    internal abstract class Zoom : Operator {
         /// <summary>チャネル数</summary>
         public int Channels { private set; get; }
 
@@ -21,7 +21,7 @@ namespace TensorShader.Operators.Connection1D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(channels, inwidth, batch)),
-                (ArgumentType.Out, Shape.Map1D(channels, checked(inwidth * scale), batch)),
+                (ArgumentType.Out, Shape.Map1D(channels, inwidth * scale, batch)),
             };
 
             this.Channels = channels;

@@ -23,7 +23,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 2; i++) {
+                for (int i = 0; i < y.Length / 2; i++) {
                     Complex z = new Complex(x1[i * 2], x1[i * 2 + 1]);
                     Complex c = z / z.Magnitude;
 
@@ -38,7 +38,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
 
                 float[] y = o.State;
 
-                for(int i = 0; i < y.Length / 2; i++) {
+                for (int i = 0; i < y.Length / 2; i++) {
                     Assert.AreEqual(0, y[i * 2], $"not equal {i}");
                     Assert.AreEqual(0, y[i * 2 + 1], $"not equal {i}");
                 }

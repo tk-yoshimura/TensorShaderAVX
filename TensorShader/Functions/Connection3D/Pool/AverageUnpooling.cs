@@ -5,9 +5,9 @@ namespace TensorShader {
         /// <summary>3次元平均値逆プーリング</summary>
         public static VariableNode AverageUnpooling3D(VariableNode x, int stride, Shape outshape = null) {
             if (outshape == null) {
-                int outwidth  = x.Shape.Width  * stride;
+                int outwidth = x.Shape.Width * stride;
                 int outheight = x.Shape.Height * stride;
-                int outdepth  = x.Shape.Depth  * stride;
+                int outdepth = x.Shape.Depth * stride;
 
                 outshape = Shape.Map3D(x.Shape.Channels, outwidth, outheight, outdepth, x.Shape.Batch);
             }
@@ -25,9 +25,9 @@ namespace TensorShader {
         /// <summary>3次元平均値逆プーリング</summary>
         public static Tensor AverageUnpooling3D(Tensor x, int stride, Shape outshape = null) {
             if (outshape == null) {
-                int outwidth  = x.Shape.Width * stride;
+                int outwidth = x.Shape.Width * stride;
                 int outheight = x.Shape.Height * stride;
-                int outdepth  = x.Shape.Depth  * stride;
+                int outdepth = x.Shape.Depth * stride;
 
                 outshape = Shape.Map3D(x.Shape.Channels, outwidth, outheight, outdepth, x.Shape.Batch);
             }
@@ -58,7 +58,8 @@ namespace TensorShader.Functions.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public AverageUnpooling(Shape outshape, int stride)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }

@@ -32,7 +32,8 @@ namespace TensorShader.Functions.ArrayManipulation {
 
         /// <summary>コンストラクタ</summary>
         public Flip(int axis)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false){
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 
@@ -58,7 +59,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             Tensor intensor = intensors[0], outtensor = outtensors[0];
 
             return (
-                new Tensor[]{ intensor, outtensor },
+                new Tensor[] { intensor, outtensor },
                 new Operators.ArrayManipulation.Flip(intensor.Shape, Axis)
                 );
         }

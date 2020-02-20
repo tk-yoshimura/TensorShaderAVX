@@ -36,7 +36,8 @@ namespace TensorShader.Functions.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public ChannelToSpace(int scale)
-            : base(inputs: 1, outputs: 1, allow_resubstitution : false) {
+            : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Scale = scale;
         }
 
@@ -47,10 +48,10 @@ namespace TensorShader.Functions.Connection3D {
             Shape inshape = inshapes[0];
 
             Shape outshape = Shape.Map3D(
-                inshape.Channels / checked(Scale * Scale * Scale),
-                checked(inshape.Width  * Scale),
-                checked(inshape.Height * Scale),
-                checked(inshape.Depth  * Scale),
+                inshape.Channels / (Scale * Scale * Scale),
+                inshape.Width * Scale,
+                inshape.Height * Scale,
+                inshape.Depth * Scale,
                 inshape.Batch);
 
             return new Shape[] { outshape };
@@ -63,7 +64,7 @@ namespace TensorShader.Functions.Connection3D {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 5), ("Type", ShapeType.Map)));
             }
 
-            if (inshapes[0].Channels % checked(Scale * Scale * Scale) != 0) {
+            if (inshapes[0].Channels % (Scale * Scale * Scale) != 0) {
                 throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, Scale * Scale * Scale));
             }
         }

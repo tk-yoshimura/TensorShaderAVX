@@ -28,7 +28,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public PointwiseConvolution(Field infield, Field kernelfield, Field outfield)
-            : base(new Field[]{ infield, kernelfield }, outfield) { }
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
@@ -37,7 +37,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if(Y.Grad == null) {
+            if (Y.Grad == null) {
                 return;
             }
 

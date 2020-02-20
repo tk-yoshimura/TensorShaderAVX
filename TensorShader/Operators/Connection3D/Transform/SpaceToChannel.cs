@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection3D {
     /// <summary>空間次元をチャネル次元に展開</summary>
@@ -25,7 +24,7 @@ namespace TensorShader.Operators.Connection3D {
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch)),
-                (ArgumentType.Out, Shape.Map3D(checked(inchannels * scale * scale * scale), checked(inwidth / scale), checked(inheight / scale), checked(indepth / scale), batch)),
+                (ArgumentType.Out, Shape.Map3D(inchannels * scale * scale * scale, inwidth / scale, inheight / scale, indepth / scale, batch)),
             };
 
             this.InChannels = inchannels;
@@ -41,9 +40,7 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderAvxBackend.Transform.SpaceToChannel3D((uint)InChannels, (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth, (uint)Batch, (uint)th, (uint)Scale, inmap.Buffer, outmap.Buffer);
-            });
+            TensorShaderAvxBackend.Transform.SpaceToChannel3D((uint)InChannels, (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth, (uint)Batch, (uint)Scale, inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

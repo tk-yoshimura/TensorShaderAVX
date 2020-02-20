@@ -11,7 +11,7 @@ namespace TensorShader {
         }
 
         /// <summary>加算</summary>
-        public static Field operator+(Field x1, Field x2) {
+        public static Field operator +(Field x1, Field x2) {
             return Add(x1, x2);
         }
     }
@@ -22,7 +22,7 @@ namespace TensorShader.Links.BinaryArithmetric {
     internal class Add : BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Add(Field infield1, Field infield2, Field outfield)
-            : base(infield1, infield2, outfield ) { }
+            : base(infield1, infield2, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {

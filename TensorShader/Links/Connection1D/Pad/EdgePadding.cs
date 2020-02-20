@@ -45,7 +45,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public EdgePadding(Field infield, Field outfield, int pad_left, int pad_right)
-            : base(new Field[]{ infield }, outfield) {
+            : base(new Field[] { infield }, outfield) {
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
         }
