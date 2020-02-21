@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void complex_purereal(unsigned int length, float* srcreal_ptr, float* __restrict dst_ptr) {
+void complex_purereal(unsigned int length, const float* __restrict srcreal_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 2, j++) {
         dst_ptr[i] = srcreal_ptr[j];
         dst_ptr[i + 1] = 0;
@@ -20,7 +20,7 @@ void TensorShaderAvxBackend::Complex::PureReal(unsigned int length, AvxArray<flo
     Util::CheckLength(length / 2, src_real);
     Util::CheckLength(length, dst);
 
-    float* srcreal_ptr = (float*)(src_real->Ptr.ToPointer());
+    const float* srcreal_ptr = (const float*)(src_real->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_purereal(length, srcreal_ptr, dst_ptr);

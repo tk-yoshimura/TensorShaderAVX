@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void complex_pureimag(unsigned int length, float* srcimag_ptr, float* __restrict dst_ptr) {
+void complex_pureimag(unsigned int length, const float* __restrict srcimag_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 2, j++) {
         dst_ptr[i] = 0;
         dst_ptr[i + 1] = srcimag_ptr[j];
@@ -20,7 +20,7 @@ void TensorShaderAvxBackend::Complex::PureImag(unsigned int length, AvxArray<flo
     Util::CheckLength(length / 2, src_imag);
     Util::CheckLength(length, dst);
 
-    float* srcimag_ptr = (float*)(src_imag->Ptr.ToPointer());
+    const float* srcimag_ptr = (const float*)(src_imag->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     complex_pureimag(length, srcimag_ptr, dst_ptr);

@@ -2,7 +2,8 @@
 
 using namespace System;
 
-void trivector_purez(unsigned int length, float* srcz_ptr, float* __restrict dst_ptr) {
+void trivector_purez(unsigned int length, const float* __restrict srcz_ptr, float* __restrict dst_ptr) {
+
     for (unsigned int i = 0, j = 0; i < length; i += 3, j++) {
         dst_ptr[i] = 0;
         dst_ptr[i + 1] = 0;
@@ -21,7 +22,7 @@ void TensorShaderAvxBackend::Trivector::PureZ(unsigned int length, AvxArray<floa
     Util::CheckLength(length / 3, src_z);
     Util::CheckLength(length, dst);
     
-    float* srcz_ptr = (float*)(src_z->Ptr.ToPointer());
+    const float* srcz_ptr = (const float*)(src_z->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     trivector_purez(length, srcz_ptr, dst_ptr);

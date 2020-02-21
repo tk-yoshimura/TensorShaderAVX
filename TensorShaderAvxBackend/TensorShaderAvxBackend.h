@@ -336,18 +336,18 @@ namespace TensorShaderAvxBackend {
 
         public:
         static void Trimming1D(unsigned int channels, unsigned int outwidth,
-                               unsigned int batch, unsigned int th,
+                               unsigned int batch, 
                                unsigned int trim_left, unsigned int trim_right,
                                AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void Trimming2D(unsigned int channels, unsigned int outwidth, unsigned int outheight,
-                               unsigned int batch, unsigned int th,
+                               unsigned int batch, 
                                unsigned int trim_left, unsigned int trim_right,
                                unsigned int trim_top, unsigned int trim_bottom,
                                AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void Trimming3D(unsigned int channels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-                               unsigned int batch, unsigned int th,
+                               unsigned int batch, 
                                unsigned int trim_left, unsigned int trim_right,
                                unsigned int trim_top, unsigned int trim_bottom,
                                unsigned int trim_front, unsigned int trim_rear,
@@ -359,27 +359,27 @@ namespace TensorShaderAvxBackend {
 
         public:
         static void NeighborZoom1D(unsigned int channels, unsigned int inwidth,
-                                   unsigned int batch, unsigned int th,
+                                   unsigned int batch, 
                                    AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void NeighborZoom2D(unsigned int channels, unsigned int inwidth, unsigned int inheight,
-                                   unsigned int batch, unsigned int th,
+                                   unsigned int batch, 
                                    AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void NeighborZoom3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                   unsigned int batch, unsigned int th,
+                                   unsigned int batch, 
                                    AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void LinearZoom1D(unsigned int channels, unsigned int inwidth,
-                                 unsigned int batch, unsigned int th,
+                                 unsigned int batch, 
                                  AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void LinearZoom2D(unsigned int channels, unsigned int inwidth, unsigned int inheight,
-                                 unsigned int batch, unsigned int th,
+                                 unsigned int batch, 
                                  AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void LinearZoom3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                 unsigned int batch, unsigned int th,
+                                 unsigned int batch, 
                                  AvxArray<float>^ inmap, AvxArray<float>^ outmap);
     };
 

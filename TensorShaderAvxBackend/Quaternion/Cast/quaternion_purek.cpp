@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void quaternion_purek(unsigned int length, float* srck_ptr, float* __restrict dst_ptr) {
+void quaternion_purek(unsigned int length, const float* __restrict srck_ptr, float* __restrict dst_ptr) {
     for (unsigned int i = 0, j = 0; i < length; i += 4, j++) {
         dst_ptr[i + 3] = srck_ptr[j];
         dst_ptr[i + 0] = dst_ptr[i + 1] = dst_ptr[i + 2] = 0;
@@ -20,7 +20,7 @@ void TensorShaderAvxBackend::Quaternion::PureK(unsigned int length, AvxArray<flo
     Util::CheckLength(length / 4, src_k);
     Util::CheckLength(length, dst);
 
-    float* srck_ptr = (float*)(src_k->Ptr.ToPointer());
+    const float* srck_ptr = (const float*)(src_k->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     quaternion_purek(length, srck_ptr, dst_ptr);
