@@ -94,7 +94,7 @@ void TensorShaderAvxBackend::Trivector::KernelProduct1D(unsigned int inchannels,
 
     Util::CheckDuplicateArray(inmap, outmap, kernel_value, kernel_grad);
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outwidth = inwidth + 1 - kwidth;
 
     if (inchannels % 3 != 0 || outchannels % 3 != 0 || outch % 3 != 0) {
         throw gcnew System::ArgumentException();

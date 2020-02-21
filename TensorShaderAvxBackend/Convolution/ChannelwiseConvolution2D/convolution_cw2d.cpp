@@ -84,8 +84,8 @@ void TensorShaderAvxBackend::Convolution::ChannelwiseConvolution2D(unsigned int 
         throw gcnew System::ArgumentException();
     }
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
-    unsigned int outheight = (inheight - kheight) / stride + 1;
+    unsigned int outwidth = inwidth + 1 - kwidth;
+    unsigned int outheight = inheight + 1 - kheight;
 
     Util::CheckLength(channels * inwidth * inheight * batch, inmap);
     Util::CheckLength(channels * outwidth * outheight * batch, outmap);

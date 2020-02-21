@@ -118,8 +118,8 @@ void TensorShaderAvxBackend::Quaternion::Convolution2D(unsigned int inchannels, 
         throw gcnew System::ArgumentException();
     }
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
-    unsigned int outheight = (inheight - kheight) / stride + 1;
+    unsigned int outwidth = inwidth + 1 - kwidth;
+    unsigned int outheight = inheight + 1 - kheight;
 
     Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
     Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);

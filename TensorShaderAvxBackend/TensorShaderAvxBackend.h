@@ -396,7 +396,7 @@ namespace TensorShaderAvxBackend {
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels, 
-                                       unsigned int batch, unsigned int outch, 
+                                       unsigned int batch, 
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
@@ -420,7 +420,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, 
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
@@ -432,7 +432,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, 
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, 
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void ChannelwiseConvolution1D(unsigned int channels, unsigned int inwidth,
@@ -480,7 +480,7 @@ namespace TensorShaderAvxBackend {
                                            AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void PointwiseKernelProduct(unsigned int inchannels, unsigned int outchannels, unsigned int points,
-                                           unsigned int batch, unsigned int outch, 
+                                           unsigned int batch, 
                                            AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
     };
 
@@ -526,7 +526,7 @@ namespace TensorShaderAvxBackend {
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels,
-                                       unsigned int batch, unsigned int outch, bool transpose,
+                                       unsigned int batch, bool transpose,
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
@@ -538,7 +538,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
@@ -550,7 +550,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
@@ -562,7 +562,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
     };
 
@@ -602,7 +602,7 @@ namespace TensorShaderAvxBackend {
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels,
-                                       unsigned int batch, unsigned int outch, bool transpose,
+                                       unsigned int batch, bool transpose,
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
 
 
@@ -615,7 +615,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
@@ -627,7 +627,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
@@ -639,7 +639,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad);
     };
 
@@ -686,7 +686,7 @@ namespace TensorShaderAvxBackend {
                                    AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProductDense(unsigned int inchannels, unsigned int outchannels,
-                                       unsigned int batch, unsigned int outch, bool transpose,
+                                       unsigned int batch, bool transpose,
                                        AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
@@ -698,7 +698,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
@@ -710,7 +710,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
@@ -722,7 +722,7 @@ namespace TensorShaderAvxBackend {
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                    unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                     AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
     };
 }

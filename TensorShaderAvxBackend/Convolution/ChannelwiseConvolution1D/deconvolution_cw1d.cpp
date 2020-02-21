@@ -51,7 +51,7 @@ void TensorShaderAvxBackend::Convolution::ChannelwiseDeconvolution1D(unsigned in
         throw gcnew System::ArgumentException();
     }
 
-    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
+    unsigned int inwidth = outwidth + 1 - kwidth;
 
     Util::CheckLength(channels * inwidth * batch, inmap);
     Util::CheckLength(channels * outwidth * batch, outmap);

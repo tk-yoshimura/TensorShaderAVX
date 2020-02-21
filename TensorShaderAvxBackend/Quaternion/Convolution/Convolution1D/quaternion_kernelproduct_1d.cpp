@@ -85,7 +85,7 @@ void TensorShaderAvxBackend::Quaternion::KernelProduct1D(unsigned int inchannels
         throw gcnew System::ArgumentException();
     }
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outwidth = inwidth + 1 - kwidth;
 
     Util::CheckLength(inchannels * inwidth * batch, inmap);
     Util::CheckLength(outchannels * outwidth * batch, outmap);

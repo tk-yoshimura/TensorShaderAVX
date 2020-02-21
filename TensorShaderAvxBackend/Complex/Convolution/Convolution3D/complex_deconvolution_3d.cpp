@@ -175,9 +175,9 @@ void TensorShaderAvxBackend::Complex::Deconvolution3D(unsigned int inchannels, u
         throw gcnew System::ArgumentException();
     }
 
-    unsigned int inwidth = (outwidth - kwidth) / stride + 1;
-    unsigned int inheight = (outheight - kheight) / stride + 1;
-    unsigned int indepth = (outdepth - kdepth) / stride + 1;
+    unsigned int inwidth = outwidth + 1 - kwidth;
+    unsigned int inheight = outheight + 1 - kheight;
+    unsigned int indepth = outdepth + 1 - kdepth;
 
     Util::CheckLength(inchannels * inwidth * inheight * indepth * batch, inmap);
     Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);

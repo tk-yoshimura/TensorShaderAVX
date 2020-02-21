@@ -79,7 +79,7 @@ void TensorShaderAvxBackend::Convolution::ChannelwiseKernelProduct1D(unsigned in
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
-    unsigned int outwidth = (inwidth - kwidth) / stride + 1;
+    unsigned int outwidth = inwidth + 1 - kwidth;
 
     Util::CheckLength(channels * inwidth * batch, inmap);
     Util::CheckLength(channels * outwidth * batch, outmap);
