@@ -11,7 +11,10 @@ __forceinline __m256d _mm256_complexmulkernelgrad_pd(__m256d u, __m256d v) {
     return _mm256_fmsubadd_pd(vri, urr, _mm256_mul_pd(vir, uii));
 }
 
-void complex_kernelproduct_dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+void complex_kernelproduct_dense(unsigned int inchannels, unsigned int outchannels, 
+                                 unsigned int batch, unsigned int outch, 
+                                 const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
+
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);
     
@@ -64,7 +67,10 @@ void complex_kernelproduct_dense(unsigned int inchannels, unsigned int outchanne
     }
 }
 
-void complex_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+void complex_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int outchannels, 
+                                           unsigned int batch, unsigned int outch, 
+                                           const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
+
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(inch_rem);
 
@@ -117,16 +123,12 @@ void complex_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int
     }
 }
 
-void TensorShaderAvxBackend::Complex::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, bool transpose,
+void TensorShaderAvxBackend::Complex::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, bool transpose,
                                                          AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
-    if (inchannels % 2 != 0 || outchannels % 2 != 0 || outch % 2 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (outch >= outchannels) {
+    if (inchannels % 2 != 0 || outchannels % 2 != 0) {
         throw gcnew System::ArgumentException();
     }
 
@@ -138,10 +140,12 @@ void TensorShaderAvxBackend::Complex::KernelProductDense(unsigned int inchannels
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
+    throw gcnew System::NotImplementedException();
+
     if (transpose) {
-        complex_kernelproduct_dense_transpose(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernel_ptr);
+        complex_kernelproduct_dense_transpose(inchannels, outchannels, batch, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
-        complex_kernelproduct_dense(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernel_ptr);
+        complex_kernelproduct_dense(inchannels, outchannels, batch, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

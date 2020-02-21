@@ -16,7 +16,7 @@ void complex_kernelproduct_3d(unsigned int inchannels, unsigned int outchannels,
                               unsigned int inheight, unsigned int outheight, unsigned int kheight,
                               unsigned int indepth, unsigned int outdepth, unsigned int kdepth,
                               unsigned int stride, unsigned int batch, unsigned int outch, 
-                              const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+                              const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const unsigned int kerneloutchannels = outchannels / 2;
@@ -102,7 +102,7 @@ void complex_kernelproduct_3d_transpose(unsigned int inchannels, unsigned int ou
                                         unsigned int inheight, unsigned int outheight, unsigned int kheight,
                                         unsigned int indepth, unsigned int outdepth, unsigned int kdepth,
                                         unsigned int stride, unsigned int batch, unsigned int outch,
-                                        const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+                                        const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
 
     const unsigned int inch_sep = inchannels & ~7u, inch_rem = inchannels - inch_sep, koutch = outch / 2;
     const unsigned int kerneloutchannels = outchannels / 2;
@@ -184,16 +184,12 @@ void complex_kernelproduct_3d_transpose(unsigned int inchannels, unsigned int ou
 }
 
 void TensorShaderAvxBackend::Complex::KernelProduct3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-	                                                  unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool transpose,
+	                                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool transpose,
                                                       AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
-    if (inchannels % 2 != 0 || outchannels % 2 != 0 || outch % 2 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (outch >= outchannels) {
+    if (inchannels % 2 != 0 || outchannels % 2 != 0) {
         throw gcnew System::ArgumentException();
     }
 
@@ -209,12 +205,14 @@ void TensorShaderAvxBackend::Complex::KernelProduct3D(unsigned int inchannels, u
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
+    throw gcnew System::NotImplementedException();
+
     if (transpose) {
         complex_kernelproduct_3d_transpose(inchannels, outchannels, 
                                            inwidth, outwidth, kwidth,
                                            inheight, outheight, kheight,
                                            indepth, outdepth, kdepth,
-                                           stride, batch, outch, 
+                                           0, batch, 0, 
                                            inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
@@ -222,7 +220,7 @@ void TensorShaderAvxBackend::Complex::KernelProduct3D(unsigned int inchannels, u
                                  inwidth, outwidth, kwidth,
                                  inheight, outheight, kheight,
                                  indepth, outdepth, kdepth,
-                                 stride, batch, outch, 
+                                 0, batch, 0, 
                                  inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

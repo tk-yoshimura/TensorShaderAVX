@@ -154,16 +154,12 @@ void complex_convolution_3d_grad(unsigned int inchannels, unsigned int outchanne
 }
 
 void TensorShaderAvxBackend::Complex::Convolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, unsigned int indepth, 
-	                                                unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+	                                                unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap){
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
     if (inchannels % 2 != 0 || outchannels % 2 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
@@ -179,18 +175,20 @@ void TensorShaderAvxBackend::Complex::Convolution3D(unsigned int inchannels, uns
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
+    throw gcnew System::NotImplementedException();
+
     if (gradmode) {
         complex_convolution_3d_grad(inchannels, outchannels, 
                                     inwidth, outwidth, kwidth,
                                     inheight, outheight, kheight,
                                     indepth, outdepth, kdepth,
-                                    stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                    0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
         complex_convolution_3d(inchannels, outchannels, 
                                inwidth, outwidth, kwidth,
                                inheight, outheight, kheight,
                                indepth, outdepth, kdepth,
-                               stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                               0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

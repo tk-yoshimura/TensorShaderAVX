@@ -162,7 +162,7 @@ void complex_deconvolution_3d_grad(unsigned int inchannels, unsigned int outchan
 }
 
 void TensorShaderAvxBackend::Complex::Deconvolution3D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight, unsigned int outdepth,
-	                                                  unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, unsigned int stride, bool gradmode,
+	                                                  unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int kdepth, bool gradmode,
                                                       AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
@@ -170,11 +170,7 @@ void TensorShaderAvxBackend::Complex::Deconvolution3D(unsigned int inchannels, u
     if (inchannels % 2 != 0 || outchannels % 2 != 0) {
         throw gcnew System::ArgumentException();
     }
-
-    if (th >= batch) {
-        throw gcnew System::ArgumentException();
-    }
-
+    
     unsigned int inwidth = outwidth + 1 - kwidth;
     unsigned int inheight = outheight + 1 - kheight;
     unsigned int indepth = outdepth + 1 - kdepth;
@@ -183,24 +179,26 @@ void TensorShaderAvxBackend::Complex::Deconvolution3D(unsigned int inchannels, u
     Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
     Util::CheckLength(inchannels * outchannels * kwidth * kheight * kdepth / 2, kernel);
 
-    outmap->Zeroset(outchannels * outwidth * outheight * outdepth * th, outchannels * outwidth * outheight * outdepth);
+    outmap->Zeroset(outchannels * outwidth * outheight * outdepth * batch);
 
     const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
+
+    throw gcnew System::NotImplementedException();
 
     if (gradmode) {
         complex_deconvolution_3d_grad(inchannels, outchannels, 
                                       inwidth, outwidth, kwidth,
                                       inheight, outheight, kheight,
                                       indepth, outdepth, kdepth,
-                                      stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                      0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
         complex_deconvolution_3d(inchannels, outchannels, 
                                  inwidth, outwidth, kwidth,
                                  inheight, outheight, kheight,
                                  indepth, outdepth, kdepth,
-                                 stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                 0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }
