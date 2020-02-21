@@ -58,9 +58,10 @@ void convolution_1d(unsigned int inchannels, unsigned int outchannels,
                 _mm_maskstore_ps(outmap_ptr + outch + outchannels * ox, mask1, _mm256d_sum(uv_hi, uv_lo));
             }
 
-            inmap_ptr += inchannels * inwidth;
-            outmap_ptr += outchannels * outwidth;
         }
+
+        inmap_ptr += inchannels * inwidth;
+        outmap_ptr += outchannels * outwidth;
     }
 }
 

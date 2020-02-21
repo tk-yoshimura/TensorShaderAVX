@@ -4,19 +4,19 @@ using namespace System;
 
 void kernelproduct_cw1d(unsigned int channels,
                       unsigned inwidth, unsigned outwidth, unsigned kwidth,
-                      unsigned stride, unsigned batch, 
-                      const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+                      unsigned batch, 
+                      const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
 
     const unsigned int ch_sep = channels & ~7u, ch_rem = channels - ch_sep;
     const __m256i mask = TensorShaderAvxBackend::masktable_m256(ch_rem);
-    
+        
     for (unsigned int ch = 0; ch < ch_sep; ch += 8) {
 
         for (unsigned int kx = 0; kx < kwidth; kx++) {
             __m256d uv_hi = _mm256_setzero_pd(), uv_lo = _mm256_setzero_pd();
 
             for (unsigned int th = 0; th < batch; th++) {
-                for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix += stride) {
+                for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix++) {
 
                     __m256 u = _mm256_loadu_ps(inmap_ptr + ch + channels * (ix + inwidth * th));
                     __m256 v = _mm256_loadu_ps(outmap_ptr + ch + channels * (ox + outwidth * th));
@@ -43,7 +43,7 @@ void kernelproduct_cw1d(unsigned int channels,
             __m256d uv_hi = _mm256_setzero_pd(), uv_lo = _mm256_setzero_pd();
 
             for (unsigned int th = 0; th < batch; th++) {
-                for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix += stride) {
+                for (unsigned int ox = 0, ix = kx; ox < outwidth; ox++, ix++) {
 
                     __m256 u = _mm256_maskload_ps(inmap_ptr + ch_sep + channels * (ix + inwidth * th), mask);
                     __m256 v = _mm256_maskload_ps(outmap_ptr + ch_sep + channels * (ox + outwidth * th), mask);
@@ -74,7 +74,7 @@ void kernelproduct_cw1d(unsigned int channels,
 }
 
 void TensorShaderAvxBackend::Convolution::ChannelwiseKernelProduct1D(unsigned int channels, unsigned int inwidth,
-                                                                     unsigned int batch, unsigned int kwidth, unsigned int stride,
+                                                                     unsigned int batch, unsigned int kwidth,
                                                                      AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
@@ -91,6 +91,6 @@ void TensorShaderAvxBackend::Convolution::ChannelwiseKernelProduct1D(unsigned in
 
     kernelproduct_cw1d(channels, 
                        inwidth, outwidth, kwidth, 
-                       stride, batch, 
+                       batch, 
                        inmap_ptr, outmap_ptr, kernel_ptr);
 }

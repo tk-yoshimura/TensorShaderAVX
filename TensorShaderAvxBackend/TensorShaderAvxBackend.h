@@ -472,15 +472,12 @@ namespace TensorShaderAvxBackend {
                                                AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
 
         static void PointwiseConvolution(unsigned int inchannels, unsigned int outchannels, unsigned int points,
-                                         unsigned int batch, 
                                          AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void PointwiseDeconvolution(unsigned int inchannels, unsigned int outchannels, unsigned int points,
-                                           unsigned int batch, 
                                            AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void PointwiseKernelProduct(unsigned int inchannels, unsigned int outchannels, unsigned int points,
-                                           unsigned int batch, 
                                            AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel);
     };
 

@@ -67,10 +67,10 @@ void convolution_3d(unsigned int inchannels, unsigned int outchannels,
                     }
                 }
             }
-
-            inmap_ptr += inchannels * inwidth * inheight * indepth;
-            outmap_ptr += outchannels * outwidth * outheight * outdepth;
         }
+
+        inmap_ptr += inchannels * inwidth * inheight * indepth;
+        outmap_ptr += outchannels * outwidth * outheight * outdepth;
     }
 }
 
