@@ -6,7 +6,7 @@ void linear_zoom_2d(unsigned int channels,
                     unsigned int inwidth, unsigned int inheight,
                     unsigned int outwidth, unsigned int outheight,
                     unsigned int th,
-                    const float* __restrict inmap_ptr, float* outmap_ptr) {
+                    const float* __restrict inmap_ptr, float* __restrict outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * inheight * th, outmap_offset = channels * outwidth * outheight * th;
     inmap_ptr += inmap_offset;
@@ -101,7 +101,7 @@ void TensorShaderAvxBackend::Zoom::LinearZoom2D(unsigned int channels, unsigned 
     Util::CheckLength(channels * inwidth * inheight * batch, inmap);
     Util::CheckLength(channels * outwidth * outheight * batch, outmap);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     linear_zoom_2d(channels, inwidth, inheight, outwidth, outheight, th, inmap_ptr, outmap_ptr);

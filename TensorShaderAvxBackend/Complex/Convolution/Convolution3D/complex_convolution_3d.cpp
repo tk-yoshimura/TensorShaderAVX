@@ -175,7 +175,7 @@ void TensorShaderAvxBackend::Complex::Convolution3D(unsigned int inchannels, uns
     Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
     Util::CheckLength(inchannels * outchannels * kwidth * kheight * kdepth / 2, kernel);
     
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 

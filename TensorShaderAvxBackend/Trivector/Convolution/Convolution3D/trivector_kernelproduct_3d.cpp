@@ -130,7 +130,7 @@ void TensorShaderAvxBackend::Trivector::KernelProduct3D(unsigned int inchannels,
     Util::CheckLength(outchannels * outwidth * outheight * outdepth * batch, outmap);
     Util::CheckLength(inchannels * outchannels * kwidth * kheight * kdepth * 4 / 9, kernel_value, kernel_grad);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernelvalue_ptr = (float*)(kernel_value->Ptr.ToPointer());
     float* kernelgrad_ptr = (float*)(kernel_grad->Ptr.ToPointer());

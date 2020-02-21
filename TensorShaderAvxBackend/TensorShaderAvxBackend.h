@@ -311,20 +311,20 @@ namespace TensorShaderAvxBackend {
                                   AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void EdgePadding2D(unsigned int channels, unsigned int inwidth, unsigned int inheight,
-                                  unsigned int batch, unsigned int th,
+                                  unsigned int batch, 
                                   unsigned int pad_left, unsigned int pad_right,
                                   unsigned int pad_top, unsigned int pad_bottom,
                                   AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void ZeroPadding3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                  unsigned int batch, unsigned int th,
+                                  unsigned int batch, 
                                   unsigned int pad_left, unsigned int pad_right,
                                   unsigned int pad_top, unsigned int pad_bottom,
                                   unsigned int pad_front, unsigned int pad_rear,
                                   AvxArray<float>^ inmap, AvxArray<float>^ outmap);
 
         static void EdgePadding3D(unsigned int channels, unsigned int inwidth, unsigned int inheight, unsigned int indepth,
-                                  unsigned int batch, unsigned int th,
+                                  unsigned int batch, 
                                   unsigned int pad_left, unsigned int pad_right,
                                   unsigned int pad_top, unsigned int pad_bottom,
                                   unsigned int pad_front, unsigned int pad_rear,

@@ -84,7 +84,7 @@ void TensorShaderAvxBackend::Convolution::Deconvolution1D(unsigned int inchannel
 
     outmap->Zeroset(outchannels * outwidth * batch);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 

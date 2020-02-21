@@ -95,7 +95,7 @@ void TensorShaderAvxBackend::Convolution::ChannelwiseKernelProduct2D(unsigned in
     Util::CheckLength(channels * outwidth * outheight * batch, outmap);
     Util::CheckLength(channels * kwidth * kheight, kernel);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 

@@ -67,7 +67,7 @@ void TensorShaderAvxBackend::Convolution::TransposeDense(unsigned int inchannels
     Util::CheckLength(outchannels * batch, outmap);
     Util::CheckLength(inchannels * outchannels, kernel);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 

@@ -60,7 +60,6 @@ void convolution_1d(unsigned int inchannels, unsigned int outchannels,
 
             inmap_ptr += inchannels * inwidth;
             outmap_ptr += outchannels * outwidth;
-
         }
     }
 }

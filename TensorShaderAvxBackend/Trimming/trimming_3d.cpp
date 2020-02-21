@@ -9,7 +9,7 @@ void trimming_3d(unsigned int channels,
                  unsigned int trim_left, unsigned int trim_right,
                  unsigned int trim_top, unsigned int trim_bottom,
                  unsigned int trim_front, unsigned int trim_rear,
-                 const float* __restrict inmap_ptr, float* outmap_ptr) {
+                 const float* __restrict inmap_ptr, float* __restrict outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * inheight * indepth * th;
     const unsigned int outmap_offset = channels * outwidth * outheight * outdepth * th;
@@ -55,7 +55,7 @@ void TensorShaderAvxBackend::Trimming::Trimming3D(unsigned int channels, unsigne
     Util::CheckLength(channels * inwidth * inheight * indepth * batch, inmap);
     Util::CheckLength(channels * outwidth * outheight * outdepth * batch, outmap);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     trimming_3d(channels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, trim_left, trim_right, trim_top, trim_bottom, trim_front, trim_rear, inmap_ptr, outmap_ptr);

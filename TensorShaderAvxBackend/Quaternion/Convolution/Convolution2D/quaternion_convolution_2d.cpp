@@ -125,7 +125,7 @@ void TensorShaderAvxBackend::Quaternion::Convolution2D(unsigned int inchannels, 
     Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
     Util::CheckLength(inchannels * outchannels * kwidth * kheight / 4, kernel);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 

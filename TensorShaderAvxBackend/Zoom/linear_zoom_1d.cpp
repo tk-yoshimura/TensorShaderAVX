@@ -5,7 +5,7 @@ using namespace System;
 void linear_zoom_1d(unsigned int channels,
                     unsigned int inwidth, unsigned int outwidth,
                     unsigned int th,
-                    const float* __restrict inmap_ptr, float* outmap_ptr) {
+                    const float* __restrict inmap_ptr, float* __restrict outmap_ptr) {
 
     const unsigned int inmap_offset = channels * inwidth * th, outmap_offset = channels * outwidth * th;
     inmap_ptr += inmap_offset;
@@ -67,7 +67,7 @@ void TensorShaderAvxBackend::Zoom::LinearZoom1D(unsigned int channels, unsigned 
     Util::CheckLength(channels * inwidth * batch, inmap);
     Util::CheckLength(channels * outwidth * batch, outmap);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     linear_zoom_1d(channels, inwidth, outwidth, th, inmap_ptr, outmap_ptr);

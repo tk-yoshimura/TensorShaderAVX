@@ -5,7 +5,7 @@ using namespace System;
 void space_to_channel_2d(unsigned int inchannels, unsigned int outchannels,
     unsigned int inwidth, unsigned int inheight,
     unsigned int outwidth, unsigned int outheight,
-    unsigned int th, unsigned int scale, const float* __restrict inmap_ptr, float* outmap_ptr) {
+    unsigned int th, unsigned int scale, const float* __restrict inmap_ptr, float* __restrict outmap_ptr) {
 
     const unsigned int inmap_offset = inchannels * inwidth * inheight * th, outmap_offset = outchannels * outwidth * outheight * th;
     const unsigned int length = scale * inchannels;
@@ -54,7 +54,7 @@ void TensorShaderAvxBackend::Transform::SpaceToChannel2D(unsigned int inchannels
     Util::CheckLength(inchannels * inwidth * inheight * batch, inmap);
     Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
 
-    float* inmap_ptr = (float*)(inmap->Ptr.ToPointer());
+    const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
     space_to_channel_2d(inchannels, outchannels, inwidth, inheight, outwidth, outheight, th, scale, inmap_ptr, outmap_ptr);
