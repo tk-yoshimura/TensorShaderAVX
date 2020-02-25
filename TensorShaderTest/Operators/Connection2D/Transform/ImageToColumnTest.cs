@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -63,12 +64,14 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ImageToColumn ope = new ImageToColumn(inwidth, inheight, channels, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/image_to_column_2d.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x_tensor, y_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         public static Map2D Reference(Map2D x, int kwidth, int kheight) {

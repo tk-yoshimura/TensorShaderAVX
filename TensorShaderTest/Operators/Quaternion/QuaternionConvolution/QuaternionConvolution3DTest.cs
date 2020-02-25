@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.QuaternionConvolution;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Quaternion {
     [TestClass]
@@ -120,12 +121,14 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionConvolution3D ope = new QuaternionConvolution3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_convolution_3d.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         public static QuaternionMap3D Reference(QuaternionMap3D x, QuaternionFilter3D w, int kwidth, int kheight, int kdepth) {

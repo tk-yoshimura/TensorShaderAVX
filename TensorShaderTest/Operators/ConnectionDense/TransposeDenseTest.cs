@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ConnectionDense;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.ConnectionDense {
     [TestClass]
@@ -98,12 +99,14 @@ namespace TensorShaderTest.Operators.ConnectionDense {
 
             TransposeDense ope = new TransposeDense(outchannels, inchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/transpose_dense.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         public static Map0D Reference(Map0D y, Filter0D w) {

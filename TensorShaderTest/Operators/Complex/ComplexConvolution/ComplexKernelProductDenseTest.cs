@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexConvolution;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]
@@ -114,12 +115,14 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexKernelProductDense ope = new ComplexKernelProductDense(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_dense.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         public static ComplexFilter0D Reference(ComplexMap0D x, ComplexMap0D gy) {

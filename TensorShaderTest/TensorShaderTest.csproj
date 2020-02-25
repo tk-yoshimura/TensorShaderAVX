@@ -61,7 +61,6 @@
     <Compile Include="Functions\Aggregation\MeanTest.cs" />
     <Compile Include="Functions\BinaryArithmetric\Arctan2Test.cs" />
     <Compile Include="Functions\BinaryArithmetric\LimitAbsTest.cs" />
-    <Compile Include="Functions\BinaryArithmetric\CustomTest.cs" />
     <Compile Include="Functions\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexDecayTest.cs" />
     <Compile Include="Functions\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexNormalizeTest.cs" />
     <Compile Include="Functions\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexZReluTest.cs" />
@@ -96,7 +95,6 @@
     <Compile Include="Functions\RandomGeneration\UniformRandomTest.cs" />
     <Compile Include="Functions\RandomGeneration\NormalRandomTest.cs" />
     <Compile Include="Functions\TrinaryArithmetric\ClampTest.cs" />
-    <Compile Include="Functions\TrinaryArithmetric\CustomTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCrossTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorNormalizeTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorSquashTest.cs" />
@@ -106,7 +104,6 @@
     <Compile Include="Functions\Trivector\TrivectorCast\TrivectorYTest.cs" />
     <Compile Include="Functions\Trivector\TrivectorCast\TrivectorXTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\CbrtTest.cs" />
-    <Compile Include="Functions\UnaryArithmetric\CustomTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\SoftPlusTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\EluTest.cs" />
     <Compile Include="Functions\UnaryArithmetric\LeakyReluTest.cs" />

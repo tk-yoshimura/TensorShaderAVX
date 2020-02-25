@@ -1,9 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Aggregation;
-using TensorShaderAvxBackend.API;
 
 namespace TensorShaderTest.Operators.Aggregation {
     [TestClass]
@@ -203,12 +203,14 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             Average ope = new Average(shape, axis: 1);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/aggregate_average.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(v1, v2);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
     }
 }

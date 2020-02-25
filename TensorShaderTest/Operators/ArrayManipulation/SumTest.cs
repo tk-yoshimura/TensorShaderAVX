@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.ArrayManipulation {
     [TestClass]
@@ -31,11 +32,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                         Sum ope = new Sum(shape, n);
 
-                        Cuda.Profiler.Start();
+                        Stopwatch sw = new Stopwatch();
+                        sw.Start();
 
                         ope.Execute(vs.Concat(new Tensor[] { u }).ToArray());
 
-                        Cuda.Profiler.Stop();
+                        sw.Stop();
+
+                        Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
 
                         for (int j = 0; j < n; j++) {
                             CollectionAssert.AreEqual(xs[j], vs[j].State);

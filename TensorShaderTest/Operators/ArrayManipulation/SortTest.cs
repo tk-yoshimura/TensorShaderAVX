@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.ArrayManipulation {
     [TestClass]
@@ -80,70 +81,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Sort ope = new Sort(shape, axis: 0);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_random.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x, y);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
 
-            float[] v = y.State;
-
-            for (int i = 1; i < axislength / 5; i++) {
-                Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
-                Assert.IsTrue(v[i - 1 + axislength] <= v[i + axislength], $"{i + axislength}: {v[i - 1 + axislength]}, {v[i + axislength]}");
-                Assert.IsTrue(v[i - 1 + axislength * 2] <= v[i + axislength * 2], $"{i + axislength * 2}: {v[i - 1 + axislength * 2]}, {v[i + axislength * 2]}");
-                Assert.IsTrue(v[i - 1 + axislength * 3] <= v[i + axislength * 3], $"{i + axislength * 3}: {v[i - 1 + axislength * 3]}, {v[i + axislength * 3]}");
-                Assert.IsTrue(v[i - 1 + axislength * 4] <= v[i + axislength * 4], $"{i + axislength * 4}: {v[i - 1 + axislength * 4]}, {v[i + axislength * 4]}");
-            }
-        }
-
-        [TestMethod]
-        public void MaxAxisLengthInSMemTest() {
-            Shape shape = Shape.Map0D((int)TensorShaderAvxBackend.Shaders.ArrayManipulation.SortUseSharedMemory.MaxAxisLength, 500);
-            int length = shape.Length, axislength = shape[0];
-
-            float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
-
-            Sort ope = new Sort(shape, axis: 0);
-
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_maxlength.nvvp");
-            Cuda.Profiler.Start();
-
-            ope.Execute(x, y);
-
-            Cuda.Profiler.Stop();
-
-            float[] v = y.State;
-
-            for (int i = 1; i < axislength / 5; i++) {
-                Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
-                Assert.IsTrue(v[i - 1 + axislength] <= v[i + axislength], $"{i + axislength}: {v[i - 1 + axislength]}, {v[i + axislength]}");
-                Assert.IsTrue(v[i - 1 + axislength * 2] <= v[i + axislength * 2], $"{i + axislength * 2}: {v[i - 1 + axislength * 2]}, {v[i + axislength * 2]}");
-                Assert.IsTrue(v[i - 1 + axislength * 3] <= v[i + axislength * 3], $"{i + axislength * 3}: {v[i - 1 + axislength * 3]}, {v[i + axislength * 3]}");
-                Assert.IsTrue(v[i - 1 + axislength * 4] <= v[i + axislength * 4], $"{i + axislength * 4}: {v[i - 1 + axislength * 4]}, {v[i + axislength * 4]}");
-            }
-        }
-
-        [TestMethod]
-        public void OverMaxAxisLengthInSMemTest() {
-            Shape shape = Shape.Map0D((int)TensorShaderAvxBackend.Shaders.ArrayManipulation.SortUseSharedMemory.MaxAxisLength + 1, 500);
-            int length = shape.Length, axislength = shape[0];
-
-            float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
-
-            Sort ope = new Sort(shape, axis: 0);
-
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_overmaxlength.nvvp");
-            Cuda.Profiler.Start();
-
-            ope.Execute(x, y);
-
-            Cuda.Profiler.Stop();
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
 
             float[] v = y.State;
 
@@ -167,12 +112,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Sort ope = new Sort(shape, axis: 0);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_reverse.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x, y);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
 
             float[] v = y.State;
 

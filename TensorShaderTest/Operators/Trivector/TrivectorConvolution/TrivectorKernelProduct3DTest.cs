@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.TrivectorConvolution;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Trivector {
     [TestClass]
@@ -137,12 +138,14 @@ namespace TensorShaderTest.Operators.Trivector {
 
             TrivectorKernelProduct3D ope = new TrivectorKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_3d.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         public static Quaternion.QuaternionFilter3D Reference(TrivectorMap3D x, TrivectorMap3D gy, Quaternion.QuaternionFilter3D w, int kwidth, int kheight, int kdepth) {

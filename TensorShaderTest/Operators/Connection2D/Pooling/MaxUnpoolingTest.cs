@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -126,12 +127,14 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             MaxUnpooling ope = new MaxUnpooling(inwidth, inheight, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/maxunpool_2d.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
     }
 }

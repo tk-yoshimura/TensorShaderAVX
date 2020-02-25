@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection1D;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Connection1D {
     [TestClass]
@@ -81,12 +82,14 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             ZeroPadding ope = new ZeroPadding(inwidth, channels, leftpad, rightpad, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/zeropadding_1d.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(x_tensor, y_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
     }
 }

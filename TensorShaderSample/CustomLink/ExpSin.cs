@@ -26,7 +26,7 @@ namespace CustomLink {
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(UnaryArithmetric(X.Value, "expsin_ew", "#y = expf(sinf(#x));"));
+            Y.AssignValue(Exp(Sin(X.Value)));
         }
 
         /// <summary>逆伝搬</summary>
@@ -36,9 +36,7 @@ namespace CustomLink {
             }
 
             if (X.EnableBackprop) {
-                VariableNode dx = UnaryArithmetric(X.Value, "dexpsin_ew", "#y = expf(sinf(#x)) * cosf(#x);");
-
-                X.AddGrad(Y.Grad * dx);
+                X.AddGrad(Y.Grad * Y.Value * Cos(X.Value));
             }
         }
     }

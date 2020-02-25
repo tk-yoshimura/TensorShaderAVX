@@ -26,7 +26,7 @@ namespace CustomLink {
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(BinaryArithmetric(X1.Value, X2.Value, "sinxy_ew", "#y = sinf(#x1 * #x2);"));
+            Y.AssignValue(Sin(X1.Value * X2.Value));
         }
 
         /// <summary>逆伝搬</summary>
@@ -36,7 +36,7 @@ namespace CustomLink {
             }
 
             if (X1.EnableBackprop || X2.EnableBackprop) {
-                VariableNode cos_xy = BinaryArithmetric(X1.Value, X2.Value, "cosxy_ew", "#y = cosf(#x1 * #x2);");
+                VariableNode cos_xy = Cos(X1.Value * X2.Value);
 
                 if (X1.EnableBackprop) {
                     X1.AddGrad(Y.Grad * X2.Value * cos_xy);

@@ -385,15 +385,7 @@ namespace TensorShaderTest {
 
                 Tensor outmap = tensors[0];
 
-                string code = @"
-                __global__ void add(float *x, int length) {
-                    int i = blockDim.x * blockIdx.x + threadIdx.x;
-                    x[length] = 1;
-                }";
-
-                Kernel kernel = new Kernel(code, "add");
-
-                kernel.Execute((uint)outmap.Length, dynamic_shared_memory_bytes: 0, stream: null, outmap.Buffer, outmap.Length);
+                outmap.Buffer[(ulong)outmap.Length] = 5;
             }
 
             /// <summary>操作を実行</summary>

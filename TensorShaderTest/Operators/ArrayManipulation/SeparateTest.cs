@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.ArrayManipulation {
     [TestClass]
@@ -186,12 +187,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Separate ope = new Separate(vc.Shape, new Shape[] { v1.Shape, v2.Shape, v3.Shape }, axis: 2);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/separate.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(vc, v1, v2, v3);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
     }
 }

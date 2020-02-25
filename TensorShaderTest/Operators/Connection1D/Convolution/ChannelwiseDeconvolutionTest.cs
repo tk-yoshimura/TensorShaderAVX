@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection1D;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.Connection1D {
     [TestClass]
@@ -106,14 +107,14 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(outwidth, channels, ksize);
 
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/chwise_deconvolution_1d.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         public static Map1D Reference(Map1D y, Filter1D w, int inw, int kwidth) {

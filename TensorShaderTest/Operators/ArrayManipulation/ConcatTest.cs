@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
-using TensorShaderAvxBackend.API;
+
 
 namespace TensorShaderTest.Operators.ArrayManipulation {
     [TestClass]
@@ -228,12 +229,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/concat.nvvp");
-            Cuda.Profiler.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             ope.Execute(v1, v2, v3, vc);
 
-            Cuda.Profiler.Stop();
+            sw.Stop();
+
+            Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
         }
 
         float[] y_expect = {
