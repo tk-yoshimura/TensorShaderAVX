@@ -20,7 +20,7 @@ __forceinline __m256d _mm256_quaternionmulkernelgrad_pd(__m256d u, __m256d v) {
     return _mm256_fmadd_pd(u_xxxx, v_xyzw, _mm256_fmadd_pd(u_yyyy, v_yxwz, _mm256_fmadd_pd(u_zzzz, v_zwxy, _mm256_mul_pd(u_wwww, v_wzyx))));
 }
 
-void quaternion_kernelproduct_dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+void quaternion_kernelproduct_dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
     const unsigned int koutch = outch / 4;
     
     for (unsigned int inch = 0; inch < inchannels; inch += 4) {
@@ -37,7 +37,7 @@ void quaternion_kernelproduct_dense(unsigned int inchannels, unsigned int outcha
     }
 }
 
-void quaternion_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+void quaternion_kernelproduct_dense_transpose(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
     const unsigned int koutch = outch / 4;
     
     for (unsigned int inch = 0; inch < inchannels; inch += 4) {
@@ -55,16 +55,12 @@ void quaternion_kernelproduct_dense_transpose(unsigned int inchannels, unsigned 
 }
 
 
-void TensorShaderAvxBackend::Quaternion::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, bool transpose,
+void TensorShaderAvxBackend::Quaternion::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, bool transpose,
                                                             AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
-    if (inchannels % 4 != 0 || outchannels % 4 != 0 || outch % 4 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (outch >= outchannels) {
+    if (inchannels % 4 != 0 || outchannels % 4 != 0) {
         throw gcnew System::ArgumentException();
     }
 
@@ -77,9 +73,9 @@ void TensorShaderAvxBackend::Quaternion::KernelProductDense(unsigned int inchann
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (transpose) {
-        quaternion_kernelproduct_dense_transpose(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernel_ptr);
+        quaternion_kernelproduct_dense_transpose(inchannels, outchannels, batch, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
-        quaternion_kernelproduct_dense(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernel_ptr);
+        quaternion_kernelproduct_dense(inchannels, outchannels, batch, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

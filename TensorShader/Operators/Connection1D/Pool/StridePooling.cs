@@ -35,7 +35,9 @@ namespace TensorShader.Operators.Connection1D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Pool.StridePool1D((uint)Channels, (uint)inmap.Width, (uint)Batch, (uint)Stride, inmap.Buffer, outmap.Buffer);
+            throw new NotImplementedException();
+
+            //TensorShaderAvxBackend.Pool.StridePool1D((uint)Channels, (uint)inmap.Width, (uint)Batch, (uint)Stride, inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

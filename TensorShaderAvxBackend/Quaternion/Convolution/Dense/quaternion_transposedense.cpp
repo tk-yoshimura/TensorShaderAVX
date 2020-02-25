@@ -78,16 +78,12 @@ void quaternion_transposedense_grad(unsigned int inchannels, unsigned int outcha
     }
 }
 
-void TensorShaderAvxBackend::Quaternion::TransposeDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int th, bool gradmode,
+void TensorShaderAvxBackend::Quaternion::TransposeDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, bool gradmode,
                                                         AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
     if (inchannels % 4 != 0 || outchannels % 4 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
@@ -100,9 +96,9 @@ void TensorShaderAvxBackend::Quaternion::TransposeDense(unsigned int inchannels,
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (gradmode) {
-        quaternion_transposedense_grad(inchannels, outchannels, th, inmap_ptr, outmap_ptr, kernel_ptr);
+        quaternion_transposedense_grad(inchannels, outchannels, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
-        quaternion_transposedense(inchannels, outchannels, th, inmap_ptr, outmap_ptr, kernel_ptr);
+        quaternion_transposedense(inchannels, outchannels, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

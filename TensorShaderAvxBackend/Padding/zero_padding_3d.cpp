@@ -161,5 +161,5 @@ void TensorShaderAvxBackend::Padding::ZeroPadding3D(unsigned int channels, unsig
     const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
-    zero_padding_3d(channels, inwidth, inheight, indepth, outwidth, outheight, outdepth, th, pad_left, pad_right, pad_top, pad_bottom, pad_front, pad_rear, inmap_ptr, outmap_ptr);
+    zero_padding_3d(channels, inwidth, inheight, indepth, outwidth, outheight, outdepth, batch, pad_left, pad_right, pad_top, pad_bottom, pad_front, pad_rear, inmap_ptr, outmap_ptr);
 }

@@ -46,6 +46,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TensorShader">
+      <HintPath>..\TensorShader\bin\x64\Release\TensorShader.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderAvxBackend">
+      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\Layer\Filter_SpatialFilter.cs" />

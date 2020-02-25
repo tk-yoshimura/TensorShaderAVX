@@ -37,7 +37,9 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Pool.StrideUnpool2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, (uint)Stride, inmap.Buffer, outmap.Buffer);
+            throw new NotImplementedException();
+
+            //TensorShaderAvxBackend.Pool.StrideUnpool2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, (uint)Stride, inmap.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

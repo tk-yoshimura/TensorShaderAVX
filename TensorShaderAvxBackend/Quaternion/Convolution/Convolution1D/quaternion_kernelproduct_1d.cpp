@@ -23,7 +23,7 @@ __forceinline __m256d _mm256_quaternionmulkernelgrad_pd(__m256d u, __m256d v) {
 void quaternion_kernelproduct_1d(unsigned int inchannels, unsigned int outchannels, 
                                  unsigned int inwidth, unsigned int outwidth, unsigned int kwidth,
                                  unsigned int stride, unsigned int batch, unsigned int outch, 
-                                 const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+                                 const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
 
     const unsigned int kerneloutchannels = outchannels / 4, koutch = outch / 4;
     
@@ -48,7 +48,7 @@ void quaternion_kernelproduct_1d(unsigned int inchannels, unsigned int outchanne
 void quaternion_kernelproduct_1d_transpose(unsigned int inchannels, unsigned int outchannels, 
                                            unsigned int inwidth, unsigned int outwidth, unsigned int kwidth, 
                                            unsigned int stride, unsigned int batch, unsigned int outch, 
-                                           const float* __restrict inmap_ptr, float* __restrict outmap_ptr, const float* __restrict kernel_ptr) {
+                                           const float* __restrict inmap_ptr, const float* __restrict outmap_ptr, float* __restrict kernel_ptr) {
 
     const unsigned int kerneloutchannels = outchannels / 4, koutch = outch / 4;
 
@@ -72,16 +72,12 @@ void quaternion_kernelproduct_1d_transpose(unsigned int inchannels, unsigned int
 
 
 void TensorShaderAvxBackend::Quaternion::KernelProduct1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, 
-                                                         unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int stride, bool transpose,
+                                                         unsigned int batch, unsigned int kwidth, bool transpose,
                                                          AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
     
-    if (inchannels % 4 != 0 || outchannels % 4 != 0 || outch % 4 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (outch >= outchannels) {
+    if (inchannels % 4 != 0 || outchannels % 4 != 0) {
         throw gcnew System::ArgumentException();
     }
 
@@ -98,13 +94,13 @@ void TensorShaderAvxBackend::Quaternion::KernelProduct1D(unsigned int inchannels
     if (transpose) {
         quaternion_kernelproduct_1d_transpose(inchannels, outchannels, 
                                               inwidth, outwidth, kwidth,
-                                              stride, batch, outch, 
+                                              0, batch, 0, 
                                               inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
         quaternion_kernelproduct_1d(inchannels, outchannels, 
                                     inwidth, outwidth, kwidth,
-                                    stride, batch, outch, 
+                                    0, batch, 0, 
                                     inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

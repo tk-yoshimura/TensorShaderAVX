@@ -72,16 +72,12 @@ void trivector_kernelproduct_dense_transpose(unsigned int inchannels, unsigned i
 }
 
 
-void TensorShaderAvxBackend::Trivector::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int outch, bool transpose,
+void TensorShaderAvxBackend::Trivector::KernelProductDense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, bool transpose,
                                                            AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad) {
 
     Util::CheckDuplicateArray(inmap, outmap, kernel_value, kernel_grad);
 
-    if (inchannels % 3 != 0 || outchannels % 3 != 0 || outch % 3 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (outch >= outchannels) {
+    if (inchannels % 3 != 0 || outchannels % 3 != 0) {
         throw gcnew System::ArgumentException();
     }
 
@@ -95,9 +91,9 @@ void TensorShaderAvxBackend::Trivector::KernelProductDense(unsigned int inchanne
     float* kernelgrad_ptr = (float*)(kernel_grad->Ptr.ToPointer());
 
     if (transpose) {
-        trivector_kernelproduct_dense_transpose(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);
+        trivector_kernelproduct_dense_transpose(inchannels, outchannels, batch, 0, inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);
     }
     else {
-        trivector_kernelproduct_dense(inchannels, outchannels, batch, outch, inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);
+        trivector_kernelproduct_dense(inchannels, outchannels, batch, 0, inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);
     }
 }

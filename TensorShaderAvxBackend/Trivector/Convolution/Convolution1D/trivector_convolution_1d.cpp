@@ -119,7 +119,7 @@ void trivector_convolution_1d_grad(unsigned int inchannels, unsigned int outchan
 }
 
 void TensorShaderAvxBackend::Trivector::Convolution1D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth,
-                                                      unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int stride, bool gradmode,
+                                                      unsigned int batch, unsigned int kwidth, bool gradmode,
                                                       AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
@@ -128,9 +128,7 @@ void TensorShaderAvxBackend::Trivector::Convolution1D(unsigned int inchannels, u
         throw gcnew System::ArgumentException();
     }
 
-    if (th >= batch) {
-        throw gcnew System::ArgumentException();
-    }
+
 
     unsigned int outwidth = inwidth + 1 - kwidth;
 
@@ -145,11 +143,11 @@ void TensorShaderAvxBackend::Trivector::Convolution1D(unsigned int inchannels, u
     if (gradmode) {
         trivector_convolution_1d_grad(inchannels, outchannels, 
                                       inwidth, outwidth, kwidth,
-                                      stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                      0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
         trivector_convolution_1d(inchannels, outchannels, 
                                  inwidth, outwidth, kwidth,
-                                 stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                 0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

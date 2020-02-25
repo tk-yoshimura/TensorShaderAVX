@@ -99,7 +99,7 @@ void trivector_kernelproduct_2d_transpose(unsigned int inchannels, unsigned int 
 
 
 void TensorShaderAvxBackend::Trivector::KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
-                                                        unsigned int batch, unsigned int outch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool transpose,
+                                                        unsigned int batch, unsigned int kwidth, unsigned int kheight, bool transpose,
                                                         AvxArray<float>^ inmap, AvxArray<float>^ outmap, AvxArray<float>^ kernel_value, AvxArray<float>^ kernel_grad) {
 
     Util::CheckDuplicateArray(inmap, outmap, kernel_value, kernel_grad);
@@ -107,11 +107,7 @@ void TensorShaderAvxBackend::Trivector::KernelProduct2D(unsigned int inchannels,
     unsigned int outwidth = inwidth + 1 - kwidth;
     unsigned int outheight = inheight + 1 - kheight;
 
-    if (inchannels % 3 != 0 || outchannels % 3 != 0 || outch % 3 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (outch >= outchannels) {
+    if (inchannels % 3 != 0 || outchannels % 3 != 0) {
         throw gcnew System::ArgumentException();
     }
 
@@ -128,14 +124,14 @@ void TensorShaderAvxBackend::Trivector::KernelProduct2D(unsigned int inchannels,
         trivector_kernelproduct_2d_transpose(inchannels, outchannels, 
                                              inwidth, outwidth, kwidth,
                                              inheight, outheight, kheight,
-                                             stride, batch, outch, 
+                                             0, batch, 0, 
                                              inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);
     }
     else {
         trivector_kernelproduct_2d(inchannels, outchannels,
                                    inwidth, outwidth, kwidth,
                                    inheight, outheight, kheight,
-                                   stride, batch, outch,
+                                   0, batch, 0,
                                    inmap_ptr, outmap_ptr, kernelvalue_ptr, kernelgrad_ptr);
     }
 }

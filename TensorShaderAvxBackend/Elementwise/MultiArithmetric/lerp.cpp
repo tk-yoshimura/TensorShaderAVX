@@ -10,10 +10,8 @@ __forceinline __m256 _mm256_lerp_ps(__m256 xc, __m256 x1, __m256 x2) {
     return y;
 }
 
-void lerp(unsigned int length, float* srcc_ptr, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict dst_ptr) {
+void lerp(unsigned int length, const float* __restrict srcc_ptr, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
-
-    
 
     for (unsigned int i = 0; i < j; i += 8) {
         __m256 xc = _mm256_load_ps(srcc_ptr + i);
@@ -42,7 +40,7 @@ void TensorShaderAvxBackend::Elementwise::Lerp(unsigned int length, AvxArray<flo
 
     Util::CheckLength(length, srccondition, src1, src2, dst);
 
-    float* srcc_ptr = (float*)(srccondition->Ptr.ToPointer());
+    const float* srcc_ptr = (const float*)(srccondition->Ptr.ToPointer());
     const float* src1_ptr = (const float*)(src1->Ptr.ToPointer());
     const float* src2_ptr = (const float*)(src2->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());

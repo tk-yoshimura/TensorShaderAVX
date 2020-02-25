@@ -31,7 +31,7 @@ __forceinline __m256d _mm256_trivectormulvgrad_pd(__m256d v, __m256d q) {
     return u;
 }
 
-void trivector_mulvgrad(unsigned int length, float* v_ptr, float* q_ptr, float* u_ptr) {
+void trivector_mulvgrad(unsigned int length, const float* __restrict v_ptr, const float* __restrict q_ptr, float* __restrict u_ptr) {
     const __m128i mask3 = TensorShaderAvxBackend::masktable_m128(3);
 
     for (unsigned int i = 0, j = 0; i < length; i += 3, j += 4) {
@@ -57,8 +57,8 @@ void TensorShaderAvxBackend::Trivector::MulVGrad(unsigned int vectorlength, AvxA
     Util::CheckLength(vectorlength, src_vector, dst_vector);
     Util::CheckLength(quaternionlength, src_quaternion);
 
-    float* v_ptr = (float*)(src_vector->Ptr.ToPointer());
-    float* q_ptr = (float*)(src_quaternion->Ptr.ToPointer());
+    const float* v_ptr = (const float*)(src_vector->Ptr.ToPointer());
+    const float* q_ptr = (const float*)(src_quaternion->Ptr.ToPointer());
     float* u_ptr = (float*)(dst_vector->Ptr.ToPointer());
 
     trivector_mulvgrad(vectorlength, v_ptr, q_ptr, u_ptr);

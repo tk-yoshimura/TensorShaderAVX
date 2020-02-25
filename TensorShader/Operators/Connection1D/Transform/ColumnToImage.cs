@@ -39,10 +39,12 @@ namespace TensorShader.Operators.Connection1D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderAvxBackend.Transform.ColumnToImage1D(
-                (uint)Channels, (uint)inmap.Width,
-                (uint)Batch, (uint)KernelWidth, inmap.Buffer, outmap.Buffer
-            );
+            throw new NotImplementedException();
+
+            //TensorShaderAvxBackend.Transform.ColumnToImage1D(
+            //    (uint)Channels, (uint)inmap.Width,
+            //    (uint)Batch, (uint)KernelWidth, inmap.Buffer, outmap.Buffer
+            //);
         }
 
         /// <summary>操作を実行</summary>

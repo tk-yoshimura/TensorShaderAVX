@@ -60,10 +60,6 @@ void TensorShaderAvxBackend::Zoom::LinearZoom1D(unsigned int channels, unsigned 
 
     Util::CheckDuplicateArray(inmap, outmap);
 
-    if (th >= batch) {
-        throw gcnew System::ArgumentException();
-    }
-
     unsigned int outwidth = inwidth * 2;
 
     Util::CheckLength(channels * inwidth * batch, inmap);
@@ -72,5 +68,5 @@ void TensorShaderAvxBackend::Zoom::LinearZoom1D(unsigned int channels, unsigned 
     const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
-    linear_zoom_1d(channels, inwidth, outwidth, th, inmap_ptr, outmap_ptr);
+    linear_zoom_1d(channels, inwidth, outwidth, batch, inmap_ptr, outmap_ptr);
 }

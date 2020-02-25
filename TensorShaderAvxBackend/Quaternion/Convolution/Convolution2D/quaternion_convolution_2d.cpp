@@ -105,16 +105,12 @@ void quaternion_convolution_2d_grad(unsigned int inchannels, unsigned int outcha
 }
 
 void TensorShaderAvxBackend::Quaternion::Convolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight, 
-                                                       unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                                       unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                                        AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap){
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
     if (inchannels % 4 != 0 || outchannels % 4 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
@@ -133,12 +129,12 @@ void TensorShaderAvxBackend::Quaternion::Convolution2D(unsigned int inchannels, 
         quaternion_convolution_2d_grad(inchannels, outchannels, 
                                        inwidth, outwidth, kwidth,
                                        inheight, outheight, kheight,
-                                       stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                       0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
         quaternion_convolution_2d(inchannels, outchannels, 
                                   inwidth, outwidth, kwidth,
                                   inheight, outheight, kheight,
-                                  stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                  0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

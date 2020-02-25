@@ -2,7 +2,7 @@
 
 using namespace System;
 
-void insertadd_1(unsigned int length, const float* __restrict src_ptr, float* ref_ptr) {
+void insertadd_1(unsigned int length, const float* __restrict src_ptr, float* __restrict ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -26,7 +26,7 @@ void insertadd_1(unsigned int length, const float* __restrict src_ptr, float* re
     }
 }
 
-void insertadd_2(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* ref_ptr) {
+void insertadd_2(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* __restrict ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -54,7 +54,7 @@ void insertadd_2(unsigned int length, const float* __restrict src1_ptr, const fl
     }
 }
 
-void insertadd_3(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* src3_ptr, float* ref_ptr) {
+void insertadd_3(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, const float* __restrict src3_ptr, float* __restrict ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -86,7 +86,7 @@ void insertadd_3(unsigned int length, const float* __restrict src1_ptr, const fl
     }
 }
 
-void insertadd_4(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, float* src3_ptr, float* src4_ptr, float* ref_ptr) {
+void insertadd_4(unsigned int length, const float* __restrict src1_ptr, const float* __restrict src2_ptr, const float* __restrict src3_ptr, const float* __restrict src4_ptr, float* __restrict ref_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
 
     for (unsigned int i = 0; i < j; i += 8) {
@@ -141,31 +141,31 @@ void TensorShaderAvxBackend::Elementwise::Sum(unsigned int length, cli::array <A
     int j = (src->Length - 1) & ~3, k = (src->Length - 1) - j;
 
     for (int i = 0; i < j; i += 4) {
-        float* src1_ptr = (float*)(src[i]->Ptr.ToPointer());
-        float* src2_ptr = (float*)(src[i + 1]->Ptr.ToPointer());
-        float* src3_ptr = (float*)(src[i + 2]->Ptr.ToPointer());
-        float* src4_ptr = (float*)(src[i + 3]->Ptr.ToPointer());
+        const float* src1_ptr = (const float*)(src[i]->Ptr.ToPointer());
+        const float* src2_ptr = (const float*)(src[i + 1]->Ptr.ToPointer());
+        const float* src3_ptr = (const float*)(src[i + 2]->Ptr.ToPointer());
+        const float* src4_ptr = (const float*)(src[i + 3]->Ptr.ToPointer());
         float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
         insertadd_4(length, src1_ptr, src2_ptr, src3_ptr, src4_ptr, dst_ptr);
     }
     if (k >= 3) {
-        float* src1_ptr = (float*)(src[j]->Ptr.ToPointer());
-        float* src2_ptr = (float*)(src[j + 1]->Ptr.ToPointer());
-        float* src3_ptr = (float*)(src[j + 2]->Ptr.ToPointer());
+        const float* src1_ptr = (const float*)(src[j]->Ptr.ToPointer());
+        const float* src2_ptr = (const float*)(src[j + 1]->Ptr.ToPointer());
+        const float* src3_ptr = (const float*)(src[j + 2]->Ptr.ToPointer());
         float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
         insertadd_3(length, src1_ptr, src2_ptr, src3_ptr, dst_ptr);
     }
     else if (k >= 2) {
-        float* src1_ptr = (float*)(src[j]->Ptr.ToPointer());
-        float* src2_ptr = (float*)(src[j + 1]->Ptr.ToPointer());
+        const float* src1_ptr = (const float*)(src[j]->Ptr.ToPointer());
+        const float* src2_ptr = (const float*)(src[j + 1]->Ptr.ToPointer());
         float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
         insertadd_2(length, src1_ptr, src2_ptr, dst_ptr);
     }
     else if (k >= 1) {
-        float* src1_ptr = (float*)(src[j]->Ptr.ToPointer());
+        const float* src1_ptr = (const float*)(src[j]->Ptr.ToPointer());
         float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
         insertadd_1(length, src1_ptr, dst_ptr);

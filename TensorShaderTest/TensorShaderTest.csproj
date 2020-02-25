@@ -49,6 +49,12 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="TensorShader">
+      <HintPath>..\TensorShader\bin\x64\Debug\TensorShader.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderAvxBackend">
+      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertError.cs" />

@@ -8,7 +8,7 @@ __forceinline __m256 _mm256_clamp_ps(__m256 xval, __m256 xmin, __m256 xmax) {
     return y;
 }
 
-void clamp(unsigned int length, float* srcval_ptr, float* srcmin_ptr, float* srcmax_ptr, float* __restrict dst_ptr) {
+void clamp(unsigned int length, const float* __restrict srcval_ptr, const float* __restrict srcmin_ptr, const float* __restrict srcmax_ptr, float* __restrict dst_ptr) {
     const unsigned int j = length & ~7u, k = length - j;
     
     for (unsigned int i = 0; i < j; i += 8) {
@@ -38,9 +38,9 @@ void TensorShaderAvxBackend::Elementwise::Clamp(unsigned int length, AvxArray<fl
     
     Util::CheckLength(length, srcval, srcmin, srcmax, dst);
     
-    float* srcval_ptr = (float*)(srcval->Ptr.ToPointer());
-    float* srcmin_ptr = (float*)(srcmin->Ptr.ToPointer());
-    float* srcmax_ptr = (float*)(srcmax->Ptr.ToPointer());
+    const float* srcval_ptr = (const float*)(srcval->Ptr.ToPointer());
+    const float* srcmin_ptr = (const float*)(srcmin->Ptr.ToPointer());
+    const float* srcmax_ptr = (const float*)(srcmax->Ptr.ToPointer());
     float* dst_ptr = (float*)(dst->Ptr.ToPointer());
 
     clamp(length, srcval_ptr, srcmin_ptr, srcmax_ptr, dst_ptr);

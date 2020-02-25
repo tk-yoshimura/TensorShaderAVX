@@ -104,16 +104,12 @@ void trivector_dense_grad(unsigned int inchannels, unsigned int outchannels, uns
     }
 }
 
-void TensorShaderAvxBackend::Trivector::Dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, unsigned int th, bool gradmode,
+void TensorShaderAvxBackend::Trivector::Dense(unsigned int inchannels, unsigned int outchannels, unsigned int batch, bool gradmode,
                                               AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap){
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
     if (inchannels % 3 != 0 || outchannels % 3 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
@@ -126,9 +122,9 @@ void TensorShaderAvxBackend::Trivector::Dense(unsigned int inchannels, unsigned 
     float* kernel_ptr = (float*)(kernel->Ptr.ToPointer());
 
     if (gradmode) {
-        trivector_dense_grad(inchannels, outchannels, th, inmap_ptr, outmap_ptr, kernel_ptr);
+        trivector_dense_grad(inchannels, outchannels, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
-        trivector_dense(inchannels, outchannels, th, inmap_ptr, outmap_ptr, kernel_ptr);
+        trivector_dense(inchannels, outchannels, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

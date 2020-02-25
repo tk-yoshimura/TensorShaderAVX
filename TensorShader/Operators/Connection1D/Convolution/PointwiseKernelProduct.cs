@@ -32,9 +32,8 @@ namespace TensorShader.Operators.Connection1D {
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
             TensorShaderAvxBackend.Convolution.PointwiseKernelProduct((uint)InChannels, (uint)OutChannels,
-                                                                       (uint)inmap1.Width,
-                                                                       (uint)Batch,
-                                                                       inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
+                                                                      (uint)(inmap1.Width * Batch),
+                                                                      inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

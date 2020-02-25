@@ -48,6 +48,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="TensorShader">
+      <HintPath>..\TensorShader\bin\x64\Release\TensorShader.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderAvxBackend">
+      <HintPath>..\TensorShaderAvxBackend\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderUtil">
+      <HintPath>..\TensorShaderUtil\bin\x64\Debug\TensorShaderUtil.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayIO\ArrayIOTest.cs" />

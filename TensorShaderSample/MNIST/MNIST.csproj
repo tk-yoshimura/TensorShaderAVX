@@ -43,6 +43,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TensorShader">
+      <HintPath>..\..\TensorShaderUtil\bin\x64\Release\TensorShader.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderAvxBackend">
+      <HintPath>..\..\TensorShaderUtil\bin\x64\Release\TensorShaderAvxBackend.dll</HintPath>
+    </Reference>
+    <Reference Include="TensorShaderUtil">
+      <HintPath>..\..\TensorShaderUtil\bin\x64\Release\TensorShaderUtil.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model.cs" />

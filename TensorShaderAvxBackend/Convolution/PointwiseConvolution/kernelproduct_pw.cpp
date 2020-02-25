@@ -16,8 +16,8 @@ void kernelproduct_pw(unsigned int inchannels, unsigned int outchannels,
 
             for (unsigned int i = 0; i < points; i++) {
 
-                __m256 u = _mm256_loadu_ps(inmap_ptr + inch + inchannels * (i + points * th));
-                __m256d v = _mm256_set1_pd(outmap_ptr[outch + outchannels * (i + points * th)]);
+                __m256 u = _mm256_loadu_ps(inmap_ptr + inch + inchannels * i);
+                __m256d v = _mm256_set1_pd(outmap_ptr[outch + outchannels * i]);
 
                 __m256d u_hi = _mm256_cvtps_pd(_mm256_extractf128_ps(u, 1));
                 __m256d u_lo = _mm256_cvtps_pd(_mm256_castps256_ps128(u));
@@ -35,8 +35,8 @@ void kernelproduct_pw(unsigned int inchannels, unsigned int outchannels,
             __m256d uv_hi = _mm256_setzero_pd(), uv_lo = _mm256_setzero_pd();
 
             for (unsigned int i = 0; i < points; i++) {
-                __m256 u = _mm256_maskload_ps(inmap_ptr + inch_sep + inchannels * (i + points * th), mask);
-                __m256d v = _mm256_set1_pd(outmap_ptr[outch + outchannels * (i + points * th)]);
+                __m256 u = _mm256_maskload_ps(inmap_ptr + inch_sep + inchannels * i, mask);
+                __m256d v = _mm256_set1_pd(outmap_ptr[outch + outchannels * i]);
 
                 __m256d u_hi = _mm256_cvtps_pd(_mm256_extractf128_ps(u, 1));
                 __m256d u_lo = _mm256_cvtps_pd(_mm256_castps256_ps128(u));

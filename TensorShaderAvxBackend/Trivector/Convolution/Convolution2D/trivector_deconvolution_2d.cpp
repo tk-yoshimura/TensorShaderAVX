@@ -129,16 +129,12 @@ void trivector_deconvolution_2d_grad(unsigned int inchannels, unsigned int outch
 }
 
 void TensorShaderAvxBackend::Trivector::Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
-                                                        unsigned int batch, unsigned int th, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                                        unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                                         AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap) {
 
     Util::CheckDuplicateArray(inmap, kernel, outmap);
 
     if (inchannels % 3 != 0 || outchannels % 3 != 0) {
-        throw gcnew System::ArgumentException();
-    }
-
-    if (th >= batch) {
         throw gcnew System::ArgumentException();
     }
 
@@ -149,7 +145,7 @@ void TensorShaderAvxBackend::Trivector::Deconvolution2D(unsigned int inchannels,
     Util::CheckLength(outchannels * outwidth * outheight * batch, outmap);
     Util::CheckLength(inchannels * outchannels * kwidth * kheight * 4 / 9, kernel);
 
-    outmap->Zeroset(outchannels * outwidth * outheight * th, outchannels * outwidth * outheight);
+    outmap->Zeroset(outchannels * outwidth * outheight * batch);
 
     const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
@@ -159,12 +155,12 @@ void TensorShaderAvxBackend::Trivector::Deconvolution2D(unsigned int inchannels,
         trivector_deconvolution_2d_grad(inchannels, outchannels,
                                         inwidth, outwidth, kwidth,
                                         inheight, outheight, kheight,
-                                        stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                        0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
     else {
         trivector_deconvolution_2d(inchannels, outchannels,
                                    inwidth, outwidth, kwidth,
                                    inheight, outheight, kheight,
-                                   stride, th, inmap_ptr, outmap_ptr, kernel_ptr);
+                                   0, 0, inmap_ptr, outmap_ptr, kernel_ptr);
     }
 }

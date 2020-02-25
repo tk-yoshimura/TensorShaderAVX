@@ -68,5 +68,5 @@ void TensorShaderAvxBackend::Pool::AveragePool2D(unsigned int channels, unsigned
     const float* inmap_ptr = (const float*)(inmap->Ptr.ToPointer());
     float* outmap_ptr = (float*)(outmap->Ptr.ToPointer());
 
-    averagepool_2d(channels, inwidth, inheight, th, stride, inmap_ptr, outmap_ptr);
+    averagepool_2d(channels, inwidth, inheight, batch, stride, inmap_ptr, outmap_ptr);
 }

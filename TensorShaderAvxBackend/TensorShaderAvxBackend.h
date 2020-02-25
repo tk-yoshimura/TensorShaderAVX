@@ -703,7 +703,7 @@ namespace TensorShaderAvxBackend {
                                   AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void Deconvolution2D(unsigned int inchannels, unsigned int outchannels, unsigned int outwidth, unsigned int outheight,
-                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, unsigned int stride, bool gradmode,
+                                    unsigned int batch, unsigned int kwidth, unsigned int kheight, bool gradmode,
                                     AvxArray<float>^ inmap, AvxArray<float>^ kernel, AvxArray<float>^ outmap);
 
         static void KernelProduct2D(unsigned int inchannels, unsigned int outchannels, unsigned int inwidth, unsigned int inheight,
